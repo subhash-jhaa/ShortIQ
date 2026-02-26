@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 
+import { SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs";
+
 export default function HeroSection() {
     const [typed, setTyped] = useState("");
     const words = ["YouTube Shorts", "Instagram Reels", "TikTok Videos", "Facebook Clips", "Email Campaigns"];
@@ -65,15 +67,29 @@ export default function HeroSection() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-up animation-delay-300">
-                    <a
-                        href="#"
-                        className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/20 flex items-center gap-2"
-                    >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <path d="M5 3l14 9-14 9V3z" fill="white" />
-                        </svg>
-                        Start Generating Free
-                    </a>
+                    <SignedOut>
+                        <SignUpButton mode="modal">
+                            <button className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/20 flex items-center gap-2">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M5 3l14 9-14 9V3z" fill="white" />
+                                </svg>
+                                Start Generating Free
+                            </button>
+                        </SignUpButton>
+                    </SignedOut>
+                    <SignedIn>
+                        <a
+                            href="/dashboard"
+                            className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/20 flex items-center gap-2"
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                <line x1="3" y1="9" x2="21" y2="9" />
+                                <line x1="9" y1="21" x2="9" y2="9" />
+                            </svg>
+                            Go to Dashboard
+                        </a>
+                    </SignedIn>
                     <a
                         href="#how-it-works"
                         className="px-8 py-4 rounded-2xl text-base font-semibold text-white border border-white/20 hover:bg-white/5 transition-all flex items-center gap-2"
