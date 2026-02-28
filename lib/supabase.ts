@@ -1,14 +1,16 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-// Standard client for client-side interactions (if used without SSR)
-export const supabase = createClient(supabaseUrl, supabaseKey)
+if (!supabaseUrl || !supabaseKey) {
+    console.warn('Supabase URL or Anon Key is missing. Check your .env.local file.');
+}
 
-// Admin client with full privileges (service role)
-// WARNING: Only use this in server-side contexts (API routes, Server Actions, etc.)
-export const supabaseAdmin = supabaseServiceKey
-    ? createClient(supabaseUrl, supabaseServiceKey)
-    : null
+export const supabase = createClient(supabaseUrl, supabaseKey);
+
+// For server-side operations that require bypass of RLS
+export const supabaseAdmin = createClient(
+    supabaseUrl,
+    process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseKey
+);
