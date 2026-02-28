@@ -42,7 +42,9 @@ interface NicheSelectionProps {
 }
 
 export function NicheSelection({ selectedNiche, customNiche, onSelect }: NicheSelectionProps) {
-    const [activeTab, setActiveTab] = useState<Tab>("available");
+    const [activeTab, setActiveTab] = useState<Tab>(
+        customNiche && !selectedNiche ? "custom" : "available"
+    );
 
     // Determine if the current selection is custom
     const isCustomActive = !AVAILABLE_NICHES.some((n) => n.id === selectedNiche) && selectedNiche !== "";

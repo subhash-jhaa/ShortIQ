@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { createSeries } from "@/actions/series";
+import { createSeries, getSeriesById, updateSeries } from "@/actions/series";
 import { StepperProgress } from "@/components/dashboard/create/StepperProgress";
 import { StepFooter } from "@/components/dashboard/create/StepFooter";
 import { NicheSelection } from "@/components/dashboard/create/NicheSelection";
@@ -13,6 +13,7 @@ import { BackgroundMusicSelection } from "@/components/dashboard/create/Backgrou
 import { VideoStyleSelection } from "@/components/dashboard/create/VideoStyleSelection";
 import { CaptionStyleSelection } from "@/components/dashboard/create/CaptionStyleSelection";
 import { SeriesDetailsReview } from "@/components/dashboard/create/SeriesDetailsReview";
+import { Loader2 } from "lucide-react";
 
 // ── Global form state type ──────────────────────────────────────────────────
 export interface CreateSeriesFormData {
@@ -61,9 +62,53 @@ const INITIAL_FORM_DATA: CreateSeriesFormData = {
 
 const TOTAL_STEPS = 6;
 
-export default function CreatePage() {
+function CreatePageContent() {
     const [currentStep, setCurrentStep] = useState(0);
     const [formData, setFormData] = useState<CreateSeriesFormData>(INITIAL_FORM_DATA);
+    const [isFetching, setIsFetching] = useState(false);
+    const [seriesId, setSeriesId] = useState<string | null>(null);
+
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const id = searchParams.get("id");
+
+    // ── Pre-fill data if editing ─────────────────────────────────────────────
+    useEffect(() => {
+        if (id) {
+            setSeriesId(id);
+            setIsFetching(true);
+            getSeriesById(id).then((result) => {
+                if (result.success && result.data) {
+                    const data = result.data;
+                    // Check if niche is in our available list
+                    const AVAILABLE_NICHE_IDS = [
+                        "scary-stories", "motivational", "tech-reviews", "true-crime",
+                        "history", "cooking-tips", "health-fitness", "science-facts",
+                        "travel-vlogs", "gaming", "finance", "comedy"
+                    ];
+                    const isCustom = !AVAILABLE_NICHE_IDS.includes(data.niche);
+
+                    setFormData({
+                        seriesName: data.seriesName,
+                        niche: data.niche,
+                        customNiche: isCustom ? data.niche : "",
+                        isCustomNiche: isCustom,
+                        language: data.language,
+                        voice: data.voice,
+                        backgroundMusic: data.backgroundMusic,
+                        videoStyle: data.videoStyle,
+                        captionStyle: data.captionStyle,
+                        videoDuration: data.videoDuration,
+                        platforms: data.platforms,
+                        publishTime: data.publishTime,
+                    });
+                } else {
+                    toast.error("Failed to load series data");
+                }
+                setIsFetching(false);
+            });
+        }
+    }, [id]);
 
     // ── Navigation ──────────────────────────────────────────────────────────
     const handleContinue = () => {
@@ -113,17 +158,22 @@ export default function CreatePage() {
     };
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const router = useRouter();
 
     const handleSchedule = async () => {
         setIsSubmitting(true);
         try {
-            const result = await createSeries(formData);
+            let result;
+            if (seriesId) {
+                result = await updateSeries(seriesId, formData);
+            } else {
+                result = await createSeries(formData);
+            }
+
             if (result.success) {
-                toast.success("Series scheduled successfully! 🎉");
+                toast.success(seriesId ? "Series updated successfully! 🎉" : "Series scheduled successfully! 🎉");
                 router.push("/dashboard");
             } else {
-                toast.error(result.error || "Failed to schedule series");
+                toast.error(result.error || `Failed to ${seriesId ? "update" : "schedule"} series`);
             }
         } catch (err) {
             toast.error("An unexpected error occurred");
@@ -157,6 +207,15 @@ export default function CreatePage() {
 
     // ── Render current step content ─────────────────────────────────────────
     const renderStep = () => {
+        if (isFetching) {
+            return (
+                <div className="flex-1 flex flex-col items-center justify-center text-white/20 gap-3">
+                    <Loader2 className="animate-spin" size={32} />
+                    <p className="text-sm font-medium">Loading series data...</p>
+                </div>
+            );
+        }
+
         switch (currentStep) {
             case 0:
                 return (
@@ -216,15 +275,19 @@ export default function CreatePage() {
     return (
         <div className="max-w-5xl mx-auto min-h-[calc(100vh-7rem)] flex flex-col">
             {/* Page title */}
-            <h1 className="text-3xl font-extrabold text-white mb-2">Create New Series</h1>
-            <p className="text-white/35 text-sm mb-6">Set up your automated content pipeline in a few steps</p>
+            <h1 className="text-3xl font-extrabold text-white mb-2">
+                {seriesId ? "Edit Series" : "Create New Series"}
+            </h1>
+            <p className="text-white/35 text-sm mb-6">
+                {seriesId ? "Update your automated content pipeline settings" : "Set up your automated content pipeline in a few steps"}
+            </p>
 
             {/* Stepper */}
             <StepperProgress currentStep={currentStep} />
 
             {/* Step Content Card — fills remaining height */}
             <div className="mt-8 rounded-2xl bg-white/[0.03] border border-white/5 p-8 flex-1 flex flex-col">
-                <div className="flex-1">
+                <div className="flex-1 overflow-y-auto">
                     {renderStep()}
                 </div>
 
@@ -239,11 +302,23 @@ export default function CreatePage() {
                             setCurrentStep((prev) => prev + 1);
                         }
                     }}
-                    isNextDisabled={isNextDisabled}
+                    isNextDisabled={isNextDisabled || isFetching}
                     isLoading={isSubmitting}
-                    continueLabel={currentStep === TOTAL_STEPS - 1 ? "Schedule Series" : "Continue"}
+                    continueLabel={currentStep === TOTAL_STEPS - 1 ? (seriesId ? "Update Series" : "Schedule Series") : "Continue"}
                 />
             </div>
         </div>
+    );
+}
+
+export default function CreatePage() {
+    return (
+        <Suspense fallback={
+            <div className="max-w-5xl mx-auto min-h-[calc(100vh-7rem)] flex items-center justify-center">
+                <Loader2 className="animate-spin text-rose-500" size={48} />
+            </div>
+        }>
+            <CreatePageContent />
+        </Suspense>
     );
 }
