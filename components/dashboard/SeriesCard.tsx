@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { deleteSeries, toggleSeriesStatus } from "@/actions/series";
+import { deleteSeries, toggleSeriesStatus, triggerVideoGeneration } from "@/actions/series";
 import { toast } from "sonner";
 
 interface Series {
@@ -81,6 +81,22 @@ export function SeriesCard({ series, onRefresh }: SeriesCardProps) {
 
     const handleEdit = () => {
         router.push(`/dashboard/create?id=${series.id}`);
+    };
+
+    const handleGenerate = async () => {
+        setIsLoading(true);
+        try {
+            const res = await triggerVideoGeneration(series.id);
+            if (res.success) {
+                toast.success("Generation started!");
+            } else {
+                toast.error(res.error || "Failed to start generation");
+            }
+        } catch (err) {
+            toast.error("Error starting generation");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -168,7 +184,11 @@ export function SeriesCard({ series, onRefresh }: SeriesCardProps) {
                     <Button variant="outline" className="bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10 text-white/60 text-xs h-9 gap-2">
                         <Eye size={14} /> Previous
                     </Button>
-                    <Button className="bg-rose-500 hover:bg-rose-600 text-white text-xs h-9 gap-2 font-bold shadow-lg shadow-rose-500/20">
+                    <Button
+                        onClick={handleGenerate}
+                        disabled={isLoading}
+                        className="bg-rose-500 hover:bg-rose-600 text-white text-xs h-9 gap-2 font-bold shadow-lg shadow-rose-500/20"
+                    >
                         <Play size={14} fill="currentColor" /> Generate
                     </Button>
                 </div>

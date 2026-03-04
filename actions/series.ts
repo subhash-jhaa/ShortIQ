@@ -3,6 +3,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
+import { inngest } from "@/inngest/client";
 
 export interface SeriesData {
     seriesName: string;
@@ -81,6 +82,22 @@ export async function updateSeries(id: string, data: Partial<SeriesData>) {
         return { success: true };
     } catch (err: any) {
         console.error("updateSeries failure:", err);
+        return { success: false, error: err.message };
+    }
+}
+
+export async function triggerVideoGeneration(seriesId: string) {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    try {
+        await inngest.send({
+            name: "video/generate",
+            data: { seriesId },
+        });
+        return { success: true };
+    } catch (err: any) {
+        console.error("triggerVideoGeneration failure:", err);
         return { success: false, error: err.message };
     }
 }
