@@ -10,7 +10,15 @@ if (!supabaseUrl || !supabaseKey) {
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // For server-side operations that require bypass of RLS
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!serviceRoleKey || !serviceRoleKey.startsWith('eyJ')) {
+    console.error(
+        '[supabase] SUPABASE_SERVICE_ROLE_KEY is missing or invalid. ' +
+        'It must be the service_role JWT from Supabase → Project Settings → API. ' +
+        'Admin operations (RLS bypass) will fail until this is set correctly.'
+    );
+}
 export const supabaseAdmin = createClient(
     supabaseUrl,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseKey
+    serviceRoleKey || supabaseKey
 );

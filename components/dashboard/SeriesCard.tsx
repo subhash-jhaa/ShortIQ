@@ -2,6 +2,7 @@
 
 import { MoreVertical, Edit2, Play, Eye, Pause, Trash2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import {
     Popover,
@@ -89,6 +90,7 @@ export function SeriesCard({ series, onRefresh }: SeriesCardProps) {
             const res = await triggerVideoGeneration(series.id);
             if (res.success) {
                 toast.success("Generation started!");
+                router.push("/dashboard/videos");
             } else {
                 toast.error(res.error || "Failed to start generation");
             }
@@ -137,9 +139,11 @@ export function SeriesCard({ series, onRefresh }: SeriesCardProps) {
             <div className="p-4 space-y-4">
                 <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
-                        <h3 className="text-white font-bold truncate text-base">
-                            {series.series_name}
-                        </h3>
+                        <Link href={`/dashboard/series/${series.id}`}>
+                            <h3 className="text-white font-bold truncate text-base hover:text-indigo-400 transition-colors">
+                                {series.series_name}
+                            </h3>
+                        </Link>
                         <p className="text-white/40 text-xs font-medium mt-0.5">
                             Created {formatDistanceToNow(new Date(series.created_at))} ago
                         </p>
@@ -179,11 +183,12 @@ export function SeriesCard({ series, onRefresh }: SeriesCardProps) {
                     </Popover>
                 </div>
 
-                {/* Bottom Actions */}
                 <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/5">
-                    <Button variant="outline" className="bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10 text-white/60 text-xs h-9 gap-2">
-                        <Eye size={14} /> Previous
-                    </Button>
+                    <Link href="/dashboard/videos" className="w-full">
+                        <Button variant="outline" className="w-full bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10 text-white/60 text-xs h-9 gap-2">
+                            <Eye size={14} /> Previous
+                        </Button>
+                    </Link>
                     <Button
                         onClick={handleGenerate}
                         disabled={isLoading}

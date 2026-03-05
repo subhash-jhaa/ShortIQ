@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
     LayoutDashboard,
     PlusCircle,
@@ -20,8 +21,14 @@ export default function DashboardLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const pathname = usePathname();
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
+
+    const isActive = (path: string) => {
+        if (path === "/dashboard") return pathname === "/dashboard";
+        return pathname.startsWith(path);
+    };
 
     const mainNavItems = [
         { name: "Series", href: "/dashboard/series", icon: <PlaySquare size={22} /> },
@@ -56,9 +63,12 @@ export default function DashboardLayout({
 
                         <Link
                             href="/dashboard"
-                            className="flex items-center gap-3 px-4 py-3 rounded-xl text-[16px] font-semibold transition-all bg-[#1e1e2d] border border-white/5 text-indigo-400 shadow-sm"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[16px] font-semibold transition-all ${isActive("/dashboard")
+                                    ? "bg-[#1e1e2d] border border-white/5 text-indigo-400 shadow-sm"
+                                    : "text-white/50 hover:bg-white/5 hover:text-white"
+                                }`}
                         >
-                            <LayoutDashboard size={22} className="text-indigo-400" />
+                            <LayoutDashboard size={22} className={isActive("/dashboard") ? "text-indigo-400" : "text-white/20"} />
                             Overview
                         </Link>
                     </div>
@@ -66,7 +76,10 @@ export default function DashboardLayout({
                     {/* Create New Series Button - Light Style */}
                     <Link
                         href="/dashboard/create"
-                        className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-100 text-[#0d0d14] py-3.5 px-4 rounded-xl font-bold text-sm transition-all shadow-lg mb-8 active:scale-[0.98]"
+                        className={`w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold text-sm transition-all shadow-lg mb-8 active:scale-[0.98] ${isActive("/dashboard/create")
+                                ? "bg-rose-500 text-white shadow-rose-500/20"
+                                : "bg-white hover:bg-slate-100 text-[#0d0d14]"
+                            }`}
                     >
                         <PlusCircle size={20} />
                         Create New Series
@@ -78,9 +91,12 @@ export default function DashboardLayout({
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className="flex items-center gap-4 px-4 py-3 rounded-xl text-[16px] font-medium transition-all hover:bg-white/[0.08] hover:text-white hover:shadow-[0_0_20px_-5px_rgba(99,102,241,0.3)] group"
+                                className={`flex items-center gap-4 px-4 py-3 rounded-xl text-[16px] font-medium transition-all group ${isActive(item.href)
+                                        ? "bg-[#1e1e2d] border border-white/5 text-indigo-400 shadow-sm"
+                                        : "text-white/50 hover:bg-white/[0.08] hover:text-white hover:shadow-[0_0_20px_-5px_rgba(99,102,241,0.3)]"
+                                    }`}
                             >
-                                <span className="text-white/20 group-hover:text-indigo-400 transition-colors">
+                                <span className={`${isActive(item.href) ? "text-indigo-400" : "text-white/20"} group-hover:text-indigo-400 transition-colors`}>
                                     {item.icon}
                                 </span>
                                 {item.name}
@@ -95,9 +111,12 @@ export default function DashboardLayout({
                         <Link
                             key={item.name}
                             href={item.href}
-                            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-white/30 hover:bg-white/5 hover:text-white transition-colors"
+                            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${isActive(item.href)
+                                    ? "bg-white/10 text-white"
+                                    : "text-white/30 hover:bg-white/5 hover:text-white"
+                                }`}
                         >
-                            {item.icon}
+                            <span className={isActive(item.href) ? "text-indigo-400" : ""}>{item.icon}</span>
                             {item.name}
                         </Link>
                     ))}

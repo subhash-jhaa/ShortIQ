@@ -31,7 +31,7 @@ export function RecentProjects() {
         <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-extrabold text-white">Your Series</h2>
-                <Link href="/dashboard/create">
+                <Link href="/dashboard/series">
                     <button className="text-sm font-bold text-rose-400 hover:text-rose-300 transition-colors bg-rose-500/10 px-4 py-2 rounded-lg border border-rose-500/20">
                         View All
                     </button>

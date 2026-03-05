@@ -111,14 +111,14 @@ export const LANGUAGE_CODES: Record<string, string> = {
     Italian: "it",
     Japanese: "ja",
     // Indian languages
-    Hindi: "Hindi",
-    Tamil: "Tamil",
-    Telugu: "Telugu",
-    Bengali: "Bengali",
-    Marathi: "Marathi",
-    Kannada: "Kannada",
-    Malayalam: "Malayalam",
-    Gujarati: "Gujarati",
+    Hindi: "hi",
+    Tamil: "ta",
+    Telugu: "te",
+    Bengali: "bn",
+    Marathi: "mr",
+    Kannada: "kn",
+    Malayalam: "ml",
+    Gujarati: "gu",
 };
 
 // ── Main helper: get voices for a language ───────────────────────────
@@ -152,6 +152,14 @@ export function getVoicesForLanguage(language: string): VoiceResult {
     }
 
     return { language, provider, voices };
+}
+
+/**
+ * Returns a voice option by its unique internal ID.
+ */
+export function getVoiceById(id: string): VoiceOption | undefined {
+    const allVoices = [...DEEPGRAM_VOICE_POOL, ...FONADALABS_VOICE_POOL];
+    return allVoices.find((v) => v.id === id);
 }
 
 /**

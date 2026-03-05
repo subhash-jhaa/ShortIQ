@@ -1,12 +1,8 @@
 import { inngest } from "./client";
 import { RetryAfterError } from "inngest";
-import { supabaseAdmin } from "@/lib/supabase";
-import { GoogleGenAI } from "@google/genai";
-import { getProvider, LANGUAGE_CODES } from "@/lib/voice-config";
-
-const client = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY!,
-});
+import { supabaseAdmin } from "../lib/supabase";
+import { groqClient } from "../lib/groq";
+import { getProvider, getVoiceById, LANGUAGE_CODES } from "../lib/voice-config";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -22,6 +18,28 @@ interface ScriptData {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Splits text into chunks of roughly MAX_CHARS characters, breaking at sentence boundaries */
+function splitTextIntoChunks(text: string, maxChars: number = 400): string[] {
+    const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+    const chunks: string[] = [];
+    let currentChunk = "";
+
+    for (const sentence of sentences) {
+        if ((currentChunk + sentence).length > maxChars && currentChunk.length > 0) {
+            chunks.push(currentChunk.trim());
+            currentChunk = sentence;
+        } else {
+            currentChunk += sentence;
+        }
+    }
+
+    if (currentChunk.length > 0) {
+        chunks.push(currentChunk.trim());
+    }
+
+    return chunks;
+}
 
 /** Upload raw bytes to Supabase Storage and return the public URL */
 async function uploadToStorage(
@@ -93,6 +111,63 @@ async function generateDeepgramAudio(
     return response.arrayBuffer();
 }
 
+/** 
+ * Generate SRT captions from audio URL using Deepgram STT.
+ * Uses the Nova-2 model for best accuracy.
+ */
+async function generateDeepgramCaptions(
+    audioUrl: string,
+    language: string
+): Promise<string> {
+    const langCode = LANGUAGE_CODES[language] || "en";
+
+    // Call Deepgram STT with utterances enabled
+    const response = await fetch(
+        `https://api.deepgram.com/v1/listen?model=nova-2&smart_format=true&utterances=true&punctuate=true&language=${langCode}`,
+        {
+            method: "POST",
+            headers: {
+                Authorization: `Token ${process.env.DEEPGRAM_API_KEY}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url: audioUrl }),
+        }
+    );
+
+    if (!response.ok) {
+        const err = await response.text();
+        throw new Error(`Deepgram STT failed: ${response.status} ${err}`);
+    }
+
+    const data = await response.json();
+    const utterances = data.results?.utterances;
+
+    if (!utterances || utterances.length === 0) {
+        // Fallback: If no utterances, return empty or try to get from transcript
+        const transcript = data.results?.channels[0]?.alternatives[0]?.transcript;
+        if (transcript) {
+            return `1\n00:00:00,000 --> 00:00:10,000\n${transcript}\n`;
+        }
+        return "";
+    }
+
+    // Convert utterances to SRT
+    const srt = utterances
+        .map((utt: any, i: number) => {
+            const fmtTime = (s: number) => {
+                const h = Math.floor(s / 3600).toString().padStart(2, "0");
+                const m = Math.floor((s % 3600) / 60).toString().padStart(2, "0");
+                const sec = Math.floor(s % 60).toString().padStart(2, "0");
+                const ms = Math.round((s % 1) * 1000).toString().padStart(3, "0");
+                return `${h}:${m}:${sec},${ms}`;
+            };
+            return `${i + 1}\n${fmtTime(utt.start)} --> ${fmtTime(utt.end)}\n${utt.transcript.trim()}\n`;
+        })
+        .join("\n");
+
+    return srt;
+}
+
 // ─── TTS: Fonadalabs ──────────────────────────────────────────────────────────
 
 async function generateFonadalabsAudio(
@@ -100,27 +175,50 @@ async function generateFonadalabsAudio(
     voiceId: string,
     language: string
 ): Promise<ArrayBuffer> {
-    const langCode = LANGUAGE_CODES[language] ?? language;
+    // Fonadalabs expects full language names (e.g. "Hindi", "Marathi") 
+    const langCode = language;
+    // Limit to 250 chars per chunk to avoid hitting the 30-second audio generation limit
+    // (466 chars was ~35s)
+    const chunks = splitTextIntoChunks(text, 250);
+    console.log(`Splitting FonadaLabs text into ${chunks.length} chunks...`);
 
-    const response = await fetch("https://api.fonadalabs.com/v1/tts", {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${process.env.FONADALABS_API_KEY}`,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            text,
-            voice: voiceId,
-            language: langCode,
-        }),
-    });
+    const audioChunks: ArrayBuffer[] = [];
 
-    if (!response.ok) {
-        const err = await response.text();
-        throw new Error(`Fonadalabs TTS failed: ${response.status} ${err}`);
+    for (let i = 0; i < chunks.length; i++) {
+        console.log(`Generating audio for chunk ${i + 1}/${chunks.length}...`);
+        const response = await fetch("https://api.fonada.ai/tts/generate-audio-large", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${process.env.FONADALABS_API_KEY}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                input: chunks[i],
+                voice: voiceId,
+                language: langCode,
+            }),
+        });
+
+        if (!response.ok) {
+            const err = await response.text();
+            throw new Error(`Fonadalabs TTS failed on chunk ${i + 1}: ${response.status} ${err}`);
+        }
+
+        audioChunks.push(await response.arrayBuffer());
     }
 
-    return response.arrayBuffer();
+    // Merge audio chunks
+    if (audioChunks.length === 1) return audioChunks[0];
+
+    const totalLength = audioChunks.reduce((acc, chunk) => acc + chunk.byteLength, 0);
+    const mergedBuffer = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const chunk of audioChunks) {
+        mergedBuffer.set(new Uint8Array(chunk), offset);
+        offset += chunk.byteLength;
+    }
+
+    return mergedBuffer.buffer as ArrayBuffer;
 }
 
 // ─── Inngest Functions ────────────────────────────────────────────────────────
@@ -139,11 +237,11 @@ export const generateVideo = inngest.createFunction(
     { event: "video/generate" },
     async ({ event, step }) => {
         console.log("Inngest received event data:", event.data);
-        const { seriesId } = event.data;
+        const { seriesId, testMock } = event.data;
 
         if (!seriesId) {
             console.error("No seriesId found in event data!");
-            throw new Error("No seriesId provided. Please send a test event with { 'data': { 'seriesId': '...' } }");
+            throw new Error("No seriesId provided. In the Inngest Dev Server 'Data' box, please provide: { \"seriesId\": \"...\" }");
         }
 
         // ── Step 1: Fetch Series data from Supabase ───────────────────────────
@@ -158,89 +256,120 @@ export const generateVideo = inngest.createFunction(
             return data;
         });
 
+        // ── Step 1.5: Create Placeholder Video Project ────────────────────────
+        const videoProjectId = await step.run("create-video-placeholder", async () => {
+            const { data, error } = await supabaseAdmin
+                .from("video_projects")
+                .insert({
+                    series_id: seriesId,
+                    user_id: series.user_id,
+                    title: "Generating...",
+                    total_script: "",
+                    scenes: [],
+                    status: "generating",
+                })
+                .select("id")
+                .single();
+
+            if (error) throw new Error(`Failed to create video placeholder: ${error.message}`);
+            return data.id;
+        });
+
         // ── Step 2: Generate Video Script using Gemini ────────────────────────
         const scriptData = await step.run("generate-video-script", async () => {
-            const prompt = `
-        You are an expert video content creator. Generate a high-quality video script, title, and image prompts for a Short-form video based on the following series data:
-        - Niche: ${series.niche}
-        - Duration: ${series.video_duration}
-        - Video Style: ${series.video_style}
-        - Language: ${series.language}
-
-        Rules:
-        1. The script must be natural, engaging, and suitable for a voiceover.
-        2. Generate 4-5 scenes if duration is 30-40 seconds.
-        3. Generate 5-6 scenes if duration is 60-70 seconds.
-        4. Each scene must include:
-           - "scene_script": The actual spoken words for this segment.
-           - "image_prompt": A detailed visual description for image generation, matching the ${series.video_style} style.
-        5. The "total_script" field should contain the full concatenated script.
-        6. Respond in strict JSON format only.
-
-        Expected Output Structure:
-        {
-          "title": "Compelling Video Title",
-          "total_script": "Full script here...",
-          "scenes": [
-            {
-              "scene_script": "Segment text...",
-              "image_prompt": "Visual description..."
+            if (testMock) {
+                console.log("Mock Mode: Returning sample script data.");
+                return {
+                    title: "Mock Video Title",
+                    total_script: "This is a mock script for testing purposes.",
+                    scenes: [
+                        {
+                            scene_script: "Mock scene 1",
+                            image_prompt: "Mock image prompt 1"
+                        }
+                    ]
+                } as ScriptData;
             }
-          ]
-        }
-      `;
 
-            console.log("Starting Gemini script generation for series:", seriesId);
+            const prompt = `You are an expert video content creator. Generate a high-quality video script, title, and image prompts for a short-form video based on the following series data:
+- Niche: ${series.niche}
+- Duration: ${series.video_duration}
+- Video Style: ${series.video_style}
+- Language: ${series.language}
 
-            // Increased timeout to 60s for real script generation
-            const timeout = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error("Gemini API Timeout (60s)")), 60000)
-            );
+Rules:
+1. The script must be natural, engaging, and suitable for a voiceover.
+2. Generate 4-5 scenes if duration is 30-40 seconds.
+3. Generate 5-6 scenes if duration is 60-70 seconds.
+4. Each scene must include:
+   - "scene_script": The actual spoken words for this segment.
+   - "image_prompt": A detailed visual description for image generation, matching the ${series.video_style} style.
+5. The "total_script" field should contain the full concatenated script.
+6. Respond ONLY with valid JSON — no markdown, no explanation.
+
+Expected Output Structure:
+{
+  "title": "Compelling Video Title",
+  "total_script": "Full script here...",
+  "scenes": [
+    {
+      "scene_script": "Segment text...",
+      "image_prompt": "Visual description..."
+    }
+  ]
+}`;
+
+            console.log("Starting Groq script generation for series:", seriesId);
 
             try {
-                console.log("Calling Gemini API with model: gemini-2.0-flash...");
-                const geminiCall = client.models.generateContent({
-                    model: "gemini-2.0-flash", // Use stable 2.0 flash which is confirmed available
-                    contents: prompt,
-                    config: {
-                        responseMimeType: "application/json", // This is the correct field for the SDK client.models interface
-                    },
+                const completion = await groqClient.chat.completions.create({
+                    model: "llama-3.3-70b-versatile",
+                    messages: [{ role: "user", content: prompt }],
+                    response_format: { type: "json_object" },
+                    temperature: 0.7,
                 });
 
-                const response = await Promise.race([geminiCall, timeout]) as Awaited<typeof geminiCall>;
-                console.log("Gemini API call finished.");
-
-                const rawText = response.text;
-                if (!rawText) throw new Error("Gemini returned no text.");
+                const rawText = completion.choices[0]?.message?.content;
+                if (!rawText) throw new Error("Groq returned no text.");
 
                 const value: ScriptData = JSON.parse(rawText);
-                if (!value) throw new Error("Gemini returned no value.");
+                if (!value) throw new Error("Groq returned no value.");
 
-                console.log("Script generated successfully:", value.title);
+                console.log("Script generated successfully via Groq:", value.title);
                 return value as ScriptData;
 
             } catch (err: any) {
-                console.error("Gemini Error or Timeout:", err.message);
-                // Retry after 5 minutes on quota exceeded (429)
-                if (err.message?.includes('429') || err.message?.includes('quota') || err.message?.includes('RESOURCE_EXHAUSTED')) {
-                    throw new RetryAfterError(`Gemini quota exceeded, retrying in 5 minutes`, 5 * 60 * 1000);
+                console.error("Groq Error:", err.message);
+                if (err.status === 429 || err.message?.includes('429') || err.message?.includes('rate_limit')) {
+                    throw new RetryAfterError(`Groq rate limit hit, retrying in 1 minute`, "1m");
                 }
-                throw new Error(`Real script generation failed: ${err.message}. Please check your Gemini API quota/connection.`);
+                throw new Error(`Script generation failed: ${err.message}`);
             }
         });
 
+        // Guard: ensure Gemini returned usable scenes
+        if (!scriptData.scenes || scriptData.scenes.length === 0) {
+            throw new Error("Script generation returned no scenes. Cannot proceed with audio, captions, or images.");
+        }
+
         // ── Step 3: Generate Voice (TTS) ──────────────────────────────────────
         const voice = await step.run("generate-voice", async () => {
-            const provider = getProvider(series.language);
-            const voiceId: string = series.voice_id;
+            const provider = series.model_name || getProvider(series.language);
+            const langCode = series.model_lang_code || (LANGUAGE_CODES[series.language] ?? series.language);
+
+            // Map internal ID (e.g. "fonadalabs-dhwani") to provider's voiceId (e.g. "Dhwani")
+            const internalVoiceId: string = series.voice_id;
+            const voiceOption = getVoiceById(internalVoiceId);
+            const actualVoiceId = voiceOption ? voiceOption.voiceId : (internalVoiceId.startsWith("fonadalabs-") ? internalVoiceId.replace("fonadalabs-", "") : internalVoiceId);
+
             const script: string = scriptData.total_script;
             const fileName = `${seriesId}-${Date.now()}.mp3`;
 
             let audioBuffer: ArrayBuffer;
             if (provider === "deepgram") {
-                audioBuffer = await generateDeepgramAudio(script, voiceId);
+                audioBuffer = await generateDeepgramAudio(script, actualVoiceId);
             } else {
-                audioBuffer = await generateFonadalabsAudio(script, voiceId, series.language);
+                audioBuffer = await generateFonadalabsAudio(script, actualVoiceId, series.language);
             }
 
             const audioUrl = await uploadToStorage(
@@ -255,8 +384,7 @@ export const generateVideo = inngest.createFunction(
 
         // ── Step 4: Generate Captions (SRT) ──────────────────────────────────
         const captions = await step.run("generate-captions", async () => {
-            const durationSec = parseDurationSeconds(series.video_duration);
-            const srtContent = buildSRT(scriptData.scenes, durationSec);
+            const srtContent = await generateDeepgramCaptions(voice.audioUrl, series.language);
 
             const srtBuffer = Buffer.from(srtContent, "utf-8");
             const fileName = `${seriesId}-${Date.now()}.srt`;
@@ -271,37 +399,43 @@ export const generateVideo = inngest.createFunction(
             return { captionsUrl };
         });
 
-        // ── Step 5: Generate Images via Gemini Imagen ─────────────────────────
+        // ── Step 5: Generate Images via Hugging Face (free, Flux model) ─────────
         const images = await step.run("generate-images", async () => {
             const imageUrls: string[] = [];
+            const hfToken = process.env.HUGGINGFACE_API_KEY;
+
+            if (!hfToken) throw new Error("HUGGINGFACE_API_KEY is not set. Get a free token at huggingface.co/settings/tokens");
 
             for (const [i, scene] of scriptData.scenes.entries()) {
                 console.log(`Generating image for scene ${i + 1}:`, scene.image_prompt);
 
-                // Increased timeout to 120s per image for real quality
-                const imgTimeout = new Promise<null>((_, reject) =>
-                    setTimeout(() => reject(new Error(`Image ${i + 1} timed out after 120s`)), 120000)
-                );
-
                 try {
-                    const imgCall = client.models.generateImages({
-                        model: "imagen-3.0-generate-001",
-                        prompt: scene.image_prompt,
-                        config: {
-                            numberOfImages: 1,
-                            outputMimeType: "image/jpeg",
-                            aspectRatio: "9:16",
-                        },
-                    });
+                    const hfResponse = await fetch(
+                        "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell",
+                        {
+                            method: "POST",
+                            headers: {
+                                Authorization: `Bearer ${hfToken}`,
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({
+                                inputs: scene.image_prompt,
+                                parameters: { width: 576, height: 1024 },
+                            }),
+                            signal: AbortSignal.timeout(120000),
+                        }
+                    );
 
-                    const response = await Promise.race([imgCall, imgTimeout]);
-                    const imageBytes = (response as any)?.generatedImages?.[0]?.image?.imageBytes;
-
-                    if (!imageBytes) {
-                        throw new Error(`No image bytes returned for scene ${i + 1}. Check API response.`);
+                    if (!hfResponse.ok) {
+                        const err = await hfResponse.text();
+                        // Model loading — retry after 30s
+                        if (hfResponse.status === 503) {
+                            throw new RetryAfterError(`HuggingFace model loading, retrying in 30s`, "30s");
+                        }
+                        throw new Error(`HuggingFace API failed (${hfResponse.status}): ${err}`);
                     }
 
-                    const buffer = Buffer.from(imageBytes, "base64");
+                    const buffer = Buffer.from(await hfResponse.arrayBuffer());
                     const fileName = `${seriesId}/scene-${i + 1}-${Date.now()}.jpg`;
                     const url = await uploadToStorage("video-images", fileName, buffer, "image/jpeg");
 
@@ -309,11 +443,9 @@ export const generateVideo = inngest.createFunction(
                     imageUrls.push(url);
 
                 } catch (err: any) {
+                    if (err instanceof RetryAfterError) throw err;
                     console.error(`Scene ${i + 1} image generation failed:`, err.message);
-                    if (err.message?.includes('429') || err.message?.includes('quota') || err.message?.includes('RESOURCE_EXHAUSTED')) {
-                        throw new RetryAfterError(`Gemini quota exceeded on image ${i + 1}, retrying in 5 minutes`, 5 * 60 * 1000);
-                    }
-                    throw new Error(`Real image generation failed for scene ${i + 1}: ${err.message}`);
+                    throw new Error(`Image generation failed for scene ${i + 1}: ${err.message}`);
                 }
             }
 
@@ -322,11 +454,10 @@ export const generateVideo = inngest.createFunction(
 
         // ── Step 6: Save everything to Supabase ───────────────────────────────
         await step.run("save-everything", async () => {
-            // Insert into video_projects table
-            const { error: insertError } = await supabaseAdmin
+            // Update the existing video project record
+            const { error: updateProjectError } = await supabaseAdmin
                 .from("video_projects")
-                .insert({
-                    series_id: seriesId,
+                .update({
                     title: scriptData.title,
                     total_script: scriptData.total_script,
                     scenes: scriptData.scenes,
@@ -334,18 +465,20 @@ export const generateVideo = inngest.createFunction(
                     captions_url: captions.captionsUrl,
                     image_urls: images.imageUrls,
                     status: "ready",
-                });
+                    updated_at: new Date().toISOString(),
+                })
+                .eq("id", videoProjectId);
 
-            if (insertError) throw new Error(`Failed to save video project: ${insertError.message}`);
+            if (updateProjectError) throw new Error(`Failed to update video project: ${updateProjectError.message}`);
 
             // Mark series video_status as completed (non-fatal if column doesn't exist)
-            const { error: updateError } = await supabaseAdmin
+            const { error: updateSeriesError } = await supabaseAdmin
                 .from("series")
                 .update({ video_status: "completed" })
                 .eq("id", seriesId);
 
-            if (updateError) {
-                console.warn(`Could not update series video_status (column may not exist): ${updateError.message}`);
+            if (updateSeriesError) {
+                console.warn(`Could not update series video_status: ${updateSeriesError.message}`);
             }
 
             return { success: true };
