@@ -2,13 +2,21 @@
 
 interface StatsGridProps {
     credits?: number | string;
+    videoCount?: number;
+    seriesCount?: number;
+    activeSchedules?: number;
 }
 
-export function StatsGrid({ credits }: StatsGridProps) {
+export function StatsGrid({
+    credits,
+    videoCount = 0,
+    seriesCount = 0,
+    activeSchedules = 0
+}: StatsGridProps) {
     const stats = [
-        { label: "Videos Generated", value: "0", icon: "🎬", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/20" },
-        { label: "Total Views", value: "0", icon: "📈", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
-        { label: "Active Schedules", value: "0", icon: "📅", color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20" },
+        { label: "Videos Generated", value: videoCount.toLocaleString(), icon: "🎬", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/20" },
+        { label: "Active Series", value: seriesCount.toLocaleString(), icon: "📈", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20" },
+        { label: "Active Schedules", value: activeSchedules.toLocaleString(), icon: "📅", color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20" },
         { label: "Credits Left", value: credits?.toLocaleString() || "10,000", icon: "💎", color: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/20" },
     ];
 

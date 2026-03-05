@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { inngest } from "@/inngest/client";
+import { getProvider, LANGUAGE_CODES } from "@/lib/voice-config";
 
 export interface SeriesData {
     seriesName: string;
@@ -26,7 +27,10 @@ export async function createSeries(data: SeriesData) {
     }
 
     try {
-        const { error } = await supabaseAdmin.from("series").insert({
+        const modelName = getProvider(data.language);
+        const modelLangCode = LANGUAGE_CODES[data.language] || data.language;
+
+        const { data: inserted, error } = await supabaseAdmin.from("series").insert({
             user_id: userId,
             series_name: data.seriesName,
             niche: data.niche,
@@ -40,11 +44,21 @@ export async function createSeries(data: SeriesData) {
             publish_time: data.publishTime,
             status: "active",
             video_status: "pending",
-        });
+            model_name: modelName,
+            model_lang_code: modelLangCode,
+        }).select("id").single();
 
         if (error) {
             console.error("Error creating series:", error);
             throw new Error(`Failed to save series: ${error.message}`);
+        }
+
+        // Trigger Inngest video generation immediately after series creation
+        if (inserted?.id) {
+            await inngest.send({
+                name: "video/generate",
+                data: { seriesId: inserted.id },
+            });
         }
 
         revalidatePath("/dashboard");
@@ -60,20 +74,27 @@ export async function updateSeries(id: string, data: Partial<SeriesData>) {
     if (!userId) throw new Error("Unauthorized");
 
     try {
+        const updatePayload: any = {
+            series_name: data.seriesName,
+            niche: data.niche,
+            language: data.language,
+            voice_id: data.voice,
+            background_music: data.backgroundMusic,
+            video_style: data.videoStyle,
+            caption_style: data.captionStyle,
+            video_duration: data.videoDuration,
+            platforms: data.platforms,
+            publish_time: data.publishTime,
+        };
+
+        if (data.language) {
+            updatePayload.model_name = getProvider(data.language);
+            updatePayload.model_lang_code = LANGUAGE_CODES[data.language] || data.language;
+        }
+
         const { error } = await supabaseAdmin
             .from("series")
-            .update({
-                series_name: data.seriesName,
-                niche: data.niche,
-                language: data.language,
-                voice_id: data.voice,
-                background_music: data.backgroundMusic,
-                video_style: data.videoStyle,
-                caption_style: data.captionStyle,
-                video_duration: data.videoDuration,
-                platforms: data.platforms,
-                publish_time: data.publishTime,
-            })
+            .update(updatePayload)
             .eq("id", id)
             .eq("user_id", userId);
 
