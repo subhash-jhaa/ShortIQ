@@ -1,10 +1,11 @@
 "use server";
 
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export async function getUserProfile() {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user?.id;
 
     if (!userId) {
         return null;
@@ -29,20 +30,13 @@ export async function getUserProfile() {
             throw error;
         }
 
-        // 2. If user doesn't exist, sync from Clerk
-        console.log("[getUserProfile] Profile not found. Attempting Sync from Clerk...");
-        const user = await currentUser();
-        if (!user) {
-            console.warn("[getUserProfile] No Clerk user found in session.");
-            return null;
-        }
-
-        const email = user.emailAddresses[0]?.emailAddress;
-        const full_name = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+        // 2. If user doesn't exist, sync from NextAuth session
+        console.log("[getUserProfile] Profile not found. Syncing from session...");
+        const email = session?.user?.email;
+        const full_name = session?.user?.name || email?.split('@')[0] || '';
 
         console.log(`[getUserProfile] Upserting user: ${email} (${userId})`);
 
-        // Upsert user (Removed updated_at as it's not in the table screenshot)
         const { data: newProfile, error: upsertError } = await supabaseAdmin
             .from('users')
             .upsert(

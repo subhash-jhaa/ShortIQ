@@ -1,19 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getVideos, VideoProject } from "@/actions/videos";
-import { formatDistanceToNow } from "date-fns";
-import { Loader2, Video, Clock, ExternalLink, Play } from "lucide-react";
+import { getVideos, VideoProject, cancelVideoGeneration, deleteVideo } from "@/actions/videos";
+import { formatDistanceToNow, differenceInMinutes } from "date-fns";
+import { Loader2, Video, Clock, ExternalLink, Play, XCircle, Eye, Download, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import { VideoDetailsModal } from "@/components/dashboard/VideoDetailsModal";
+import { VideoPreviewModal } from "@/components/dashboard/VideoPreviewModal";
 
 export default function VideosPage() {
     const [videos, setVideos] = useState<VideoProject[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedVideo, setSelectedVideo] = useState<VideoProject | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [previewVideo, setPreviewVideo] = useState<VideoProject | null>(null);
+    const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+    const [currentTime, setCurrentTime] = useState(new Date());
 
     const fetchVideos = async () => {
         const res = await getVideos();
@@ -25,19 +29,36 @@ export default function VideosPage() {
         setIsLoading(false);
     };
 
+    const handleCancel = async (videoId: string) => {
+        if (!confirm("Are you sure you want to cancel this generation?")) return;
+
+        toast.promise(cancelVideoGeneration(videoId), {
+            loading: 'Cancelling generation...',
+            success: () => {
+                fetchVideos();
+                return 'Generation cancelled';
+            },
+            error: 'Failed to cancel generation'
+        });
+    };
+
     useEffect(() => {
         fetchVideos();
         const hasGenerating = videos.some(v => v.status === "generating");
 
-        // Poll every 5 seconds if there's a generation in progress
-        // Poll every 30 seconds otherwise to check for new scheduled videos
-        const interval = setInterval(() => {
-            if (hasGenerating || videos.length === 0) {
-                fetchVideos();
-            }
-        }, hasGenerating ? 5000 : 30000);
+        // Polling for data
+        const pollRate = (hasGenerating || videos.length === 0) ? 5000 : 30000;
+        const dataInterval = setInterval(fetchVideos, pollRate);
 
-        return () => clearInterval(interval);
+        // Timer for the 5-minute cancel button UI
+        const timerInterval = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 10000); // Check every 10s for the timer
+
+        return () => {
+            clearInterval(dataInterval);
+            clearInterval(timerInterval);
+        };
     }, [videos.length, videos.some(v => v.status === "generating")]);
 
     if (isLoading) {
@@ -48,6 +69,21 @@ export default function VideosPage() {
             </div>
         );
     }
+
+    const handleDelete = async (videoId: string) => {
+        if (!confirm("Are you sure you want to delete this video? This action cannot be undone.")) return;
+        try {
+            const res = await deleteVideo(videoId);
+            if (res.success) {
+                toast.success("Video deleted");
+                fetchVideos(); // Refresh the list
+            } else {
+                toast.error(res.error || "Failed to delete video");
+            }
+        } catch (err) {
+            toast.error("Error deleting video");
+        }
+    };
 
     return (
         <div className="space-y-8">
@@ -88,17 +124,43 @@ export default function VideosPage() {
                         <div
                             key={video.id}
                             onClick={() => {
-                                setSelectedVideo(video);
-                                setIsModalOpen(true);
+                                if (video.status === "ready") {
+                                    setPreviewVideo(video);
+                                    setIsPreviewOpen(true);
+                                }
                             }}
-                            className="bg-white/[0.03] border border-white/5 rounded-2xl overflow-hidden group hover:border-white/10 transition-all cursor-pointer"
+                            className={`bg-white/[0.03] border border-white/5 rounded-2xl overflow-hidden group hover:border-white/10 transition-all ${video.status === "ready" ? "cursor-pointer" : "cursor-default"}`}
                         >
                             {/* Thumbnail Area */}
                             <div className="relative aspect-video w-full overflow-hidden bg-white/5">
-                                {video.status === "generating" ? (
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-indigo-400 gap-3 bg-indigo-500/5">
-                                        <Loader2 className="animate-spin" size={24} />
-                                        <span className="text-[10px] uppercase font-bold tracking-widest">Generating Video...</span>
+                                {(video.status === "generating" || video.status === "cancelled") ? (
+                                    <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 ${video.status === 'cancelled' ? 'text-white/20 bg-white/5' : 'text-indigo-400 bg-indigo-500/5'
+                                        }`}>
+                                        {video.status === 'generating' ? (
+                                            <>
+                                                <Loader2 className="animate-spin" size={24} />
+                                                <span className="text-[10px] uppercase font-bold tracking-widest">Generating Video...</span>
+
+                                                {/* Cancel Button - Only after 5 minutes */}
+                                                {differenceInMinutes(currentTime, new Date(video.created_at)) >= 5 && (
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleCancel(video.id);
+                                                        }}
+                                                        className="mt-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-[10px] font-bold uppercase tracking-wider border border-rose-500/20 transition-all active:scale-95"
+                                                    >
+                                                        <XCircle size={14} />
+                                                        Cancel Generation
+                                                    </button>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <XCircle size={32} />
+                                                <span className="text-[10px] uppercase font-bold tracking-widest">Generation Cancelled</span>
+                                            </>
+                                        )}
                                     </div>
                                 ) : (
                                     <>
@@ -122,7 +184,37 @@ export default function VideosPage() {
                                         </div>
                                     </>
                                 )}
-                                <div className="absolute top-3 right-3 px-2 py-1 rounded-md bg-black/40 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white uppercase tracking-wider">
+                                {video.video_url ? (
+                                    <Link
+                                        href={video.video_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="absolute top-3 left-3 px-3 h-9 rounded-full bg-indigo-500 text-white flex items-center justify-center gap-2 shadow-xl shadow-black/50 z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-indigo-600 hover:scale-105 active:scale-95"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <Download size={16} />
+                                        <span className="text-[10px] font-bold uppercase tracking-wider">Download MP4</span>
+                                    </Link>
+                                ) : video.status === "ready" && (
+                                    <div className="absolute top-3 left-3 px-3 h-9 rounded-full bg-white/10 backdrop-blur-md text-white/40 flex items-center justify-center gap-2 border border-white/5 z-20 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                        <Download size={16} />
+                                        <span className="text-[10px] font-bold uppercase tracking-wider">No MP4 Link</span>
+                                    </div>
+                                )}
+
+                                {/* Delete Button */}
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDelete(video.id);
+                                    }}
+                                    className="absolute top-3 right-3 p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white border border-rose-500/20 backdrop-blur-md z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 active:scale-90"
+                                    title="Delete Video"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
+
+                                <div className="absolute bottom-3 right-3 px-2 py-1 rounded-md bg-black/40 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white uppercase tracking-wider z-10">
                                     {video.status}
                                 </div>
                             </div>
@@ -147,21 +239,34 @@ export default function VideosPage() {
                                 </div>
 
                                 {video.status === "ready" && (
-                                    <div className="mt-5 flex gap-2">
-                                        <Link
-                                            href={video.audio_url || "#"}
-                                            target="_blank"
-                                            className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white border border-white/5 py-2 rounded-lg text-xs font-semibold transition-all"
-                                        >
-                                            Audio <ExternalLink size={10} />
-                                        </Link>
-                                        <Link
-                                            href={video.captions_url || "#"}
-                                            target="_blank"
-                                            className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white border border-white/5 py-2 rounded-lg text-xs font-semibold transition-all"
-                                        >
-                                            SRT <ExternalLink size={10} />
-                                        </Link>
+                                    <div className="mt-5 flex flex-col gap-2">
+                                        <div className="flex gap-2">
+                                            <Link
+                                                href={video.audio_url || "#"}
+                                                target="_blank"
+                                                className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white border border-white/5 py-2 rounded-lg text-xs font-semibold transition-all"
+                                            >
+                                                Audio <ExternalLink size={10} />
+                                            </Link>
+                                            <Link
+                                                href={video.captions_url || "#"}
+                                                target="_blank"
+                                                className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white border border-white/5 py-2 rounded-lg text-xs font-semibold transition-all"
+                                            >
+                                                SRT <ExternalLink size={10} />
+                                            </Link>
+                                        </div>
+
+                                        {video.video_url && (
+                                            <Link
+                                                href={video.video_url}
+                                                target="_blank"
+                                                className="w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white py-2.5 rounded-lg text-xs font-bold transition-all shadow-lg shadow-indigo-500/20"
+                                            >
+                                                <Download size={14} />
+                                                Download MP4
+                                            </Link>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -175,6 +280,17 @@ export default function VideosPage() {
                 open={isModalOpen}
                 onOpenChange={setIsModalOpen}
             />
+
+            {previewVideo && (
+                <VideoPreviewModal
+                    video={previewVideo}
+                    isOpen={isPreviewOpen}
+                    onClose={() => {
+                        setIsPreviewOpen(false);
+                        setPreviewVideo(null);
+                    }}
+                />
+            )}
         </div>
     );
 }

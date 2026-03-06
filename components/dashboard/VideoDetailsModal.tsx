@@ -154,6 +154,23 @@ export function VideoDetailsModal({ video, open, onOpenChange }: VideoDetailsMod
                                         <ExternalLink size={14} className="text-white/20" />
                                     </a>
                                 </Button>
+                                {video.video_url && (
+                                    <Button
+                                        variant="outline"
+                                        asChild
+                                        className="w-full justify-start gap-3 bg-indigo-500/10 border-indigo-500/20 hover:bg-indigo-500/20 hover:border-indigo-500/30 h-10 rounded-xl text-indigo-100"
+                                    >
+                                        <a href={video.video_url} target="_blank">
+                                            <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                                                <VideoIcon size={16} />
+                                            </div>
+                                            <div className="flex-1 text-left">
+                                                <p className="text-xs font-bold text-white uppercase tracking-tight">Full Video (MP4)</p>
+                                            </div>
+                                            <Download size={14} className="text-white/20" />
+                                        </a>
+                                    </Button>
+                                )}
                             </div>
                         </div>
 

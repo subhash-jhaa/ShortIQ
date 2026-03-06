@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-
-import { SignedIn, SignedOut, SignUpButton } from "@clerk/nextjs";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function HeroSection() {
     const [typed, setTyped] = useState("");
+    const { data: session } = useSession();
     const words = ["YouTube Shorts", "Instagram Reels", "TikTok Videos", "Facebook Clips", "Email Campaigns"];
     const wordIndex = useRef(0);
     const charIndex = useRef(0);
@@ -67,18 +68,15 @@ export default function HeroSection() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-up animation-delay-300">
-                    <SignedOut>
-                        <SignUpButton mode="modal">
-                            <button className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/20 flex items-center gap-2">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                    <path d="M5 3l14 9-14 9V3z" fill="white" />
-                                </svg>
-                                Start Generating Free
-                            </button>
-                        </SignUpButton>
-                    </SignedOut>
-                    <SignedIn>
-                        <a
+                    {!session ? (
+                        <Link href="/sign-up" className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/20 flex items-center gap-2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M5 3l14 9-14 9V3z" fill="white" />
+                            </svg>
+                            Start Generating Free
+                        </Link>
+                    ) : (
+                        <Link
                             href="/dashboard"
                             className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/20 flex items-center gap-2"
                         >
@@ -88,8 +86,8 @@ export default function HeroSection() {
                                 <line x1="9" y1="21" x2="9" y2="9" />
                             </svg>
                             Go to Dashboard
-                        </a>
-                    </SignedIn>
+                        </Link>
+                    )}
                     <a
                         href="#how-it-works"
                         className="px-8 py-4 rounded-2xl text-base font-semibold text-white border border-white/20 hover:bg-white/5 transition-all flex items-center gap-2"

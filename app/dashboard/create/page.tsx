@@ -171,7 +171,7 @@ function CreatePageContent() {
 
             if (result.success) {
                 toast.success(seriesId ? "Series updated successfully! 🎉" : "Series scheduled successfully! 🎉");
-                router.push("/dashboard");
+                router.push("/dashboard/videos");
             } else {
                 toast.error(result.error || `Failed to ${seriesId ? "update" : "schedule"} series`);
             }
