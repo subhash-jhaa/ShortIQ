@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { SignInButton, SignUpButton, UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const { data: session } = useSession();
 
     useEffect(() => {
         const handler = () => setScrolled(window.scrollY > 20);
@@ -54,34 +56,28 @@ export default function Navbar() {
 
                 {/* CTAs */}
                 <div className="hidden md:flex items-center gap-3">
-                    <SignedOut>
-                        <SignInButton mode="modal">
-                            <button className="text-sm text-white/70 hover:text-white transition-colors font-medium px-4 py-2">
+                    {!session ? (
+                        <>
+                            <Link href="/sign-in" className="text-sm text-white/70 hover:text-white transition-colors font-medium px-4 py-2">
                                 Sign In
-                            </button>
-                        </SignInButton>
-                        <SignUpButton mode="modal">
-                            <button className="btn-primary text-sm px-5 py-2.5 rounded-xl font-semibold">
+                            </Link>
+                            <Link href="/sign-up" className="btn-primary text-sm px-5 py-2.5 rounded-xl font-semibold">
                                 Start Free Trial
+                            </Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link href="/dashboard" className="text-sm text-white/70 hover:text-white transition-colors font-medium px-4 py-2 border border-white/10 rounded-xl hover:bg-white/5">
+                                Dashboard
+                            </Link>
+                            <button
+                                onClick={() => signOut({ callbackUrl: "/" })}
+                                className="text-sm text-white/50 hover:text-white border border-white/10 hover:border-white/30 px-4 py-2 rounded-xl transition-colors"
+                            >
+                                Sign out
                             </button>
-                        </SignUpButton>
-                    </SignedOut>
-                    <SignedIn>
-                        <a
-                            href="/dashboard"
-                            className="text-sm text-white/70 hover:text-white transition-colors font-medium px-4 py-2 border border-white/10 rounded-xl hover:bg-white/5"
-                        >
-                            Dashboard
-                        </a>
-                        <UserButton
-                            afterSignOutUrl="/"
-                            appearance={{
-                                elements: {
-                                    userButtonAvatarBox: "w-9 h-9 border border-white/10"
-                                }
-                            }}
-                        />
-                    </SignedIn>
+                        </>
+                    )}
                 </div>
 
                 {/* Mobile Menu Toggle */}
@@ -120,27 +116,23 @@ export default function Navbar() {
                             {item}
                         </a>
                     ))}
-                    <SignedOut>
-                        <SignUpButton mode="modal">
-                            <button className="btn-primary text-sm px-5 py-2.5 rounded-xl font-semibold text-center w-full">
-                                Start Free Trial
-                            </button>
-                        </SignUpButton>
-                    </SignedOut>
-                    <SignedIn>
+                    {!session ? (
+                        <Link href="/sign-up" className="btn-primary text-sm px-5 py-2.5 rounded-xl font-semibold text-center w-full block text-center">
+                            Start Free Trial
+                        </Link>
+                    ) : (
                         <div className="flex flex-col gap-3">
-                            <a
-                                href="/dashboard"
-                                className="text-white/80 hover:text-white text-sm font-medium px-2"
-                            >
+                            <Link href="/dashboard" className="text-white/80 hover:text-white text-sm font-medium px-2">
                                 Dashboard
-                            </a>
-                            <div className="flex items-center gap-3 px-2 py-1">
-                                <UserButton afterSignOutUrl="/" />
-                                <span className="text-sm text-white/80 font-medium">My Account</span>
-                            </div>
+                            </Link>
+                            <button
+                                onClick={() => signOut({ callbackUrl: "/" })}
+                                className="text-sm text-white/50 hover:text-white text-left px-2"
+                            >
+                                Sign out
+                            </button>
                         </div>
-                    </SignedIn>
+                    )}
                 </div>
             )}
         </header>

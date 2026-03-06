@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { UserButton } from "@clerk/nextjs";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -22,6 +22,7 @@ export default function DashboardLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const { data: session } = useSession();
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
 
@@ -128,14 +129,15 @@ export default function DashboardLayout({
                 {/* Dashboard Header */}
                 <header className="h-16 bg-[#0a0a0b]/80 backdrop-blur-md border-b border-white/5 flex items-center justify-end px-8 shrink-0">
                     {mounted && (
-                        <UserButton
-                            afterSignOutUrl="/"
-                            appearance={{
-                                elements: {
-                                    userButtonAvatarBox: "w-8 h-8"
-                                }
-                            }}
-                        />
+                        <div className="flex items-center gap-3">
+                            <span className="text-sm text-white/50">{session?.user?.email}</span>
+                            <button
+                                onClick={() => signOut({ callbackUrl: "/" })}
+                                className="text-sm text-white/40 hover:text-white border border-white/10 hover:border-white/30 px-3 py-1.5 rounded-lg transition-colors"
+                            >
+                                Sign out
+                            </button>
+                        </div>
                     )}
                 </header>
 

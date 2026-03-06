@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { inngest } from "@/inngest/client";
@@ -20,7 +20,8 @@ export interface SeriesData {
 }
 
 export async function createSeries(data: SeriesData) {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user?.id;
 
     if (!userId) {
         throw new Error("Unauthorized");
@@ -70,7 +71,8 @@ export async function createSeries(data: SeriesData) {
 }
 
 export async function updateSeries(id: string, data: Partial<SeriesData>) {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user?.id;
     if (!userId) throw new Error("Unauthorized");
 
     try {
@@ -108,7 +110,8 @@ export async function updateSeries(id: string, data: Partial<SeriesData>) {
 }
 
 export async function triggerVideoGeneration(seriesId: string) {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user?.id;
     if (!userId) throw new Error("Unauthorized");
 
     try {
@@ -124,7 +127,8 @@ export async function triggerVideoGeneration(seriesId: string) {
 }
 
 export async function deleteSeries(id: string) {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user?.id;
     if (!userId) throw new Error("Unauthorized");
 
     try {
@@ -144,7 +148,8 @@ export async function deleteSeries(id: string) {
 }
 
 export async function toggleSeriesStatus(id: string, currentStatus: string) {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user?.id;
     if (!userId) throw new Error("Unauthorized");
 
     const newStatus = currentStatus === "paused" ? "active" : "paused";
@@ -166,7 +171,8 @@ export async function toggleSeriesStatus(id: string, currentStatus: string) {
 }
 
 export async function getSeriesById(id: string) {
-    const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user?.id;
     if (!userId) {
         throw new Error("Unauthorized");
     }
