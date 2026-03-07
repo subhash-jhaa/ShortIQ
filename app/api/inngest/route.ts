@@ -1,6 +1,7 @@
 import { serve } from "inngest/next";
 import { inngest } from "@/inngest/client";
 import { helloWorld, generateVideo } from "@/inngest/functions";
+import { seriesScheduler, dailyWorkflow } from "@/inngest/scheduling";
 
 console.log(">>> Inngest route handler loaded. Using Client ID: vidmaxx");
 
@@ -9,5 +10,7 @@ export const { GET, POST, PUT } = serve({
     functions: [
         helloWorld,
         generateVideo,
+        seriesScheduler,
+        dailyWorkflow,
     ],
 });

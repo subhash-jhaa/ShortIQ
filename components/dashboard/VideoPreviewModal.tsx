@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Player } from "@remotion/player";
-import { Main } from "@/remotion/Main";
+import { useState } from "react";
 import { VideoProject } from "@/actions/videos";
 import { X, Download, Loader2 } from "lucide-react";
 
@@ -13,32 +11,15 @@ interface VideoPreviewModalProps {
 }
 
 export function VideoPreviewModal({ video, isOpen, onClose }: VideoPreviewModalProps) {
-    const [srtContent, setSrtContent] = useState("");
-    const [loadingSrt, setLoadingSrt] = useState(false);
-
-    useEffect(() => {
-        if (!isOpen) return;
-        if ((video as any).srt_content) {
-            setSrtContent((video as any).srt_content);
-            return;
-        }
-        if ((video as any).captions_url) {
-            setLoadingSrt(true);
-            fetch((video as any).captions_url)
-                .then((r) => r.text())
-                .then((text) => setSrtContent(text))
-                .catch(console.error)
-                .finally(() => setLoadingSrt(false));
-        }
-    }, [isOpen, video]);
+    const [isLoading, setIsLoading] = useState(true);
 
     if (!isOpen) return null;
 
+    // Ensure duration has a fallback
     const durationInFrames = (video as any).duration_in_frames || 1800;
-    const imageUrls: string[] = video.image_urls || [];
-    const captionStyle: string = (video as any).caption_style || "classic";
 
-    const canPreview = imageUrls.length > 0;
+    // We expect the final Creatomate render URL to be on `video.video_url`
+    const videoUrl = (video as any).video_url;
 
     return (
         <div
@@ -58,34 +39,28 @@ export function VideoPreviewModal({ video, isOpen, onClose }: VideoPreviewModalP
                 </div>
 
                 {/* Player */}
-                <div className="bg-black aspect-[9/16] w-full flex items-center justify-center">
-                    {loadingSrt ? (
-                        <div className="flex flex-col items-center gap-3 text-white/30">
-                            <Loader2 size={32} className="animate-spin" />
-                            <span className="text-xs">Loading preview…</span>
-                        </div>
-                    ) : canPreview ? (
-                        <Player
-                            component={Main}
-                            durationInFrames={durationInFrames}
-                            compositionWidth={1080}
-                            compositionHeight={1920}
-                            fps={30}
-                            style={{ width: "100%", height: "100%" }}
-                            controls
-                            inputProps={{
-                                audioUrl: video.audio_url || "",
-                                srtContent,
-                                imageUrls,
-                                captionStyle,
-                                videoStyle: "realistic",
-                                durationInFrames,
-                            }}
-                        />
+                <div className="bg-black aspect-[9/16] w-full flex items-center justify-center relative">
+                    {videoUrl ? (
+                        <>
+                            {isLoading && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-white/30 z-10">
+                                    <Loader2 size={32} className="animate-spin" />
+                                    <span className="text-xs">Loading video…</span>
+                                </div>
+                            )}
+                            <video
+                                src={videoUrl}
+                                controls
+                                onLoadedData={() => setIsLoading(false)}
+                                className="w-full h-full object-contain"
+                            />
+                        </>
                     ) : (
                         <div className="text-white/20 text-center text-sm px-8">
                             <p>No preview available yet.</p>
-                            <p className="text-xs mt-1 opacity-60">Images are still generating.</p>
+                            <p className="text-xs mt-1 opacity-60">
+                                {video.status === "rendering" ? "Video is currently rendering in the cloud..." : "Video generation has not completed."}
+                            </p>
                         </div>
                     )}
                 </div>
@@ -93,7 +68,7 @@ export function VideoPreviewModal({ video, isOpen, onClose }: VideoPreviewModalP
                 {/* Footer */}
                 <div className="px-5 py-4 flex items-center justify-between border-t border-white/5">
                     <p className="text-xs text-white/30">
-                        {durationInFrames} frames · {Math.round(durationInFrames / 30)}s · 30fps
+                        {Math.round(durationInFrames / 30)}s
                     </p>
                     {video.audio_url && (
                         <a

@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreVertical, Edit2, Play, Eye, Pause, Trash2 } from "lucide-react";
+import { MoreVertical, Edit2, Play, Eye, Pause, Trash2, Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { deleteSeries, toggleSeriesStatus, triggerVideoGeneration } from "@/actions/series";
+import { deleteSeries, toggleSeriesStatus, triggerVideoGeneration, fastTrackWorkflow } from "@/actions/series";
 import { toast } from "sonner";
 
 interface Series {
@@ -75,6 +75,23 @@ export function SeriesCard({ series, onRefresh }: SeriesCardProps) {
             }
         } catch (err) {
             toast.error("Error updating status");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleTestWorkflow = async () => {
+        setIsLoading(true);
+        try {
+            const res = await fastTrackWorkflow(series.id);
+            if (res.success) {
+                toast.success("Full Workflow Triggered (Test Mode)");
+                router.push("/dashboard/videos");
+            } else {
+                toast.error(res.error || "Failed to trigger workflow");
+            }
+        } catch (err) {
+            toast.error("Error triggering workflow");
         } finally {
             setIsLoading(false);
         }
@@ -171,6 +188,12 @@ export function SeriesCard({ series, onRefresh }: SeriesCardProps) {
                                 ) : (
                                     <><Play size={14} /> Resume Series</>
                                 )}
+                            </button>
+                            <button
+                                onClick={handleTestWorkflow}
+                                className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium hover:bg-white/5 rounded-md transition-colors text-amber-400"
+                            >
+                                <Zap size={14} className="fill-current" /> Test Workflow
                             </button>
                             <div className="h-px bg-white/5 my-1" />
                             <button

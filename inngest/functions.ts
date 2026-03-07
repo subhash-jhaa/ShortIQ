@@ -3,6 +3,9 @@ import { RetryAfterError } from "inngest";
 import { supabaseAdmin } from "../lib/supabase";
 import { groqClient } from "../lib/groq";
 import { getProvider, getVoiceById, LANGUAGE_CODES } from "../lib/voice-config";
+import { plunk } from "../lib/plunk";
+import { buildVideoReadyEmail } from "../lib/email-templates";
+import { renderWithCreatomate } from "../actions/render";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -482,6 +485,130 @@ Expected Output Structure:
             }
 
             return { success: true };
+        });
+
+        // ── Step 6.5: Trigger Creatomate Video Render ──────────────────────────
+        await step.run("trigger-video-render", async () => {
+            try {
+                // Fetch the saved video project to get captions URL and style
+                const { data: project, error: projectError } = await supabaseAdmin
+                    .from("video_projects")
+                    .select("captions_url, audio_url, image_urls")
+                    .eq("id", videoProjectId)
+                    .single();
+
+                if (projectError || !project) {
+                    console.warn(`[Creatomate] Could not fetch project for render: ${projectError?.message}`);
+                    return { skipped: true, reason: "project not found" };
+                }
+
+                // Fetch the SRT content from the captions URL
+                let srtContent = "";
+                if (project.captions_url) {
+                    try {
+                        const srtRes = await fetch(project.captions_url);
+                        if (srtRes.ok) srtContent = await srtRes.text();
+                    } catch (srtErr: any) {
+                        console.warn(`[Creatomate] Could not fetch SRT content: ${srtErr.message}`);
+                    }
+                }
+
+                const durationSeconds = parseDurationSeconds(series.video_duration);
+                const captionStyle = series.caption_style || "classic";
+
+                // Trigger the actual Creatomate render directly
+                const renderRes = await renderWithCreatomate({
+                    videoProjectId,
+                    imageUrls: project.image_urls || [],
+                    audioUrl: project.audio_url || "",
+                    srtContent,
+                    captionStyle,
+                    durationSeconds,
+                });
+
+                if (!renderRes.success || !renderRes.renderId) {
+                    console.error(`[Creatomate] Render trigger failed: ${renderRes.error}`);
+                    return { triggered: false, error: renderRes.error };
+                }
+
+                console.log(`[Creatomate] Render triggered! renderId: ${renderRes.renderId} status: ${renderRes.status}`);
+
+                // Save the render ID back to Supabase
+                if (renderRes.renderId) {
+                    await supabaseAdmin
+                        .from("video_projects")
+                        .update({
+                            render_id: renderRes.renderId,
+                            status: "rendering",
+                        })
+                        .eq("id", videoProjectId);
+                }
+
+                return { triggered: true, renderId: renderRes.renderId, status: renderRes.status };
+
+            } catch (renderErr: any) {
+                // Non-fatal — video assets are already saved, render can be triggered manually
+                console.error("[Creatomate] Failed to trigger render:", renderErr.message);
+                return { triggered: false, error: renderErr.message };
+            }
+        });
+
+        // ── Step 7: Send Email Notification via Plunk ─────────────────────────
+        await step.run("send-email-notification", async () => {
+            try {
+                if (!plunk) {
+                    console.warn("[Email] Plunk client not initialized — skipping email notification.");
+                    return { skipped: true, reason: "PLUNK_SECRET_KEY not set" };
+                }
+
+                // Look up user's email from Supabase Auth
+                const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserById(
+                    series.user_id
+                );
+
+                if (userError || !userData?.user?.email) {
+                    console.warn(`[Email] Could not fetch user email: ${userError?.message ?? "no email found"}`);
+                    return { skipped: true, reason: "user email not found" };
+                }
+
+                const userEmail = userData.user.email;
+                const userName =
+                    userData.user.user_metadata?.full_name ||
+                    userData.user.user_metadata?.name ||
+                    userEmail.split("@")[0];
+
+                // First image as thumbnail
+                const thumbnailUrl = images.imageUrls?.[0] ?? undefined;
+
+                // Build the HTML email
+                const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+                const htmlBody = buildVideoReadyEmail({
+                    userName,
+                    videoTitle: scriptData.title,
+                    thumbnailUrl,
+                    videoUrl: undefined, // video_url populated after render; omit for now
+                    niche: series.niche,
+                    duration: series.video_duration,
+                    language: series.language,
+                    appUrl,
+                    videoProjectId,
+                });
+
+                // Send email via Plunk
+                await plunk.emails.send({
+                    to: userEmail,
+                    subject: `🎬 Your video "${scriptData.title}" is ready!`,
+                    body: htmlBody,
+                });
+
+                console.log(`[Email] Notification sent to ${userEmail} for video: ${scriptData.title}`);
+                return { sent: true, to: userEmail };
+
+            } catch (emailErr: any) {
+                // Non-fatal — video is already saved, email failure should not break the pipeline
+                console.error("[Email] Failed to send notification:", emailErr.message);
+                return { sent: false, error: emailErr.message };
+            }
         });
 
         return { success: true, seriesId };

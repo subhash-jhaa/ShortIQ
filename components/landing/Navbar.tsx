@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useUser, useClerk } from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-    const { data: session } = useSession();
+    const { isSignedIn } = useUser();
+    const { signOut } = useClerk();
 
     useEffect(() => {
         const handler = () => setScrolled(window.scrollY > 20);
@@ -56,7 +57,7 @@ export default function Navbar() {
 
                 {/* CTAs */}
                 <div className="hidden md:flex items-center gap-3">
-                    {!session ? (
+                    {!isSignedIn ? (
                         <>
                             <Link href="/sign-in" className="text-sm text-white/70 hover:text-white transition-colors font-medium px-4 py-2">
                                 Sign In
@@ -116,7 +117,7 @@ export default function Navbar() {
                             {item}
                         </a>
                     ))}
-                    {!session ? (
+                    {!isSignedIn ? (
                         <Link href="/sign-up" className="btn-primary text-sm px-5 py-2.5 rounded-xl font-semibold text-center w-full block text-center">
                             Start Free Trial
                         </Link>

@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function HeroSection() {
     const [typed, setTyped] = useState("");
-    const { data: session } = useSession();
+    const { isSignedIn } = useUser();
     const words = ["YouTube Shorts", "Instagram Reels", "TikTok Videos", "Facebook Clips", "Email Campaigns"];
     const wordIndex = useRef(0);
     const charIndex = useRef(0);
@@ -68,7 +68,7 @@ export default function HeroSection() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-up animation-delay-300">
-                    {!session ? (
+                    {!isSignedIn ? (
                         <Link href="/sign-up" className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/20 flex items-center gap-2">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                                 <path d="M5 3l14 9-14 9V3z" fill="white" />

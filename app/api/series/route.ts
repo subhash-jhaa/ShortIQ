@@ -1,11 +1,10 @@
-import { auth } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const session = await auth();
-        const userId = session?.user?.id;
+        const { userId } = await auth();
 
         if (!userId) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

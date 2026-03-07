@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useUser, useClerk } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -22,7 +22,8 @@ export default function DashboardLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
-    const { data: session } = useSession();
+    const { user, isLoaded } = useUser();
+    const { signOut } = useClerk();
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
 
@@ -45,9 +46,9 @@ export default function DashboardLayout({
     ];
 
     return (
-        <div className="flex min-h-screen bg-[#0a0a0b] text-white font-sans">
+        <div className="flex h-screen bg-[#0a0a0b] text-white font-sans overflow-hidden">
             {/* Sidebar */}
-            <aside className="w-72 bg-[#0d0d14] border-r border-white/10 flex flex-col">
+            <aside className="w-72 bg-[#0d0d14] border-r border-white/10 flex flex-col overflow-y-auto custom-scrollbar">
                 <div className="p-6 shrink-0">
                     {/* Sidebar Header: Logo & Overview */}
                     <div className="mb-8">
@@ -65,8 +66,8 @@ export default function DashboardLayout({
                         <Link
                             href="/dashboard"
                             className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[16px] font-semibold transition-all ${isActive("/dashboard")
-                                    ? "bg-[#1e1e2d] border border-white/5 text-indigo-400 shadow-sm"
-                                    : "text-white/50 hover:bg-white/5 hover:text-white"
+                                ? "bg-[#1e1e2d] border border-white/5 text-indigo-400 shadow-sm"
+                                : "text-white/50 hover:bg-white/5 hover:text-white"
                                 }`}
                         >
                             <LayoutDashboard size={22} className={isActive("/dashboard") ? "text-indigo-400" : "text-white/20"} />
@@ -78,8 +79,8 @@ export default function DashboardLayout({
                     <Link
                         href="/dashboard/create"
                         className={`w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold text-sm transition-all shadow-lg mb-8 active:scale-[0.98] ${isActive("/dashboard/create")
-                                ? "bg-rose-500 text-white shadow-rose-500/20"
-                                : "bg-white hover:bg-slate-100 text-[#0d0d14]"
+                            ? "bg-rose-500 text-white shadow-rose-500/20"
+                            : "bg-white hover:bg-slate-100 text-[#0d0d14]"
                             }`}
                     >
                         <PlusCircle size={20} />
@@ -93,8 +94,8 @@ export default function DashboardLayout({
                                 key={item.name}
                                 href={item.href}
                                 className={`flex items-center gap-4 px-4 py-3 rounded-xl text-[16px] font-medium transition-all group ${isActive(item.href)
-                                        ? "bg-[#1e1e2d] border border-white/5 text-indigo-400 shadow-sm"
-                                        : "text-white/50 hover:bg-white/[0.08] hover:text-white hover:shadow-[0_0_20px_-5px_rgba(99,102,241,0.3)]"
+                                    ? "bg-[#1e1e2d] border border-white/5 text-indigo-400 shadow-sm"
+                                    : "text-white/50 hover:bg-white/[0.08] hover:text-white hover:shadow-[0_0_20px_-5px_rgba(99,102,241,0.3)]"
                                     }`}
                             >
                                 <span className={`${isActive(item.href) ? "text-indigo-400" : "text-white/20"} group-hover:text-indigo-400 transition-colors`}>
@@ -113,8 +114,8 @@ export default function DashboardLayout({
                             key={item.name}
                             href={item.href}
                             className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${isActive(item.href)
-                                    ? "bg-white/10 text-white"
-                                    : "text-white/30 hover:bg-white/5 hover:text-white"
+                                ? "bg-white/10 text-white"
+                                : "text-white/30 hover:bg-white/5 hover:text-white"
                                 }`}
                         >
                             <span className={isActive(item.href) ? "text-indigo-400" : ""}>{item.icon}</span>
@@ -128,11 +129,11 @@ export default function DashboardLayout({
             <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Dashboard Header */}
                 <header className="h-16 bg-[#0a0a0b]/80 backdrop-blur-md border-b border-white/5 flex items-center justify-end px-8 shrink-0">
-                    {mounted && (
+                    {mounted && isLoaded && (
                         <div className="flex items-center gap-3">
-                            <span className="text-sm text-white/50">{session?.user?.email}</span>
+                            <span className="text-sm text-white/50">{user?.primaryEmailAddress?.emailAddress}</span>
                             <button
-                                onClick={() => signOut({ callbackUrl: "/" })}
+                                onClick={() => signOut({ redirectUrl: "/" })}
                                 className="text-sm text-white/40 hover:text-white border border-white/10 hover:border-white/30 px-3 py-1.5 rounded-lg transition-colors"
                             >
                                 Sign out
