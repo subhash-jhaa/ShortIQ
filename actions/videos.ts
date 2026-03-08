@@ -5,7 +5,19 @@ import { auth } from "@/lib/clerk-server";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export interface VideoProject {
-    // ... (rest of interface)
+    id: string;
+    user_id: string;
+    series_id: string;
+    title: string;
+    total_script: string;
+    scenes: any[];
+    audio_url?: string;
+    captions_url?: string;
+    image_urls?: string[];
+    video_url?: string;
+    status: 'generating' | 'ready' | 'failed' | 'cancelled' | 'rendering';
+    created_at: string;
+    updated_at: string;
 }
 
 export async function getVideos() {

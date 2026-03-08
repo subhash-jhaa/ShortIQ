@@ -32,12 +32,12 @@ export function StepperProgress({ currentStep }: StepperProgressProps) {
                             {/* Connector line (between circles) */}
                             {index < STEPS.length - 1 && (
                                 <div
-                                    className="absolute top-[18px] left-[calc(50%+18px)] h-[2px] transition-all duration-500 ease-out"
+                                    className="absolute top-[18px] left-[calc(50%+18px)] h-[2px] transition-all duration-500 ease-out dark:[--stepper-bg:rgba(255,255,255,0.08)] [--stepper-bg:rgba(0,0,0,0.08)]"
                                     style={{
                                         width: "calc(100% - 36px)",
                                         background: isCompleted
                                             ? "linear-gradient(90deg, #6366f1, #818cf8)"
-                                            : "rgba(255,255,255,0.08)",
+                                            : "var(--stepper-bg)",
                                     }}
                                 />
                             )}
@@ -50,8 +50,8 @@ export function StepperProgress({ currentStep }: StepperProgressProps) {
                                     ${isCompleted
                                         ? "bg-indigo-500 border-indigo-500 text-white shadow-[0_0_16px_rgba(99,102,241,0.45)]"
                                         : isActive
-                                            ? "bg-indigo-500/20 border-indigo-500 text-indigo-300 shadow-[0_0_20px_rgba(99,102,241,0.35)]"
-                                            : "bg-white/5 border-white/10 text-white/30"
+                                            ? "bg-indigo-500/10 dark:bg-indigo-500/20 border-indigo-500 text-indigo-600 dark:text-indigo-300 shadow-[0_0_20px_rgba(99,102,241,0.35)]"
+                                            : "bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/30"
                                     }
                                 `}
                             >
@@ -73,10 +73,10 @@ export function StepperProgress({ currentStep }: StepperProgressProps) {
                                     mt-2.5 text-xs font-medium tracking-wide whitespace-nowrap
                                     transition-colors duration-300
                                     ${isCompleted
-                                        ? "text-indigo-400"
+                                        ? "text-indigo-500 dark:text-indigo-400"
                                         : isActive
-                                            ? "text-white"
-                                            : "text-white/25"
+                                            ? "text-gray-900 dark:text-white"
+                                            : "text-gray-400 dark:text-white/25"
                                     }
                                 `}
                             >

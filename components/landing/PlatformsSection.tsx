@@ -73,15 +73,15 @@ export default function PlatformsSection() {
                             >
                                 {p.svg}
                             </div>
-                            <h3 className="text-white font-bold text-lg mb-2 text-left">{p.name}</h3>
-                            <p className="text-white/60 text-sm leading-relaxed text-left">{p.desc}</p>
+                            <h3 className="text-gray-900 dark:text-white font-bold text-lg mb-2 text-left transition-colors">{p.name}</h3>
+                            <p className="text-gray-600 dark:text-white/60 text-sm leading-relaxed text-left transition-colors">{p.desc}</p>
                         </div>
                     ))}
 
                     {/* Extra empty card with CTA */}
                     <div className="glass-card border-dashed flex flex-col items-center justify-center text-center gap-3">
-                        <div className="w-14 h-14 rounded-2xl border-2 border-dashed border-white/20 flex items-center justify-center text-2xl text-white/40">+</div>
-                        <p className="text-white/50 text-sm">More coming soon</p>
+                        <div className="w-14 h-14 rounded-2xl border-2 border-dashed border-gray-300 dark:border-white/20 flex items-center justify-center text-2xl text-gray-400 dark:text-white/40 transition-colors">+</div>
+                        <p className="text-gray-500 dark:text-white/50 text-sm transition-colors">More coming soon</p>
                     </div>
                 </div>
             </div>

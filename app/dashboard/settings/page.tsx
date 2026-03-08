@@ -50,9 +50,6 @@ export default function SettingsPage() {
     };
 
     const handleConnect = async (platform: string) => {
-        // Clerk handles OAuth differently. We usually redirect to their profile page or a custom flux.
-        // For now, let's point them to the Clerk User Profile to manage accounts if that's the setup,
-        // or trigger a sign-in with the specific provider if integrated.
         toast.info(`Please connect your ${platform} account in your profile settings.`);
         openUserProfile();
     };
@@ -114,55 +111,55 @@ export default function SettingsPage() {
             name: "Tiktok",
             icon: (
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19.589 6.686a4.944 4.944 0 0 1-3.778-1.787c-.19-.115-.42-.23-.62-.315-.175-.075-.365-.13-.56-.16-.305-.05-.615-.075-.925-.075h-2.11c-.254 0-.482.106-.641.303-.16.196-.226.459-.181.714.107 1.064.407 2.091.892 3.023.51.982 1.203 1.845 2.057 2.565v2.855c0 3.108-2.521 5.629-5.629 5.629s-5.63-2.521-5.63-5.629 2.521-5.63 5.63-5.63c.272 0 .542.019.808.057V5.986c0-.57-.463-1.033-1.033-1.033H4.777c-.57 0-1.033.463-1.033 1.033V17.37c0 4.135 3.364 7.499 7.499 7.499 4.135 0 7.499-3.364 7.499-7.499v-6.742c1.32.915 2.88 1.446 4.563 1.446v-3.09c-.001-1.267-.935-2.296-2.219-2.298z" fill="white" />
+                    <path d="M19.589 6.686a4.944 4.944 0 0 1-3.778-1.787c-.19-.115-.42-.23-.62-.315-.175-.075-.365-.13-.56-.16-.305-.05-.615-.075-.925-.075h-2.11c-.254 0-.482.106-.641.303-.16.196-.226.459-.181.714.107 1.064.407 2.091.892 3.023.51.982 1.203 1.845 2.057 2.565v2.855c0 3.108-2.521 5.629-5.629 5.629s-5.63-2.521-5.63-5.629 2.521-5.63 5.63-5.63c.272 0 .542.019.808.057V5.986c0-.57-.463-1.033-1.033-1.033H4.777c-.57 0-1.033.463-1.033 1.033V17.37c0 4.135 3.364 7.499 7.499 7.499 4.135 0 7.499-3.364 7.499-7.499v-6.742c1.32.915 2.88 1.446 4.563 1.446v-3.09c-.001-1.267-.935-2.296-2.219-2.298z" fill="#000000" className="dark:fill-white" />
                 </svg>
             ),
             description: "Post your creations to TikTok automatically."
         },
     ];
 
-    if (!isLoaded) return <div>Loading...</div>;
+    if (!isLoaded) return <div className="text-gray-900 dark:text-white">Loading...</div>;
 
     return (
         <div className="max-w-4xl mx-auto py-10 px-4 space-y-12">
             {/* Header */}
             <div>
-                <h1 className="text-3xl font-bold text-white mb-2">Settings</h1>
-                <p className="text-white/40">Manage your connected accounts and preferences.</p>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Settings</h1>
+                <p className="text-gray-500 dark:text-white/40">Manage your connected accounts and preferences.</p>
             </div>
 
             {/* Profile Section */}
             <section className="space-y-6">
-                <div className="flex items-center gap-2 border-b border-white/5 pb-4">
-                    <div className="w-5 h-5 rounded-full border border-[#7c3aed] flex items-center justify-center text-[#7c3aed]">
+                <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/5 pb-4">
+                    <div className="w-5 h-5 rounded-full border border-indigo-500 dark:border-[#7c3aed] flex items-center justify-center text-indigo-500 dark:text-[#7c3aed]">
                         <CheckCircle2 size={12} />
                     </div>
-                    <h2 className="text-xl font-semibold text-white">Profile Information</h2>
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Profile Information</h2>
                 </div>
 
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-12 transition-all hover:border-white/20">
+                <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-12 transition-all hover:border-gray-300 dark:hover:border-white/20 shadow-sm dark:shadow-none">
                     {/* Avatar with PRO Badge */}
                     <div className="relative shrink-0">
-                        <div className="w-24 h-24 rounded-2xl bg-[#002b1f] flex items-center justify-center border border-white/10 shadow-2xl overflow-hidden">
-                            <span className="text-5xl font-medium text-white/90">
+                        <div className="w-24 h-24 rounded-2xl bg-indigo-50 dark:bg-[#002b1f] flex items-center justify-center border border-indigo-100 dark:border-white/10 shadow-lg dark:shadow-2xl overflow-hidden">
+                            <span className="text-5xl font-medium text-indigo-600 dark:text-white/90">
                                 {user?.fullName?.[0] || user?.primaryEmailAddress?.emailAddress?.[0] || "U"}
                             </span>
                         </div>
-                        <div className="absolute -bottom-2 -right-2 bg-[#4f46e5] text-white text-[10px] font-black px-2.5 py-1 rounded-lg border-4 border-[#0d0d14] shadow-xl tracking-tight uppercase">
+                        <div className="absolute -bottom-2 -right-2 bg-indigo-600 dark:bg-[#4f46e5] text-white text-[10px] font-black px-2.5 py-1 rounded-lg border-4 border-white dark:border-[#0d0d14] shadow-xl tracking-tight uppercase">
                             PRO
                         </div>
                     </div>
 
                     <div className="flex-1 grid gap-8 sm:grid-cols-2 w-full">
                         <div className="space-y-2.5">
-                            <label className="text-[10px] font-black text-white/30 uppercase tracking-widest">Full Name</label>
-                            <div className="bg-white/[0.02] text-white/50 font-medium px-4 py-3.5 rounded-xl border border-white/5 cursor-not-allowed text-[15px] shadow-inner select-none">
+                            <label className="text-[10px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest">Full Name</label>
+                            <div className="bg-gray-50 dark:bg-white/[0.02] text-gray-500 dark:text-white/50 font-medium px-4 py-3.5 rounded-xl border border-gray-200 dark:border-white/5 cursor-not-allowed text-[15px] shadow-inner select-none">
                                 {user?.fullName || "Loading..."}
                             </div>
                         </div>
                         <div className="space-y-2.5">
-                            <label className="text-[10px] font-black text-white/30 uppercase tracking-widest">Email Address</label>
-                            <div className="bg-white/[0.02] text-white/50 font-medium px-4 py-3.5 rounded-xl border border-white/5 cursor-not-allowed text-[15px] shadow-inner select-none overflow-hidden text-ellipsis">
+                            <label className="text-[10px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest">Email Address</label>
+                            <div className="bg-gray-50 dark:bg-white/[0.02] text-gray-500 dark:text-white/50 font-medium px-4 py-3.5 rounded-xl border border-gray-200 dark:border-white/5 cursor-not-allowed text-[15px] shadow-inner select-none overflow-hidden text-ellipsis">
                                 {user?.primaryEmailAddress?.emailAddress || "Loading..."}
                             </div>
                         </div>
@@ -172,17 +169,17 @@ export default function SettingsPage() {
 
             {/* Social Accounts Section */}
             <section className="space-y-6">
-                <div className="flex items-center gap-2 border-b border-white/5 pb-4">
-                    <Share2 className="text-indigo-400 transform rotate-45" size={20} />
-                    <h2 className="text-xl font-semibold text-white">Social Media Connections</h2>
+                <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/5 pb-4">
+                    <Share2 className="text-indigo-500 dark:text-indigo-400 transform rotate-45" size={20} />
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Social Media Connections</h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {platforms.map((platform) => (
-                        <div key={platform.id} className="bg-white/5 border border-white/10 rounded-[32px] p-8 flex flex-col items-center transition-all hover:border-white/20 shadow-xl group">
+                        <div key={platform.id} className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-[32px] p-8 flex flex-col items-center transition-all hover:border-gray-300 dark:hover:border-white/20 shadow-md dark:shadow-xl group">
                             {/* Platform Icon Box */}
-                            <div className={`w-28 h-28 rounded-[2rem] flex items-center justify-center mb-6 border border-white/5 transition-transform group-hover:scale-105 ${platform.id === 'youtube' ? 'bg-rose-500/10' :
-                                platform.id === 'instagram' ? 'bg-pink-500/10' : 'bg-white/10'
+                            <div className={`w-28 h-28 rounded-[2rem] flex items-center justify-center mb-6 border border-gray-100 dark:border-white/5 transition-transform group-hover:scale-105 ${platform.id === 'youtube' ? 'bg-rose-50 dark:bg-rose-500/10' :
+                                platform.id === 'instagram' ? 'bg-pink-50 dark:bg-pink-500/10' : 'bg-gray-50 dark:bg-white/10'
                                 }`}>
                                 <div className="transform scale-125">
                                     {platform.icon}
@@ -190,22 +187,22 @@ export default function SettingsPage() {
                             </div>
 
                             {/* Platform Name */}
-                            <h3 className="text-xl font-bold text-white mb-1 uppercase tracking-tight">{platform.name.split(' ')[0]}</h3>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1 uppercase tracking-tight">{platform.name.split(' ')[0]}</h3>
 
                             {isConnected(platform.id) ? (
                                 <>
-                                    <p className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em] mb-8">CONNECTED</p>
+                                    <p className="text-[10px] font-black text-emerald-500 dark:text-emerald-400 uppercase tracking-[0.2em] mb-8">CONNECTED</p>
 
                                     <div className="w-full space-y-4">
                                         {/* Account Name Pill */}
-                                        <div className="w-full bg-white/[0.02] border border-white/5 py-4 px-4 rounded-2xl text-white/70 text-sm font-medium text-center truncate shadow-inner">
+                                        <div className="w-full bg-gray-50 dark:bg-white/[0.02] border border-gray-200 dark:border-white/5 py-4 px-4 rounded-2xl text-gray-600 dark:text-white/70 text-sm font-medium text-center truncate shadow-inner">
                                             {getAccountName(platform.id)}
                                         </div>
 
                                         {/* Disconnect Button */}
                                         <Button
                                             variant="ghost"
-                                            className="w-full bg-transparent border border-rose-500/20 text-rose-500 hover:bg-rose-500/10 hover:text-rose-600 rounded-2xl h-14 gap-2 font-bold transition-all text-base"
+                                            className="w-full bg-transparent border border-rose-200 dark:border-rose-500/20 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-600 rounded-2xl h-14 gap-2 font-bold transition-all text-base"
                                             onClick={() => handleDisconnect(platform.id)}
                                             disabled={actionLoading === platform.id}
                                         >
@@ -220,14 +217,14 @@ export default function SettingsPage() {
                                 </>
                             ) : (
                                 <>
-                                    <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-12">DISCONNECTED</p>
+                                    <p className="text-[10px] font-black text-gray-400 dark:text-white/20 uppercase tracking-[0.2em] mb-12">DISCONNECTED</p>
                                     <Button
-                                        className="w-full bg-white text-black hover:bg-slate-100 font-black h-14 rounded-2xl text-base transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
+                                        className="w-full bg-gray-900 dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-slate-100 font-black h-14 rounded-2xl text-base transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
                                         onClick={() => handleConnect(platform.id)}
                                         disabled={actionLoading === platform.id}
                                     >
                                         {actionLoading === platform.id ? (
-                                            <Loader2 className="animate-spin text-black" size={20} />
+                                            <Loader2 className="animate-spin" size={20} />
                                         ) : (
                                             <>
                                                 <Share2 size={20} className="transform rotate-45" />
@@ -243,16 +240,16 @@ export default function SettingsPage() {
             </section>
 
             {/* Danger Zone Section */}
-            <section className="space-y-6 pt-10 border-t border-white/5">
+            <section className="space-y-6 pt-10 border-t border-gray-200 dark:border-white/5">
                 <div className="flex items-center gap-2 pb-4">
                     <AlertTriangle className="text-rose-500" size={20} />
-                    <h2 className="text-xl font-semibold text-white">Danger Zone</h2>
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Danger Zone</h2>
                 </div>
 
-                <div className="bg-rose-500/5 border border-rose-500/20 rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="bg-rose-50 dark:bg-rose-500/5 border border-rose-200 dark:border-rose-500/20 rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-8">
                     <div className="text-center md:text-left">
-                        <h3 className="text-lg font-bold text-white mb-2">Delete Account</h3>
-                        <p className="text-white/40 text-sm max-w-md">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Delete Account</h3>
+                        <p className="text-gray-500 dark:text-white/40 text-sm max-w-md">
                             Permanently delete your account, all your series, and generated videos. This action is irreversible.
                         </p>
                     </div>
@@ -260,7 +257,7 @@ export default function SettingsPage() {
                     {!showDeleteConfirm ? (
                         <Button
                             variant="destructive"
-                            className="bg-rose-600 hover:bg-rose-700 text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-rose-900/20"
+                            className="bg-rose-600 hover:bg-rose-700 text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-rose-900/10 dark:shadow-rose-900/20"
                             onClick={() => setShowDeleteConfirm(true)}
                         >
                             <Trash2 size={18} className="mr-2" />
@@ -270,7 +267,7 @@ export default function SettingsPage() {
                         <div className="flex flex-col sm:flex-row gap-3">
                             <Button
                                 variant="ghost"
-                                className="text-white/40 hover:text-white"
+                                className="text-gray-500 dark:text-white/40 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
                                 onClick={() => setShowDeleteConfirm(false)}
                                 disabled={actionLoading === "delete"}
                             >
@@ -296,10 +293,10 @@ export default function SettingsPage() {
 
             {/* Loading Overlay */}
             {loading && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-white/50 dark:bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
                     <div className="flex flex-col items-center gap-3">
                         <Loader2 className="animate-spin text-indigo-500" size={40} />
-                        <p className="text-white/60 font-medium">Loading settings...</p>
+                        <p className="text-gray-600 dark:text-white/60 font-medium">Loading settings...</p>
                     </div>
                 </div>
             )}

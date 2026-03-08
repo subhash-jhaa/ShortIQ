@@ -516,6 +516,10 @@ Expected Output Structure:
                 const durationSeconds = parseDurationSeconds(series.video_duration);
                 const captionStyle = series.caption_style || "classic";
 
+                // Construct webhook URL for progress/completion tracking
+                const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+                const webhookUrl = `${appUrl}/api/webhooks/creatomate`;
+
                 // Trigger the actual Creatomate render directly
                 const renderRes = await renderWithCreatomate({
                     videoProjectId,
@@ -524,6 +528,7 @@ Expected Output Structure:
                     srtContent,
                     captionStyle,
                     durationSeconds,
+                    webhookUrl,
                 });
 
                 if (!renderRes.success || !renderRes.renderId) {

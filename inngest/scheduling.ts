@@ -121,7 +121,17 @@ export const dailyWorkflow = inngest.createFunction(
                 if (video && plunk) {
                     const { data: userData } = await supabaseAdmin.auth.admin.getUserById(series.user_id);
                     if (userData?.user?.email) {
-                        const emailHtml = buildVideoReadyEmail(video, series);
+                        const emailHtml = buildVideoReadyEmail({
+                            userName: userData.user.user_metadata?.full_name || userData.user.user_metadata?.name || userData.user.email.split("@")[0],
+                            videoTitle: video.title || series.series_name,
+                            thumbnailUrl: video.image_urls?.[0],
+                            videoUrl: video.video_url,
+                            niche: series.niche,
+                            duration: series.video_duration,
+                            language: series.language,
+                            appUrl: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+                            videoProjectId: video.id,
+                        });
                         await plunk.emails.send({
                             to: userData.user.email,
                             subject: `Your scheduled video is ready: ${series.series_name}`,

@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import FloatingOrbs from "@/components/landing/FloatingOrbs";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
@@ -11,14 +8,11 @@ import PricingSection from "@/components/landing/PricingSection";
 import TestimonialsSection from "@/components/landing/TestimonialsSection";
 import CTASection from "@/components/landing/CTASection";
 import Footer from "@/components/landing/Footer";
-import ThemeSwitcher from "@/components/landing/ThemeSwitcher";
 
 export default function Home() {
-  const [theme, setTheme] = useState("midnight-sunset");
-
   return (
-    <div className={`shortiq-root theme-${theme}`}>
-      <FloatingOrbs theme={theme} />
+    <div className="shortiq-root dark:bg-gray-950 transition-colors duration-500">
+      <FloatingOrbs />
       <Navbar />
       <main>
         <HeroSection />
@@ -30,7 +24,6 @@ export default function Home() {
         <CTASection />
       </main>
       <Footer />
-      <ThemeSwitcher current={theme} onChange={setTheme} />
     </div>
   );
 }

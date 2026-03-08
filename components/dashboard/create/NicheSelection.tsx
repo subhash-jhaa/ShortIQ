@@ -53,21 +53,21 @@ export function NicheSelection({ selectedNiche, customNiche, onSelect }: NicheSe
         <div className="space-y-6">
             {/* Header */}
             <div>
-                <h2 className="text-2xl font-bold text-white">Choose Your Niche</h2>
-                <p className="text-white/40 text-sm mt-1">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Choose Your Niche</h2>
+                <p className="text-gray-500 dark:text-white/40 text-sm mt-1">
                     Select the content category for your new series
                 </p>
             </div>
 
             {/* Tabs */}
-            <div className="flex items-center gap-1 p-1 rounded-xl bg-white/5 w-fit">
+            <div className="flex items-center gap-1 p-1 rounded-xl bg-gray-100 dark:bg-white/5 w-fit">
                 <button
                     onClick={() => setActiveTab("available")}
                     className={`
                         px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer
                         ${activeTab === "available"
-                            ? "bg-indigo-500/20 text-indigo-300 shadow-sm"
-                            : "text-white/40 hover:text-white/60"
+                            ? "bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 shadow-sm"
+                            : "text-gray-500 dark:text-white/40 hover:text-gray-700 dark:hover:text-white/60"
                         }
                     `}
                 >
@@ -78,8 +78,8 @@ export function NicheSelection({ selectedNiche, customNiche, onSelect }: NicheSe
                     className={`
                         px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer
                         ${activeTab === "custom"
-                            ? "bg-indigo-500/20 text-indigo-300 shadow-sm"
-                            : "text-white/40 hover:text-white/60"
+                            ? "bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 shadow-sm"
+                            : "text-gray-500 dark:text-white/40 hover:text-gray-700 dark:hover:text-white/60"
                         }
                     `}
                 >
@@ -123,8 +123,8 @@ export function NicheSelection({ selectedNiche, customNiche, onSelect }: NicheSe
                                         relative text-left p-7 rounded-2xl min-h-[130px]
                                         transition-all duration-200 border-2 cursor-pointer
                                         ${isSelected
-                                            ? "bg-indigo-500/10 border-indigo-500 shadow-[0_0_24px_-4px_rgba(99,102,241,0.35)]"
-                                            : "bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.06] hover:border-white/15"
+                                            ? "bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500 shadow-[0_0_24px_-4px_rgba(99,102,241,0.35)]"
+                                            : "bg-white dark:bg-white/[0.03] border-gray-200 dark:border-white/[0.06] hover:bg-gray-50 dark:hover:bg-white/[0.06] hover:border-gray-300 dark:hover:border-white/15 shadow-sm dark:shadow-none"
                                         }
                                     `}
                                 >
@@ -139,19 +139,19 @@ export function NicheSelection({ selectedNiche, customNiche, onSelect }: NicheSe
 
                                     {/* Icon */}
                                     <div
-                                        className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-colors duration-200"
-                                        style={{ backgroundColor: isSelected ? `${themeColor}33` : "rgba(255,255,255,0.05)" }}
+                                        className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 transition-colors duration-200 ${!isSelected && "bg-gray-100 dark:bg-white/5"}`}
+                                        style={{ backgroundColor: isSelected ? `${themeColor}33` : undefined }}
                                     >
-                                        <Icon size={20} style={{ color: isSelected ? themeColor : "rgba(255,255,255,0.4)" }} />
+                                        <Icon size={20} className={!isSelected ? "text-gray-400 dark:text-white/40" : ""} style={{ color: isSelected ? themeColor : undefined }} />
                                     </div>
 
                                     {/* Niche name */}
-                                    <p className={`font-bold text-base pr-10 ${isSelected ? "text-indigo-300" : "text-white/85"}`}>
+                                    <p className={`font-bold text-base pr-10 ${isSelected ? "text-indigo-600 dark:text-indigo-300" : "text-gray-700 dark:text-white/85"}`}>
                                         {niche.name}
                                     </p>
 
                                     {/* Description */}
-                                    <p className="text-sm text-white/35 mt-2 leading-relaxed">
+                                    <p className="text-sm text-gray-500 dark:text-white/35 mt-2 leading-relaxed">
                                         {niche.desc}
                                     </p>
                                 </button>
@@ -164,7 +164,7 @@ export function NicheSelection({ selectedNiche, customNiche, onSelect }: NicheSe
             {/* ── Custom Niche Tab ────────────────────────────────────────── */}
             {activeTab === "custom" && (
                 <div className="space-y-4">
-                    <p className="text-white/40 text-sm">
+                    <p className="text-gray-500 dark:text-white/40 text-sm">
                         Have something unique in mind? Enter your niche below.
                     </p>
                     <input
@@ -172,10 +172,10 @@ export function NicheSelection({ selectedNiche, customNiche, onSelect }: NicheSe
                         value={customNiche}
                         onChange={(e) => onSelect(e.target.value, true)}
                         placeholder="e.g. Underwater Photography Tips"
-                        className="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10
-                                   text-white placeholder:text-white/20 text-sm font-medium
+                        className="w-full px-5 py-3.5 rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10
+                                   text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/20 text-sm font-medium
                                    focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30
-                                   transition-all duration-200"
+                                   transition-all duration-200 shadow-sm dark:shadow-none"
                     />
                 </div>
             )}

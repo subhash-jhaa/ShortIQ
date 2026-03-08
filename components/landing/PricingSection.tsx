@@ -3,7 +3,7 @@
 const plans = [
     {
         name: "Starter",
-        price: "$19",
+        price: "₹19",
         period: "/month",
         desc: "Perfect for solo creators just getting started.",
         features: [
@@ -19,7 +19,7 @@ const plans = [
     },
     {
         name: "Pro",
-        price: "$49",
+        price: "₹49",
         period: "/month",
         desc: "For creators and small teams who publish consistently.",
         features: [
@@ -36,7 +36,7 @@ const plans = [
     },
     {
         name: "Business",
-        price: "$129",
+        price: "₹129",
         period: "/month",
         desc: "For agencies and brands running at scale.",
         features: [
@@ -69,9 +69,9 @@ export default function PricingSection() {
                     {plans.map((plan) => (
                         <div
                             key={plan.name}
-                            className={`rounded-3xl p-8 border ${plan.highlight
-                                ? "bg-gradient-to-b from-indigo-600/20 to-rose-600/10 border-rose-500/50 shadow-2xl shadow-rose-500/20 scale-105"
-                                : "bg-white/5 border-white/10"
+                            className={`rounded-3xl p-8 border transition-all duration-500 ${plan.highlight
+                                ? "bg-gradient-to-b from-rose-50 dark:from-indigo-600/20 to-white dark:to-rose-600/10 border-rose-200 dark:border-rose-500/50 shadow-xl dark:shadow-2xl shadow-rose-500/10 dark:shadow-rose-500/20 scale-105 z-10"
+                                : "bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10"
                                 } relative`}
                         >
                             {plan.highlight && (
@@ -80,18 +80,18 @@ export default function PricingSection() {
                                 </div>
                             )}
                             <div className="mb-6">
-                                <h3 className="text-white font-bold text-lg mb-1 text-left">{plan.name}</h3>
+                                <h3 className="text-gray-900 dark:text-white font-bold text-lg mb-1 text-left transition-colors">{plan.name}</h3>
                                 <div className="flex items-end gap-1 mb-2">
-                                    <span className="text-4xl font-extrabold text-white">{plan.price}</span>
-                                    <span className="text-white/40 pb-1">{plan.period}</span>
+                                    <span className="text-4xl font-extrabold text-gray-900 dark:text-white transition-colors">{plan.price}</span>
+                                    <span className="text-gray-400 dark:text-white/40 pb-1 transition-colors">{plan.period}</span>
                                 </div>
-                                <p className="text-white/60 text-sm text-left">{plan.desc}</p>
+                                <p className="text-gray-600 dark:text-white/60 text-sm text-left transition-colors">{plan.desc}</p>
                             </div>
 
                             <ul className="space-y-3 mb-8">
                                 {plan.features.map((f) => (
-                                    <li key={f} className="flex items-center gap-3 text-sm text-white/80 text-left">
-                                        <svg className="w-4 h-4 text-rose-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                    <li key={f} className="flex items-center gap-3 text-sm text-gray-700 dark:text-white/80 text-left transition-colors">
+                                        <svg className="w-4 h-4 text-rose-500 dark:text-rose-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                                             <path d="M5 13l4 4L19 7" />
                                         </svg>
                                         {f}
@@ -101,9 +101,9 @@ export default function PricingSection() {
 
                             <a
                                 href="#"
-                                className={`block text-center py-3 px-6 rounded-xl font-semibold text-sm transition-all ${plan.highlight
-                                    ? "btn-primary shadow-lg shadow-rose-500/30"
-                                    : "border border-white/20 text-white hover:bg-white/5"
+                                className={`block text-center py-3 px-6 rounded-xl font-semibold text-sm transition-all duration-300 ${plan.highlight
+                                    ? "btn-primary shadow-lg shadow-rose-500/30 dark:shadow-rose-900/40"
+                                    : "border border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5"
                                     }`}
                             >
                                 {plan.cta}

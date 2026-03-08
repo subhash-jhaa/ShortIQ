@@ -39,13 +39,13 @@ export default function HeroSection() {
 
     return (
         <section className="relative min-h-screen flex items-center justify-center pt-40 overflow-hidden">
-            <div className="absolute inset-0 hero-grid opacity-20 pointer-events-none" />
+            <div className="absolute inset-0 hero-grid opacity-5 dark:opacity-20 pointer-events-none transition-opacity duration-500" />
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="w-[700px] h-[700px] bg-rose-600/10 rounded-full blur-[120px]" />
             </div>
 
             <div className="relative max-w-6xl mx-auto px-6 text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-rose-500/40 bg-rose-500/10 text-rose-300 text-sm font-medium mb-8 animate-fade-up">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-rose-500/20 dark:border-rose-500/40 bg-rose-500/5 dark:bg-rose-500/10 text-rose-600 dark:text-rose-300 text-sm font-medium mb-8 animate-fade-up">
                     <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
@@ -53,17 +53,17 @@ export default function HeroSection() {
                     AI-Powered • Auto-Schedule • Multi-Platform
                 </div>
 
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight mb-6 animate-fade-up animation-delay-100">
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-[1.1] tracking-tight mb-6 animate-fade-up animation-delay-100 transition-colors">
                     Generate & Schedule
                     <br />
                     <span className="gradient-text">AI Short Videos</span>
                     <br />
-                    <span className="text-white/60 text-4xl sm:text-5xl lg:text-6xl">for </span>
+                    <span className="text-gray-400 dark:text-white/60 text-4xl sm:text-5xl lg:text-6xl transition-colors">for </span>
                     <span className="text-rose-400 typewriter">{typed}</span>
                     <span className="typewriter-cursor">|</span>
                 </h1>
 
-                <p className="max-w-2xl mx-auto text-lg text-white/60 mb-10 leading-relaxed animate-fade-up animation-delay-200">
+                <p className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-white/60 mb-10 leading-relaxed animate-fade-up animation-delay-200 transition-colors">
                     ShortIQ uses cutting-edge AI to create stunning short-form videos from your ideas, then automatically schedules and publishes them across all your social channels — all from one powerful dashboard.
                 </p>
 
@@ -90,7 +90,7 @@ export default function HeroSection() {
                     )}
                     <a
                         href="#how-it-works"
-                        className="px-8 py-4 rounded-2xl text-base font-semibold text-white border border-white/20 hover:bg-white/5 transition-all flex items-center gap-2"
+                        className="px-8 py-4 rounded-2xl text-base font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-white/20 hover:bg-gray-50 dark:hover:bg-white/5 transition-all flex items-center gap-2"
                     >
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <circle cx="12" cy="12" r="10" />
@@ -115,9 +115,9 @@ export default function HeroSection() {
                 </div>
 
                 <div className="mt-20 relative">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 pointer-events-none rounded-3xl" />
-                    <div className="dashboard-mockup rounded-3xl border border-white/10 overflow-hidden shadow-2xl shadow-rose-900/20 mx-auto max-w-4xl">
-                        <div className="bg-[#0d0d14] px-4 py-3 flex items-center gap-3 border-b border-white/10">
+                    <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-black via-transparent to-transparent z-10 pointer-events-none rounded-3xl transition-all duration-500" />
+                    <div className="glass-card relative overflow-hidden rounded-2xl bg-white dark:bg-[#0d0d14] border border-gray-200/50 dark:border-white/10 shadow-2xl shadow-rose-900/10 dark:shadow-rose-900/20 mx-auto max-w-4xl transition-all">
+                        <div className="bg-gray-50 dark:bg-[#0d0d14] px-4 py-3 flex items-center gap-3 border-b border-gray-200 dark:border-white/10 transition-colors">
                             <div className="flex gap-1.5">
                                 <div className="w-3 h-3 rounded-full bg-red-500" />
                                 <div className="w-3 h-3 rounded-full bg-yellow-500" />
@@ -128,14 +128,14 @@ export default function HeroSection() {
                             </div>
                         </div>
 
-                        <div className="bg-[#0a0a12] p-6 grid grid-cols-3 gap-4 min-h-[300px]">
+                        <div className="bg-white dark:bg-[#0a0a12] p-6 grid grid-cols-3 gap-4 min-h-[300px] transition-colors">
                             <div className="col-span-1 space-y-3">
                                 {["📋 Projects", "🎬 Generate", "📅 Schedule", "📊 Analytics", "⚙️ Settings"].map((item) => (
                                     <div
                                         key={item}
-                                        className={`px-3 py-2 rounded-lg text-sm text-center ${item.includes("Generate")
-                                            ? "bg-rose-600/30 text-rose-300 font-semibold"
-                                            : "text-white/50 hover:bg-white/5"
+                                        className={`px-3 py-2 rounded-lg text-sm text-center transition-colors ${item.includes("Generate")
+                                            ? "bg-rose-600/10 dark:bg-rose-600/30 text-rose-600 dark:text-rose-300 font-semibold"
+                                            : "text-gray-400 dark:text-white/50 hover:bg-gray-50 dark:hover:bg-white/5"
                                             }`}
                                     >
                                         {item}

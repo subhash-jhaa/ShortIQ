@@ -27,8 +27,8 @@ export function VideoStyleSelection({ selectedStyle, onSelect }: VideoStyleSelec
     return (
         <div className="space-y-6">
             <div>
-                <h2 className="text-2xl font-bold text-white">Select Video Style</h2>
-                <p className="text-white/40 text-sm mt-1">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Select Video Style</h2>
+                <p className="text-gray-500 dark:text-white/40 text-sm mt-1">
                     Choose the visual aesthetic for your generated videos
                 </p>
             </div>
@@ -55,13 +55,14 @@ export function VideoStyleSelection({ selectedStyle, onSelect }: VideoStyleSelec
                                     transition-all duration-300
                                     ${isSelected
                                         ? "border-indigo-500 shadow-[0_0_30px_rgba(99,102,241,0.4)]"
-                                        : "border-white/10 hover:border-white/30"
+                                        : "border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/30"
                                     }
                                 `}>
                                     <Image
                                         src={style.image}
                                         alt={style.name}
                                         fill
+                                        sizes="200px"
                                         className={`
                                             object-cover transition-transform duration-500
                                             ${isSelected ? "scale-110" : "group-hover/item:scale-105"}
@@ -98,8 +99,8 @@ export function VideoStyleSelection({ selectedStyle, onSelect }: VideoStyleSelec
                 </div>
 
                 {/* Optional: Add fade edges if needed */}
-                <div className="absolute top-0 left-0 bottom-6 w-12 bg-gradient-to-r from-[#0d0d0d]/40 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute top-0 right-0 bottom-6 w-12 bg-gradient-to-l from-[#0d0d0d]/40 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute top-0 left-0 bottom-6 w-12 bg-gradient-to-r from-gray-50/40 dark:from-[#0d0d0d]/40 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute top-0 right-0 bottom-6 w-12 bg-gradient-to-l from-gray-50/40 dark:from-[#0d0d0d]/40 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
 
             {selectedStyle === "" && (

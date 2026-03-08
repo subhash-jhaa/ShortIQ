@@ -74,15 +74,15 @@ export default function TestimonialsSection() {
                                 ))}
                             </div>
 
-                            <p className="text-white/80 text-sm leading-relaxed mb-6 italic text-left">"{t.text}"</p>
+                            <p className="text-gray-700 dark:text-white/80 text-sm leading-relaxed mb-6 italic text-left transition-colors">"{t.text}"</p>
 
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-rose-500 flex items-center justify-center text-white text-xs font-bold">
                                     {t.avatar}
                                 </div>
                                 <div>
-                                    <div className="text-white font-semibold text-sm">{t.name}</div>
-                                    <div className="text-white/40 text-xs">{t.role}</div>
+                                    <div className="text-gray-900 dark:text-white font-semibold text-sm transition-colors">{t.name}</div>
+                                    <div className="text-gray-400 dark:text-white/40 text-xs transition-colors">{t.role}</div>
                                 </div>
                             </div>
                         </div>

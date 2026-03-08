@@ -50,7 +50,7 @@ export default function Footer() {
     ];
 
     return (
-        <footer className="relative border-t border-white/10 bg-black/60 backdrop-blur-xl">
+        <footer className="relative border-t border-gray-200 dark:border-white/10 bg-gray-50/80 dark:bg-black/60 backdrop-blur-xl transition-colors duration-500">
             <div className="max-w-7xl mx-auto px-6 pt-16 pb-10">
                 <div className="grid lg:grid-cols-6 gap-12">
                     {/* Brand column */}
@@ -61,11 +61,11 @@ export default function Footer() {
                                     <path d="M5 3l14 9-14 9V3z" fill="white" stroke="white" strokeWidth="1.5" strokeLinejoin="round" />
                                 </svg>
                             </div>
-                            <span className="text-xl font-bold text-white tracking-tight">
-                                Short<span className="text-rose-400">IQ</span>
+                            <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight transition-colors">
+                                Short<span className="text-rose-600 dark:text-rose-400">IQ</span>
                             </span>
                         </div>
-                        <p className="text-white/50 text-sm leading-relaxed mb-6 max-w-sm">
+                        <p className="text-gray-500 dark:text-white/50 text-sm leading-relaxed mb-6 max-w-sm transition-colors">
                             The AI-powered short video generator and scheduler that helps creators and brands dominate YouTube, Instagram, TikTok, Facebook, and email.
                         </p>
 
@@ -76,7 +76,7 @@ export default function Footer() {
                                     key={s.label}
                                     href={s.href}
                                     aria-label={s.label}
-                                    className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-rose-500/20 hover:border-rose-500/40 transition-all"
+                                    className="w-9 h-9 rounded-xl bg-gray-200/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-400 dark:text-white/50 hover:text-rose-600 dark:hover:text-white hover:bg-rose-500/10 dark:hover:bg-rose-500/20 hover:border-rose-300 dark:hover:border-rose-500/40 transition-all"
                                 >
                                     {s.icon}
                                 </a>
@@ -87,13 +87,13 @@ export default function Footer() {
                     {/* Link columns */}
                     {Object.entries(links).map(([category, items]) => (
                         <div key={category} className="lg:col-span-1 text-left">
-                            <h4 className="text-white font-semibold text-sm mb-4">{category}</h4>
+                            <h4 className="text-gray-900 dark:text-white font-semibold text-sm mb-4 transition-colors">{category}</h4>
                             <ul className="space-y-3">
                                 {items.map((item) => (
                                     <li key={item}>
                                         <a
                                             href="#"
-                                            className="text-white/50 hover:text-white text-sm transition-colors"
+                                            className="text-gray-500 dark:text-white/50 hover:text-rose-600 dark:hover:text-white text-sm transition-colors"
                                         >
                                             {item}
                                         </a>
@@ -106,11 +106,11 @@ export default function Footer() {
             </div>
 
             {/* Newsletter strip */}
-            <div className="border-t border-white/10">
+            <div className="border-t border-gray-200 dark:border-white/10">
                 <div className="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="text-left">
-                        <p className="text-white font-semibold text-sm">Get early access to new features</p>
-                        <p className="text-white/40 text-xs mt-0.5">No spam. Unsubscribe anytime.</p>
+                        <p className="text-gray-900 dark:text-white font-semibold text-sm transition-colors">Get early access to new features</p>
+                        <p className="text-gray-400 dark:text-white/40 text-xs mt-0.5 transition-colors">No spam. Unsubscribe anytime.</p>
                     </div>
                     <form
                         onSubmit={(e) => e.preventDefault()}
@@ -119,11 +119,11 @@ export default function Footer() {
                         <input
                             type="email"
                             placeholder="your@email.com"
-                            className="flex-1 md:w-64 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-rose-500/60 transition-colors"
+                            className="flex-1 md:w-64 px-4 py-2.5 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white text-sm placeholder:text-gray-400 dark:placeholder:text-white/30 focus:outline-none focus:border-rose-500/60 dark:focus:border-rose-500/60 transition-all"
                         />
                         <button
                             type="submit"
-                            className="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap"
+                            className="btn-primary px-5 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap shadow-md hover:shadow-lg transition-all"
                         >
                             Subscribe
                         </button>
@@ -132,15 +132,15 @@ export default function Footer() {
             </div>
 
             {/* Bottom bar */}
-            <div className="border-t border-white/10">
-                <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/30">
+            <div className="border-t border-gray-200 dark:border-white/10">
+                <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400 dark:text-white/30 transition-colors">
                     <p>© {currentYear} ShortIQ, Inc. All rights reserved.</p>
                     <div className="flex items-center gap-4">
-                        <a href="#" className="hover:text-white/60 transition-colors">Privacy</a>
-                        <a href="#" className="hover:text-white/60 transition-colors">Terms</a>
-                        <a href="#" className="hover:text-white/60 transition-colors">Cookies</a>
+                        <a href="#" className="hover:text-rose-600 dark:hover:text-white/60 transition-colors">Privacy</a>
+                        <a href="#" className="hover:text-rose-600 dark:hover:text-white/60 transition-colors">Terms</a>
+                        <a href="#" className="hover:text-rose-600 dark:hover:text-white/60 transition-colors">Cookies</a>
                         <span className="flex items-center gap-1">
-                            Made with <span className="text-red-400">❤</span> for creators
+                            Made with <span className="text-red-500">❤</span> for creators
                         </span>
                     </div>
                 </div>

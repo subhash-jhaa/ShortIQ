@@ -6,11 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "inngest:dev": "npx inngest-cli@latest dev -u http://localhost:3000/api/inngest"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
     "@clerk/nextjs": "^6.39.0",
+    "@clerk/themes": "^2.4.57",
     "@google/genai": "^1.43.0",
     "@hookform/resolvers": "^5.2.2",
     "@plunk/node": "^3.0.3",

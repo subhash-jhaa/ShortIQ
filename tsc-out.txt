@@ -1,0 +1,66 @@
+app/dashboard/videos/page.tsx(47,50): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(62,43): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(125,40): error TS2339: Property 'id' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(127,43): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(132,247): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(136,41): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(136,74): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(137,127): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(139,48): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(145,98): error TS2339: Property 'created_at' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(149,80): error TS2339: Property 'id' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(167,48): error TS2339: Property 'image_urls' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(169,60): error TS2339: Property 'image_urls' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(170,60): error TS2339: Property 'title' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(187,40): error TS2339: Property 'video_url' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(189,53): error TS2339: Property 'video_url' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(198,43): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(209,60): error TS2339: Property 'id' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(218,44): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(225,44): error TS2339: Property 'title' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(231,77): error TS2339: Property 'created_at' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(233,44): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(233,72): error TS2339: Property 'image_urls' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(236,52): error TS2339: Property 'image_urls' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(241,40): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(245,61): error TS2339: Property 'audio_url' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(252,61): error TS2339: Property 'captions_url' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(260,48): error TS2339: Property 'video_url' does not exist on type 'VideoProject'.
+app/dashboard/videos/page.tsx(262,61): error TS2339: Property 'video_url' does not exist on type 'VideoProject'.
+components/dashboard/create/StepperProgress.tsx(42,37): error TS17001: JSX elements cannot have multiple attributes with the same name.
+components/dashboard/RecentVideos.tsx(66,40): error TS2339: Property 'id' does not exist on type 'VideoProject'.
+components/dashboard/RecentVideos.tsx(71,40): error TS2339: Property 'image_urls' does not exist on type 'VideoProject'.
+components/dashboard/RecentVideos.tsx(73,52): error TS2339: Property 'image_urls' does not exist on type 'VideoProject'.
+components/dashboard/RecentVideos.tsx(74,52): error TS2339: Property 'title' does not exist on type 'VideoProject'.
+components/dashboard/RecentVideos.tsx(83,40): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+components/dashboard/RecentVideos.tsx(92,44): error TS2339: Property 'title' does not exist on type 'VideoProject'.
+components/dashboard/RecentVideos.tsx(95,73): error TS2339: Property 'created_at' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(43,92): error TS2339: Property 'title' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(46,79): error TS2339: Property 'created_at' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(51,40): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(66,40): error TS2339: Property 'scenes' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(66,52): error TS7006: Parameter 'scene' implicitly has an 'any' type.
+components/dashboard/VideoDetailsModal.tsx(66,59): error TS7006: Parameter 'idx' implicitly has an 'any' type.
+components/dashboard/VideoDetailsModal.tsx(76,56): error TS2339: Property 'image_urls' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(78,68): error TS2339: Property 'image_urls' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(115,40): error TS2339: Property 'total_script' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(130,52): error TS2339: Property 'audio_url' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(146,52): error TS2339: Property 'captions_url' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(157,40): error TS2339: Property 'video_url' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(163,56): error TS2339: Property 'video_url' does not exist on type 'VideoProject'.
+components/dashboard/VideoDetailsModal.tsx(178,68): error TS2339: Property 'series_id' does not exist on type 'VideoProject'.
+components/dashboard/VideoPreviewModal.tsx(35,82): error TS2339: Property 'title' does not exist on type 'VideoProject'.
+components/dashboard/VideoPreviewModal.tsx(62,40): error TS2339: Property 'status' does not exist on type 'VideoProject'.
+components/dashboard/VideoPreviewModal.tsx(73,28): error TS2339: Property 'audio_url' does not exist on type 'VideoProject'.
+components/dashboard/VideoPreviewModal.tsx(75,41): error TS2339: Property 'audio_url' does not exist on type 'VideoProject'.
+components/landing/Navbar.tsx(77,62): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: SignOutOptions | undefined): Promise<void>', gave the following error.
+    Object literal may only specify known properties, and 'callbackUrl' does not exist in type 'SignOutOptions'.
+  Overload 2 of 2, '(signOutCallback?: SignOutCallback | undefined, options?: SignOutOptions | undefined): Promise<void>', gave the following error.
+    Object literal may only specify known properties, and 'callbackUrl' does not exist in type 'SignOutCallback'.
+components/landing/Navbar.tsx(144,51): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(options?: SignOutOptions | undefined): Promise<void>', gave the following error.
+    Object literal may only specify known properties, and 'callbackUrl' does not exist in type 'SignOutOptions'.
+  Overload 2 of 2, '(signOutCallback?: SignOutCallback | undefined, options?: SignOutOptions | undefined): Promise<void>', gave the following error.
+    Object literal may only specify known properties, and 'callbackUrl' does not exist in type 'SignOutCallback'.
+inngest/scheduling.ts(124,71): error TS2554: Expected 1 arguments, but got 2.
