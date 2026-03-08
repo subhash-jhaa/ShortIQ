@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/clerk-server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { inngest } from "@/inngest/client";
@@ -20,8 +20,7 @@ export interface SeriesData {
 }
 
 export async function createSeries(data: SeriesData) {
-    const session = await auth();
-    const userId = session?.user?.id;
+    const { userId } = await auth();
 
     if (!userId) {
         throw new Error("Unauthorized");
@@ -71,8 +70,7 @@ export async function createSeries(data: SeriesData) {
 }
 
 export async function updateSeries(id: string, data: Partial<SeriesData>) {
-    const session = await auth();
-    const userId = session?.user?.id;
+    const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
     try {
@@ -110,8 +108,7 @@ export async function updateSeries(id: string, data: Partial<SeriesData>) {
 }
 
 export async function triggerVideoGeneration(seriesId: string) {
-    const session = await auth();
-    const userId = session?.user?.id;
+    const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
     try {
@@ -126,9 +123,24 @@ export async function triggerVideoGeneration(seriesId: string) {
     }
 }
 
+export async function fastTrackWorkflow(seriesId: string) {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    try {
+        await inngest.send({
+            name: "series/daily-workflow",
+            data: { seriesId, isTest: true },
+        });
+        return { success: true };
+    } catch (err: any) {
+        console.error("fastTrackWorkflow failure:", err);
+        return { success: false, error: err.message };
+    }
+}
+
 export async function deleteSeries(id: string) {
-    const session = await auth();
-    const userId = session?.user?.id;
+    const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
     try {
@@ -148,8 +160,7 @@ export async function deleteSeries(id: string) {
 }
 
 export async function toggleSeriesStatus(id: string, currentStatus: string) {
-    const session = await auth();
-    const userId = session?.user?.id;
+    const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
     const newStatus = currentStatus === "paused" ? "active" : "paused";
@@ -171,8 +182,7 @@ export async function toggleSeriesStatus(id: string, currentStatus: string) {
 }
 
 export async function getSeriesById(id: string) {
-    const session = await auth();
-    const userId = session?.user?.id;
+    const { userId } = await auth();
     if (!userId) {
         throw new Error("Unauthorized");
     }

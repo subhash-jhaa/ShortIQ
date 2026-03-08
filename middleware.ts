@@ -1,21 +1,23 @@
-import { auth } from "@/lib/auth";
-import { NextResponse } from "next/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-export default auth((req) => {
-    const session = req.auth;
-    const { pathname } = req.nextUrl;
+const isProtectedRoute = createRouteMatcher(['/dashboard(.*)', '/api(.*)']);
+const isPublicApiRoute = createRouteMatcher([
+    '/api/webhooks/clerk(.*)',
+    '/api/inngest(.*)',
+    '/api/webhooks/creatomate(.*)'
+]);
 
-    // Protect dashboard routes — redirect unauthenticated users to sign-in
-    if (pathname.startsWith("/dashboard") && !session) {
-        return NextResponse.redirect(new URL("/sign-in", req.nextUrl));
+export default clerkMiddleware(async (auth, req) => {
+    if (isProtectedRoute(req) && !isPublicApiRoute(req)) {
+        await auth.protect();
     }
-
-    return NextResponse.next();
 });
 
 export const config = {
     matcher: [
-        "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-        "/(api|trpc)(.*)",
+        // Skip Next.js internals and all static files, unless found in search params
+        '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+        // Always run for API routes
+        '/(api|trpc)(.*)',
     ],
 };

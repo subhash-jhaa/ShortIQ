@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/clerk-server";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export interface CreatomateRenderProps {
@@ -128,7 +128,7 @@ function buildCreatomateTemplate(props: CreatomateRenderProps) {
 }
 
 // --- Main render function ---
-export async function renderWithCreatomate(props: CreatomateRenderProps) {
+export async function renderWithCreatomate(props: CreatomateRenderProps & { webhookUrl?: string }) {
     const apiKey = process.env.CREATOMATE_API_KEY;
     if (!apiKey) {
         return { success: false, error: "CREATOMATE_API_KEY is not set in .env.local" };
@@ -145,6 +145,7 @@ export async function renderWithCreatomate(props: CreatomateRenderProps) {
             },
             body: JSON.stringify({
                 source: template,
+                webhook_url: props.webhookUrl,
             }),
         });
 

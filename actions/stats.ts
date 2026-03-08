@@ -1,11 +1,10 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/clerk-server";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export async function getDashboardStats() {
-    const session = await auth();
-    const userId = session?.user?.id;
+    const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
     try {

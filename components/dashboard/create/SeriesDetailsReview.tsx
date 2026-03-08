@@ -45,8 +45,8 @@ export function SeriesDetailsReview({ formData, onUpdate }: SeriesDetailsReviewP
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div>
-                <h2 className="text-2xl font-bold text-white">Series Details</h2>
-                <p className="text-white/40 text-sm mt-1">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Series Details</h2>
+                <p className="text-gray-500 dark:text-white/40 text-sm mt-1">
                     Finalize your series name and schedule your first video
                 </p>
             </div>
@@ -55,22 +55,22 @@ export function SeriesDetailsReview({ formData, onUpdate }: SeriesDetailsReviewP
                 {/* Left Column: Name & Duration */}
                 <div className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-white/60 ml-1">Series Name</label>
+                        <label className="text-sm font-medium text-gray-600 dark:text-white/60 ml-1">Series Name</label>
                         <input
                             type="text"
                             value={formData.seriesName}
                             onChange={(e) => onUpdate({ seriesName: e.target.value })}
                             placeholder="e.g. Daily Stoic Wisdom"
-                            className="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500 transition-all font-medium"
+                            className="w-full px-5 py-4 rounded-2xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/20 focus:outline-none focus:border-indigo-500 transition-all font-medium shadow-sm dark:shadow-none"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-white/60 ml-1">Video Duration</label>
+                        <label className="text-sm font-medium text-gray-600 dark:text-white/60 ml-1">Video Duration</label>
                         <select
                             value={formData.videoDuration}
                             onChange={(e) => onUpdate({ videoDuration: e.target.value })}
-                            className="w-full px-5 py-4 rounded-2xl bg-[#121212] border border-white/10 text-white focus:outline-none focus:border-indigo-500 transition-all font-medium appearance-none cursor-pointer"
+                            className="w-full px-5 py-4 rounded-2xl bg-white dark:bg-[#121212] border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-all font-medium appearance-none cursor-pointer shadow-sm dark:shadow-none"
                         >
                             <option value="30-50">30-50 Seconds (Flashy)</option>
                             <option value="60-70">60-70 Seconds (Deep Dive)</option>
@@ -81,7 +81,7 @@ export function SeriesDetailsReview({ formData, onUpdate }: SeriesDetailsReviewP
                 {/* Right Column: Platforms & Time */}
                 <div className="space-y-6">
                     <div className="space-y-3">
-                        <label className="text-sm font-medium text-white/60 ml-1 flex items-center gap-2">
+                        <label className="text-sm font-medium text-gray-600 dark:text-white/60 ml-1 flex items-center gap-2">
                             <Layout size={16} /> Publish Platforms
                         </label>
                         <div className="flex flex-wrap gap-2">
@@ -95,8 +95,8 @@ export function SeriesDetailsReview({ formData, onUpdate }: SeriesDetailsReviewP
                                         className={`
                                             flex items-center gap-2.5 px-5 py-3 rounded-2xl text-xs font-bold transition-all border-2 group
                                             ${isSelected
-                                                ? "bg-white/5 border-white/20 text-white shadow-lg"
-                                                : "bg-white/5 border-transparent text-white/40 hover:bg-white/10 hover:border-white/10"}
+                                                ? "bg-gray-100 dark:bg-white/5 border-gray-300 dark:border-white/20 text-gray-900 dark:text-white shadow-md dark:shadow-lg"
+                                                : "bg-white dark:bg-white/5 border-gray-200 dark:border-transparent text-gray-500 dark:text-white/40 hover:bg-gray-50 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-white/10 shadow-sm dark:shadow-none"}
                                         `}
                                         style={{
                                             borderColor: isSelected ? platform.color : undefined,
@@ -115,14 +115,14 @@ export function SeriesDetailsReview({ formData, onUpdate }: SeriesDetailsReviewP
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-white/60 ml-1 flex items-center gap-2">
+                        <label className="text-sm font-medium text-gray-600 dark:text-white/60 ml-1 flex items-center gap-2">
                             <Clock size={16} /> Schedule Time
                         </label>
                         <input
                             type="time"
                             value={formData.publishTime}
                             onChange={(e) => onUpdate({ publishTime: e.target.value })}
-                            className="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-indigo-500 transition-all font-medium cursor-pointer"
+                            className="w-full px-5 py-4 rounded-2xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-all font-medium cursor-pointer shadow-sm dark:shadow-none"
                         />
                         <p className="text-[10px] text-indigo-400/60 mt-2 italic flex items-center gap-1">
                             <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
@@ -136,8 +136,8 @@ export function SeriesDetailsReview({ formData, onUpdate }: SeriesDetailsReviewP
             <div className="mt-4 p-6 rounded-3xl bg-gradient-to-br from-indigo-500/10 to-purple-500/5 border border-white/10 overflow-hidden relative">
                 <div className="relative z-10 flex items-center justify-between">
                     <div>
-                        <h4 className="text-white font-bold text-lg">Ready to Launch?</h4>
-                        <p className="text-white/40 text-xs mt-1">
+                        <h4 className="text-gray-900 dark:text-white font-bold text-lg">Ready to Launch?</h4>
+                        <p className="text-gray-500 dark:text-white/40 text-xs mt-1">
                             Your series "{formData.seriesName || 'New Series'}" will be scheduled across {formData.platforms.length} platforms.
                         </p>
                     </div>

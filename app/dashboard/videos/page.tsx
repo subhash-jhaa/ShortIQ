@@ -63,9 +63,9 @@ export default function VideosPage() {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[400px] text-white/20 gap-3">
+            <div className="flex flex-col items-center justify-center min-h-[400px] text-gray-400 dark:text-white/20 gap-3">
                 <Loader2 className="animate-spin" size={32} />
-                <p className="text-sm font-medium text-white/40">Loading your videos...</p>
+                <p className="text-sm font-medium text-gray-500 dark:text-white/40">Loading your videos...</p>
             </div>
         );
     }
@@ -89,13 +89,13 @@ export default function VideosPage() {
         <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-extrabold text-white mb-2">My Videos</h1>
-                    <p className="text-white/35 text-sm">Manage and preview all your generated video assets</p>
+                    <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">My Videos</h1>
+                    <p className="text-gray-500 dark:text-white/35 text-sm">Manage and preview all your generated video assets</p>
                 </div>
                 <button
                     onClick={fetchVideos}
                     disabled={isLoading}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 transition-all active:scale-95 disabled:opacity-50"
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-white/60 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all active:scale-95 disabled:opacity-50 shadow-sm dark:shadow-none"
                 >
                     <Loader2 className={isLoading ? "animate-spin" : ""} size={16} />
                     Refresh
@@ -103,12 +103,12 @@ export default function VideosPage() {
             </div>
 
             {videos.length === 0 ? (
-                <div className="bg-white/[0.02] border border-dashed border-white/10 rounded-2xl p-12 text-center">
-                    <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Video size={32} className="text-white/20" />
+                <div className="bg-white dark:bg-white/[0.02] border border-dashed border-gray-200 dark:border-white/10 rounded-2xl p-12 text-center shadow-sm dark:shadow-none">
+                    <div className="w-16 h-16 bg-gray-50 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 dark:border-transparent">
+                        <Video size={32} className="text-gray-400 dark:text-white/20" />
                     </div>
-                    <h3 className="text-white font-bold text-lg mb-2">No videos yet</h3>
-                    <p className="text-white/40 text-sm max-w-sm mx-auto mb-8">
+                    <h3 className="text-gray-900 dark:text-white font-bold text-lg mb-2">No videos yet</h3>
+                    <p className="text-gray-500 dark:text-white/40 text-sm max-w-sm mx-auto mb-8">
                         Once you trigger generation for a series, your video assets will appear here.
                     </p>
                     <Link
@@ -129,12 +129,12 @@ export default function VideosPage() {
                                     setIsPreviewOpen(true);
                                 }
                             }}
-                            className={`bg-white/[0.03] border border-white/5 rounded-2xl overflow-hidden group hover:border-white/10 transition-all ${video.status === "ready" ? "cursor-pointer" : "cursor-default"}`}
+                            className={`bg-white dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 rounded-2xl overflow-hidden group hover:border-gray-300 dark:hover:border-white/10 shadow-sm dark:shadow-none transition-all ${video.status === "ready" ? "cursor-pointer hover:shadow-md" : "cursor-default"}`}
                         >
                             {/* Thumbnail Area */}
-                            <div className="relative aspect-video w-full overflow-hidden bg-white/5">
+                            <div className="relative aspect-video w-full overflow-hidden bg-gray-50 dark:bg-white/5">
                                 {(video.status === "generating" || video.status === "cancelled") ? (
-                                    <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 ${video.status === 'cancelled' ? 'text-white/20 bg-white/5' : 'text-indigo-400 bg-indigo-500/5'
+                                    <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 ${video.status === 'cancelled' ? 'text-gray-400 dark:text-white/20 bg-gray-100 dark:bg-white/5' : 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/5'
                                         }`}>
                                         {video.status === 'generating' ? (
                                             <>
@@ -148,7 +148,7 @@ export default function VideosPage() {
                                                             e.stopPropagation();
                                                             handleCancel(video.id);
                                                         }}
-                                                        className="mt-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-[10px] font-bold uppercase tracking-wider border border-rose-500/20 transition-all active:scale-95"
+                                                        className="mt-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-100 dark:hover:bg-rose-500/20 text-rose-500 dark:text-rose-400 text-[10px] font-bold uppercase tracking-wider border border-rose-200 dark:border-rose-500/20 transition-all active:scale-95"
                                                     >
                                                         <XCircle size={14} />
                                                         Cancel Generation
@@ -172,11 +172,11 @@ export default function VideosPage() {
                                                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                                             />
                                         ) : (
-                                            <div className="absolute inset-0 flex items-center justify-center text-white/5">
+                                            <div className="absolute inset-0 flex items-center justify-center text-gray-300 dark:text-white/5">
                                                 <Video size={48} />
                                             </div>
                                         )}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 dark:from-black/80 via-transparent to-transparent opacity-60 dark:opacity-100" />
                                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                             <div className="w-12 h-12 bg-rose-500 rounded-full flex items-center justify-center shadow-lg shadow-rose-500/40">
                                                 <Play size={20} fill="white" className="ml-1" />
@@ -189,14 +189,14 @@ export default function VideosPage() {
                                         href={video.video_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="absolute top-3 left-3 px-3 h-9 rounded-full bg-indigo-500 text-white flex items-center justify-center gap-2 shadow-xl shadow-black/50 z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-indigo-600 hover:scale-105 active:scale-95"
+                                        className="absolute top-3 left-3 px-3 h-9 rounded-full bg-indigo-500 text-white flex items-center justify-center gap-2 shadow-xl shadow-black/20 dark:shadow-black/50 z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-indigo-600 hover:scale-105 active:scale-95"
                                         onClick={(e) => e.stopPropagation()}
                                     >
                                         <Download size={16} />
                                         <span className="text-[10px] font-bold uppercase tracking-wider">Download MP4</span>
                                     </Link>
                                 ) : video.status === "ready" && (
-                                    <div className="absolute top-3 left-3 px-3 h-9 rounded-full bg-white/10 backdrop-blur-md text-white/40 flex items-center justify-center gap-2 border border-white/5 z-20 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                    <div className="absolute top-3 left-3 px-3 h-9 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-md text-gray-500 dark:text-white/40 flex items-center justify-center gap-2 border border-white/40 dark:border-white/5 shadow-sm dark:shadow-none z-20 opacity-0 group-hover:opacity-100 transition-all duration-300">
                                         <Download size={16} />
                                         <span className="text-[10px] font-bold uppercase tracking-wider">No MP4 Link</span>
                                     </div>
@@ -208,24 +208,24 @@ export default function VideosPage() {
                                         e.stopPropagation();
                                         handleDelete(video.id);
                                     }}
-                                    className="absolute top-3 right-3 p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white border border-rose-500/20 backdrop-blur-md z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 active:scale-90"
+                                    className="absolute top-3 right-3 p-2 rounded-lg bg-white/80 dark:bg-rose-500/10 hover:bg-rose-50 dark:hover:bg-rose-500 text-rose-500 dark:text-rose-500/80 hover:text-rose-600 dark:hover:text-white border border-rose-100 dark:border-rose-500/20 backdrop-blur-md shadow-sm dark:shadow-none z-20 opacity-0 group-hover:opacity-100 transition-all duration-300 active:scale-90"
                                     title="Delete Video"
                                 >
                                     <Trash2 size={16} />
                                 </button>
 
-                                <div className="absolute bottom-3 right-3 px-2 py-1 rounded-md bg-black/40 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white uppercase tracking-wider z-10">
+                                <div className="absolute bottom-3 right-3 px-2 py-1 rounded-md bg-white/90 dark:bg-black/40 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-sm dark:shadow-none text-[10px] font-bold text-gray-700 dark:text-white uppercase tracking-wider z-10">
                                     {video.status}
                                 </div>
                             </div>
 
                             {/* Info Area */}
                             <div className="p-5">
-                                <h3 className="text-white font-bold truncate text-base mb-1 group-hover:text-indigo-400 transition-colors">
+                                <h3 className="text-gray-900 dark:text-white font-bold truncate text-base mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                     {video.title}
                                 </h3>
 
-                                <div className="flex items-center gap-4 text-white/30 text-xs">
+                                <div className="flex items-center gap-4 text-gray-500 dark:text-white/30 text-xs">
                                     <div className="flex items-center gap-1.5">
                                         <Clock size={12} />
                                         {formatDistanceToNow(new Date(video.created_at))} ago
@@ -244,14 +244,14 @@ export default function VideosPage() {
                                             <Link
                                                 href={video.audio_url || "#"}
                                                 target="_blank"
-                                                className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white border border-white/5 py-2 rounded-lg text-xs font-semibold transition-all"
+                                                className="flex-1 flex items-center justify-center gap-2 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 text-gray-600 dark:text-white/60 hover:text-gray-900 dark:hover:text-white border border-gray-200 dark:border-white/5 py-2 rounded-lg text-xs font-semibold transition-all"
                                             >
                                                 Audio <ExternalLink size={10} />
                                             </Link>
                                             <Link
                                                 href={video.captions_url || "#"}
                                                 target="_blank"
-                                                className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white border border-white/5 py-2 rounded-lg text-xs font-semibold transition-all"
+                                                className="flex-1 flex items-center justify-center gap-2 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 text-gray-600 dark:text-white/60 hover:text-gray-900 dark:hover:text-white border border-gray-200 dark:border-white/5 py-2 rounded-lg text-xs font-semibold transition-all"
                                             >
                                                 SRT <ExternalLink size={10} />
                                             </Link>

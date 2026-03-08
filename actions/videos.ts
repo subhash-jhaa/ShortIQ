@@ -1,28 +1,27 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { auth } from "@/lib/clerk-server";
+
 import { supabaseAdmin } from "@/lib/supabase";
 
 export interface VideoProject {
     id: string;
+    user_id: string;
     series_id: string;
     title: string;
     total_script: string;
     scenes: any[];
-    audio_url: string;
-    captions_url: string;
-    image_urls: string[];
-    status: string;
+    audio_url?: string;
+    captions_url?: string;
+    image_urls?: string[];
     video_url?: string;
-    srt_content?: string;
-    duration_in_frames?: number;
-    render_id?: string;
+    status: 'generating' | 'ready' | 'failed' | 'cancelled' | 'rendering';
     created_at: string;
+    updated_at: string;
 }
 
 export async function getVideos() {
-    const session = await auth();
-    const userId = session?.user?.id;
+    const { userId } = await auth();
     if (!userId) {
         throw new Error("Unauthorized");
     }
@@ -47,8 +46,7 @@ export async function getVideos() {
 }
 
 export async function cancelVideoGeneration(videoId: string) {
-    const session = await auth();
-    const userId = session?.user?.id;
+    const { userId } = await auth();
     if (!userId) {
         throw new Error("Unauthorized");
     }
@@ -72,8 +70,7 @@ export async function cancelVideoGeneration(videoId: string) {
     }
 }
 export async function deleteVideo(videoId: string) {
-    const session = await auth();
-    const userId = session?.user?.id;
+    const { userId } = await auth();
     if (!userId) {
         throw new Error("Unauthorized");
     }

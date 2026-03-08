@@ -49,12 +49,12 @@ export default function HowItWorksSection() {
                                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-rose-600 flex items-center justify-center text-2xl shadow-lg shadow-rose-500/30 group-hover:scale-110 transition-transform">
                                         {step.icon}
                                     </div>
-                                    <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-[#0d0d14] border border-rose-500/40 text-rose-400 text-xs flex items-center justify-center font-bold">
+                                    <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white dark:bg-[#0d0d14] border border-rose-500/20 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 text-xs flex items-center justify-center font-bold transition-colors">
                                         {i + 1}
                                     </span>
                                 </div>
-                                <h3 className="text-white font-bold mb-2">{step.title}</h3>
-                                <p className="text-white/60 text-sm leading-relaxed">{step.desc}</p>
+                                <h3 className="text-gray-900 dark:text-white font-bold mb-2 transition-colors">{step.title}</h3>
+                                <p className="text-gray-600 dark:text-white/60 text-sm leading-relaxed transition-colors">{step.desc}</p>
                             </div>
                         ))}
                     </div>

@@ -30,16 +30,16 @@ export function RecentProjects() {
     return (
         <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-extrabold text-white">Your Series</h2>
+                <h2 className="text-xl font-extrabold text-gray-900 dark:text-white">Your Series</h2>
                 <Link href="/dashboard/series">
-                    <button className="text-sm font-bold text-rose-400 hover:text-rose-300 transition-colors bg-rose-500/10 px-4 py-2 rounded-lg border border-rose-500/20">
+                    <button className="text-sm font-bold text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 transition-colors bg-rose-50 dark:bg-rose-500/10 px-4 py-2 rounded-lg border border-rose-200 dark:border-rose-500/20">
                         View All
                     </button>
                 </Link>
             </div>
 
             {loading ? (
-                <div className="h-64 flex flex-col items-center justify-center text-white/20 gap-3 bg-white/[0.02] rounded-3xl border border-dashed border-white/5">
+                <div className="h-64 flex flex-col items-center justify-center text-gray-300 dark:text-white/20 gap-3 bg-gray-50 dark:bg-white/[0.02] rounded-3xl border border-dashed border-gray-200 dark:border-white/5">
                     <Loader2 className="animate-spin" size={32} />
                     <p className="text-sm font-medium">Loading your series...</p>
                 </div>
@@ -50,21 +50,21 @@ export function RecentProjects() {
                     ))}
                 </div>
             ) : (
-                <div className="h-64 flex flex-col items-center justify-center text-white/20 gap-4 bg-white/[0.02] rounded-3xl border border-dashed border-white/5">
-                    <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center">
+                <div className="h-64 flex flex-col items-center justify-center text-gray-300 dark:text-white/20 gap-4 bg-gray-50 dark:bg-white/[0.02] rounded-3xl border border-dashed border-gray-200 dark:border-white/5">
+                    <div className="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-white/5 flex items-center justify-center">
                         <Plus size={24} />
                     </div>
                     <div className="text-center">
-                        <p className="text-sm font-bold text-white/40">No series created yet</p>
-                        <p className="text-xs">Start by creating your first automated series</p>
+                        <p className="text-sm font-bold text-gray-400 dark:text-white/40">No series created yet</p>
+                        <p className="text-xs text-gray-300 dark:text-white/20">Start by creating your first automated series</p>
                     </div>
                 </div>
             )}
 
             <Link href="/dashboard/create">
-                <button className="w-full py-8 rounded-2xl border-2 border-dashed border-white/5 hover:border-rose-500/30 hover:bg-rose-500/5 transition-all text-white/20 hover:text-rose-400 font-extrabold text-sm flex flex-col items-center justify-center gap-3 group">
-                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 group-hover:bg-rose-500/20 transition-all">
-                        <Plus size={20} className="group-hover:text-rose-400" />
+                <button className="w-full py-8 rounded-2xl border-2 border-dashed border-gray-200 dark:border-white/5 hover:border-rose-300 dark:hover:border-rose-500/30 hover:bg-rose-50 dark:hover:bg-rose-500/5 transition-all text-gray-300 dark:text-white/20 hover:text-rose-500 dark:hover:text-rose-400 font-extrabold text-sm flex flex-col items-center justify-center gap-3 group">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center group-hover:scale-110 group-hover:bg-rose-100 dark:group-hover:bg-rose-500/20 transition-all">
+                        <Plus size={20} className="group-hover:text-rose-500" />
                     </div>
                     <span>Create New Series</span>
                 </button>

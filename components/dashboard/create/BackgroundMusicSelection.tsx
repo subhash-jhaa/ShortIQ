@@ -112,13 +112,13 @@ export function BackgroundMusicSelection({
     }, []);
 
     return (
-        <div className="flex flex-col gap-8 text-white">
+        <div className="flex flex-col gap-8 text-gray-900 dark:text-white">
             <div>
                 <h2 className="text-xl font-bold flex items-center gap-2">
                     <Music size={24} className="text-indigo-400" />
                     Background Music
                 </h2>
-                <p className="text-sm text-white/35 mt-1">
+                <p className="text-sm text-gray-500 dark:text-white/35 mt-1">
                     Select one or more tracks to be used as background music for your videos.
                 </p>
             </div>
@@ -133,10 +133,10 @@ export function BackgroundMusicSelection({
 
             <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-bold text-white/50 uppercase tracking-wider">
+                    <h3 className="text-sm font-bold text-gray-500 dark:text-white/50 uppercase tracking-wider">
                         Available Tracks
                     </h3>
-                    <span className="text-xs font-bold text-white/25 uppercase tracking-wider bg-white/5 px-3 py-1 rounded-lg border border-white/5 flex items-center gap-2">
+                    <span className="text-xs font-bold text-gray-500 dark:text-white/25 uppercase tracking-wider bg-gray-100 dark:bg-white/5 px-3 py-1 rounded-lg border border-transparent dark:border-white/5 flex items-center gap-2">
                         <Headphones size={12} />
                         {selectedTracks.length} Selected
                     </span>
@@ -155,8 +155,8 @@ export function BackgroundMusicSelection({
                                     relative flex items-center justify-between p-4 rounded-xl border-2
                                     transition-all duration-200 cursor-pointer group
                                     ${isSelected
-                                        ? "bg-indigo-500/10 border-indigo-500/50 shadow-[0_0_20px_-5px_rgba(99,102,241,0.15)]"
-                                        : "bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.06] hover:border-white/15"
+                                        ? "bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500/50 shadow-[0_0_20px_-5px_rgba(99,102,241,0.15)]"
+                                        : "bg-white dark:bg-white/[0.03] border-gray-200 dark:border-white/[0.06] hover:bg-gray-50 dark:hover:bg-white/[0.06] hover:border-gray-300 dark:hover:border-white/15 shadow-sm dark:shadow-none"
                                     }
                                 `}
                             >
@@ -172,7 +172,7 @@ export function BackgroundMusicSelection({
                                             transition-all duration-200
                                             ${isPlaying
                                                 ? "bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.5)]"
-                                                : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
+                                                : "bg-gray-100 dark:bg-white/5 text-gray-500 dark:text-white/40 hover:bg-gray-200 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
                                             }
                                         `}
                                     >
@@ -180,10 +180,10 @@ export function BackgroundMusicSelection({
                                     </button>
 
                                     <div className="flex-1">
-                                        <h4 className={`font-bold text-sm ${isSelected ? "text-white" : "text-white/80"}`}>
+                                        <h4 className={`font-bold text-sm ${isSelected ? "text-gray-900 dark:text-white" : "text-gray-600 dark:text-white/80"}`}>
                                             {track.name}
                                         </h4>
-                                        <p className="text-[11px] text-white/25 mt-0.5 truncate max-w-[200px] sm:max-w-md">
+                                        <p className="text-[11px] text-gray-400 dark:text-white/25 mt-0.5 truncate max-w-[200px] sm:max-w-md">
                                             {track.url}
                                         </p>
                                     </div>
@@ -195,7 +195,7 @@ export function BackgroundMusicSelection({
                                     transition-all duration-200
                                     ${isSelected
                                         ? "bg-indigo-500 border-indigo-500 text-white"
-                                        : "bg-transparent border-white/10 group-hover:border-white/20"
+                                        : "bg-transparent border-gray-200 dark:border-white/10 group-hover:border-gray-300 dark:group-hover:border-white/20"
                                     }
                                 `}>
                                     {isSelected && <Check size={14} strokeWidth={3} />}

@@ -171,7 +171,7 @@ function CreatePageContent() {
 
             if (result.success) {
                 toast.success(seriesId ? "Series updated successfully! 🎉" : "Series scheduled successfully! 🎉");
-                router.push("/dashboard/videos");
+                router.push("/dashboard/series");
             } else {
                 toast.error(result.error || `Failed to ${seriesId ? "update" : "schedule"} series`);
             }
@@ -275,10 +275,10 @@ function CreatePageContent() {
     return (
         <div className="max-w-5xl mx-auto min-h-[calc(100vh-7rem)] flex flex-col">
             {/* Page title */}
-            <h1 className="text-3xl font-extrabold text-white mb-2">
+            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">
                 {seriesId ? "Edit Series" : "Create New Series"}
             </h1>
-            <p className="text-white/35 text-sm mb-6">
+            <p className="text-gray-500 dark:text-white/35 text-sm mb-6">
                 {seriesId ? "Update your automated content pipeline settings" : "Set up your automated content pipeline in a few steps"}
             </p>
 
@@ -286,7 +286,7 @@ function CreatePageContent() {
             <StepperProgress currentStep={currentStep} />
 
             {/* Step Content Card — fills remaining height */}
-            <div className="mt-8 rounded-2xl bg-white/[0.03] border border-white/5 p-8 flex-1 flex flex-col">
+            <div className="mt-8 rounded-2xl bg-white dark:bg-white/[0.03] border border-gray-200 dark:border-white/5 shadow-sm dark:shadow-none p-8 flex-1 flex flex-col">
                 <div className="flex-1 overflow-y-auto">
                     {renderStep()}
                 </div>

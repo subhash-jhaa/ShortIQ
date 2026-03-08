@@ -69,8 +69,8 @@ export function CaptionStyleSelection({ selectedStyle, onSelect }: CaptionStyleS
     return (
         <div className="space-y-6">
             <div>
-                <h2 className="text-2xl font-bold text-white">Caption Style</h2>
-                <p className="text-white/40 text-sm mt-1">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Caption Style</h2>
+                <p className="text-gray-500 dark:text-white/40 text-sm mt-1">
                     Choose how subtitles appear on your video
                 </p>
             </div>
@@ -86,8 +86,8 @@ export function CaptionStyleSelection({ selectedStyle, onSelect }: CaptionStyleS
                             className={`
                                 relative flex flex-col p-4 rounded-2xl border-2 text-left transition-all duration-300
                                 ${isSelected
-                                    ? "bg-indigo-500/10 border-indigo-500 shadow-[0_0_24px_-4px_rgba(99,102,241,0.3)]"
-                                    : "bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.06] hover:border-white/15"
+                                    ? "bg-indigo-50 dark:bg-indigo-500/10 border-indigo-500 shadow-[0_0_24px_-4px_rgba(99,102,241,0.3)]"
+                                    : "bg-white dark:bg-white/[0.03] border-gray-200 dark:border-white/[0.06] hover:bg-gray-50 dark:hover:bg-white/[0.06] hover:border-gray-300 dark:hover:border-white/15 shadow-sm dark:shadow-none"
                                 }
                             `}
                         >
@@ -131,10 +131,10 @@ export function CaptionStyleSelection({ selectedStyle, onSelect }: CaptionStyleS
                             {/* Info */}
                             <div className="flex justify-between items-start">
                                 <div>
-                                    <h3 className={`font-bold text-sm ${isSelected ? "text-indigo-300" : "text-white"}`}>
+                                    <h3 className={`font-bold text-sm ${isSelected ? "text-indigo-600 dark:text-indigo-300" : "text-gray-800 dark:text-white"}`}>
                                         {style.name}
                                     </h3>
-                                    <p className="text-[11px] text-white/30 mt-1 leading-tight">
+                                    <p className="text-[11px] text-gray-500 dark:text-white/30 mt-1 leading-tight">
                                         {style.description}
                                     </p>
                                 </div>
