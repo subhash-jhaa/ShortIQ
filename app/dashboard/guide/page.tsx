@@ -27,56 +27,58 @@ export default function GuidePage() {
     ];
 
     return (
-        <div className="max-w-6xl mx-auto space-y-8 pb-12 animate-in fade-in duration-500">
+        <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-12 animate-in fade-in duration-500">
             {/* Hero Section */}
-            <div className="relative rounded-3xl overflow-hidden bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 p-10 md:p-14 shadow-sm dark:shadow-none">
+            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-indigo-500/20 via-purple-500/10 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
 
                 <div className="relative z-10 max-w-2xl">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium text-sm mb-6 border border-indigo-100 dark:border-indigo-500/20">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-indigo-100 dark:border-indigo-500/20">
                         <BookOpen size={16} />
                         ShortIQ Documentation
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3 sm:mb-4">
                         Master the Art of <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-rose-500">
                             Automated Content
                         </span>
                     </h1>
-                    <p className="text-lg text-gray-500 dark:text-white/60 leading-relaxed">
+                    <p className="text-sm sm:text-base md:text-lg text-gray-500 dark:text-white/60 leading-relaxed">
                         Learn how to set up, customize, and automatically publish faceless viral videos to all your social platforms using ShortIQ's powerful engine.
                     </p>
                 </div>
             </div>
 
             {/* Main Content Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8">
 
                 {/* Sidebar Navigation */}
                 <div className="md:col-span-3 space-y-2">
-                    <h3 className="text-xs font-bold text-gray-400 dark:text-white/40 uppercase tracking-wider mb-4 px-3">
+                    <h3 className="text-[10px] sm:text-xs font-bold text-gray-400 dark:text-white/40 uppercase tracking-wider mb-2 sm:mb-4 px-3">
                         Guide Topics
                     </h3>
-                    {categories.map((category) => (
-                        <button
-                            key={category.id}
-                            onClick={() => setActiveTab(category.id)}
-                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all text-left ${activeTab === category.id
-                                ? "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shadow-sm"
-                                : "text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white"
-                                }`}
-                        >
-                            <span className={activeTab === category.id ? "text-indigo-500" : "text-gray-400 dark:text-white/40"}>
-                                {category.icon}
-                            </span>
-                            {category.name}
-                            {activeTab === category.id && (
-                                <ChevronRight size={16} className="ml-auto opacity-50" />
-                            )}
-                        </button>
-                    ))}
+                    <div className="flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible pb-2 md:pb-0 custom-scrollbar">
+                        {categories.map((category) => (
+                            <button
+                                key={category.id}
+                                onClick={() => setActiveTab(category.id)}
+                                className={`flex-1 md:flex-none flex items-center gap-3 px-4 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition-all text-left whitespace-nowrap md:whitespace-normal ${activeTab === category.id
+                                    ? "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-100 dark:border-white/5"
+                                    : "text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent"
+                                    }`}
+                            >
+                                <span className={activeTab === category.id ? "text-indigo-500" : "text-gray-400 dark:text-white/40"}>
+                                    {category.icon}
+                                </span>
+                                {category.name}
+                                {activeTab === category.id && (
+                                    <ChevronRight size={16} className="hidden md:block ml-auto opacity-50" />
+                                )}
+                            </button>
+                        ))}
+                    </div>
 
-                    <div className="mt-8 p-5 rounded-2xl bg-gradient-to-br from-rose-500/10 to-orange-500/10 border border-rose-500/20 text-center">
+                    <div className="hidden md:block mt-8 p-5 rounded-2xl bg-gradient-to-br from-rose-500/10 to-orange-500/10 border border-rose-500/20 text-center">
                         <div className="w-10 h-10 rounded-full bg-rose-500/20 flex items-center justify-center mx-auto mb-3 text-rose-500">
                             <Zap size={20} fill="currentColor" />
                         </div>
@@ -90,13 +92,13 @@ export default function GuidePage() {
 
                 {/* Content Area */}
                 <div className="md:col-span-9">
-                    <div className="bg-white dark:bg-[#0d0d14] rounded-3xl border border-gray-200 dark:border-white/10 p-8 md:p-10 shadow-sm dark:shadow-none min-h-[600px]">
+                    <div className="bg-white dark:bg-[#0d0d14] rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-white/10 p-6 sm:p-8 md:p-10 shadow-sm dark:shadow-none min-h-[400px]">
 
                         {/* Getting Started Content */}
                         {activeTab === "getting-started" && (
-                            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                            <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                                 <div>
-                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Welcome to ShortIQ</h2>
+                                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">Welcome to ShortIQ</h2>
                                     <p className="text-gray-500 dark:text-white/60 leading-relaxed">
                                         ShortIQ is your all-in-one platform for creating and distributing faceless short-form videos. We combine advanced AI scripting, voice generation, and visual synthesis to produce high-retention content automatically.
                                     </p>

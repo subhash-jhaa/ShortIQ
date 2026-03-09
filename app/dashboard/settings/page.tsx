@@ -12,7 +12,11 @@ import {
     Loader2,
     LogOut,
     UserCircle,
-    Mail
+    Mail,
+    Settings as SettingsIcon,
+    ShieldAlert,
+    ChevronRight,
+    CreditCard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getConnectedAccounts, disconnectAccount } from "@/actions/social";
@@ -32,7 +36,15 @@ export default function SettingsPage() {
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [activeTab, setActiveTab] = useState("profile");
     const router = useRouter();
+
+    const tabs = [
+        { id: "profile", name: "Profile Info", icon: <UserCircle size={18} /> },
+        { id: "social", name: "Social Accounts", icon: <Share2 size={18} /> },
+        { id: "billing", name: "Billing", icon: <CreditCard size={18} />, href: "/dashboard/billing" },
+        { id: "danger", name: "Danger Zone", icon: <ShieldAlert size={18} /> },
+    ];
 
     useEffect(() => {
         if (isLoaded) {
@@ -81,8 +93,15 @@ export default function SettingsPage() {
         }
     };
 
-    const isConnected = (platform: string) => connectedAccounts.some(acc => acc.platform === platform);
-    const getAccountName = (platform: string) => connectedAccounts.find(acc => acc.platform === platform)?.platform_account_name;
+    const isConnected = (platform: string) => {
+        if (platform === 'email') return !!user?.primaryEmailAddress?.emailAddress;
+        return connectedAccounts.some(acc => acc.platform === platform);
+    };
+
+    const getAccountName = (platform: string) => {
+        if (platform === 'email') return user?.primaryEmailAddress?.emailAddress;
+        return connectedAccounts.find(acc => acc.platform === platform)?.platform_account_name;
+    };
 
     const platforms = [
         {
@@ -110,186 +129,279 @@ export default function SettingsPage() {
             id: "tiktok",
             name: "Tiktok",
             icon: (
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19.589 6.686a4.944 4.944 0 0 1-3.778-1.787c-.19-.115-.42-.23-.62-.315-.175-.075-.365-.13-.56-.16-.305-.05-.615-.075-.925-.075h-2.11c-.254 0-.482.106-.641.303-.16.196-.226.459-.181.714.107 1.064.407 2.091.892 3.023.51.982 1.203 1.845 2.057 2.565v2.855c0 3.108-2.521 5.629-5.629 5.629s-5.63-2.521-5.63-5.629 2.521-5.63 5.63-5.63c.272 0 .542.019.808.057V5.986c0-.57-.463-1.033-1.033-1.033H4.777c-.57 0-1.033.463-1.033 1.033V17.37c0 4.135 3.364 7.499 7.499 7.499 4.135 0 7.499-3.364 7.499-7.499v-6.742c1.32.915 2.88 1.446 4.563 1.446v-3.09c-.001-1.267-.935-2.296-2.219-2.298z" fill="#000000" className="dark:fill-white" />
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.89-.6-4.13-1.38-.11 3.12-.01 6.25-.01 9.37 0 .85-.11 1.73-.46 2.53-.78 1.83-2.61 3.14-4.57 3.42-1.2.17-2.46.06-3.6-.45-2-1-3.23-3.32-2.91-5.54.19-1.25.9-2.39 1.9-3.13 1-.74 2.3-.98 3.52-.81V13.7c-1.39-.17-2.82.01-4.04.74-1.74 1.05-2.65 3.17-2.2 5.17.41 1.72 1.74 3.15 3.39 3.65 1.48.45 3.15.22 4.45-.69 1.25-.87 1.95-2.34 1.95-3.83-.01-4.29.01-8.58 0-12.87-1.14.77-2.49 1.25-3.89 1.34V4.14c1.6-.13 3.1-.9 4.13-2.14.28-.33.51-.71.69-1.12L12.525.02z" />
                 </svg>
             ),
             description: "Post your creations to TikTok automatically."
+        },
+        {
+            id: "email",
+            name: "Email",
+            icon: <Mail size={40} className="text-indigo-500" />,
+            description: "Receive notifications and send video copies."
         },
     ];
 
     if (!isLoaded) return <div className="text-gray-900 dark:text-white">Loading...</div>;
 
     return (
-        <div className="max-w-4xl mx-auto py-10 px-4 space-y-12">
-            {/* Header */}
-            <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Settings</h1>
-                <p className="text-gray-500 dark:text-white/40">Manage your connected accounts and preferences.</p>
+        <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-12 animate-in fade-in duration-500">
+            {/* Hero Section */}
+            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-indigo-500/20 via-purple-500/10 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
+
+                <div className="relative z-10 max-w-2xl">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-indigo-100 dark:border-indigo-500/20">
+                        <SettingsIcon size={16} />
+                        Account Settings
+                    </div>
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3 sm:mb-4">
+                        Manage Your <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-rose-500">
+                            Preferences
+                        </span>
+                    </h1>
+                    <p className="text-sm sm:text-base md:text-lg text-gray-500 dark:text-white/60 leading-relaxed">
+                        Configure your profile, connect social media accounts, and manage your account security settings in one place.
+                    </p>
+                </div>
             </div>
 
-            {/* Profile Section */}
-            <section className="space-y-6">
-                <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/5 pb-4">
-                    <div className="w-5 h-5 rounded-full border border-indigo-500 dark:border-[#7c3aed] flex items-center justify-center text-indigo-500 dark:text-[#7c3aed]">
-                        <CheckCircle2 size={12} />
+            {/* Main Content Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8">
+
+                {/* Sidebar Navigation */}
+                <div className="md:col-span-3 space-y-2">
+                    <h3 className="text-[10px] sm:text-xs font-bold text-gray-400 dark:text-white/40 uppercase tracking-wider mb-2 sm:mb-4 px-3">
+                        Settings Categories
+                    </h3>
+                    <div className="flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible pb-2 md:pb-0 custom-scrollbar">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => {
+                                    if ('href' in tab && tab.href) {
+                                        router.push(tab.href);
+                                    } else {
+                                        setActiveTab(tab.id);
+                                    }
+                                }}
+                                className={`flex-1 md:flex-none flex items-center gap-3 px-4 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition-all text-left whitespace-nowrap md:whitespace-normal ${activeTab === tab.id
+                                    ? "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-100 dark:border-white/5"
+                                    : "text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent"
+                                    }`}
+                            >
+                                <span className={activeTab === tab.id ? "text-indigo-500" : "text-gray-400 dark:text-white/40"}>
+                                    {tab.icon}
+                                </span>
+                                {tab.name}
+                                {activeTab === tab.id && (
+                                    <ChevronRight size={16} className="hidden md:block ml-auto opacity-50" />
+                                )}
+                            </button>
+                        ))}
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Profile Information</h2>
+
+                    <div className="hidden md:block mt-8 p-5 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 text-center">
+                        <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center mx-auto mb-3 text-indigo-500">
+                            <UserCircle size={20} />
+                        </div>
+                        <h4 className="text-gray-900 dark:text-white font-bold text-sm mb-1">Need to update Auth?</h4>
+                        <p className="text-gray-500 dark:text-white/50 text-xs mb-4">Manage password and security via Clerk.</p>
+                        <button
+                            onClick={() => openUserProfile()}
+                            className="w-full py-2 bg-white dark:bg-white/10 hover:bg-gray-50 dark:hover:bg-white/20 text-gray-900 dark:text-white text-xs font-bold rounded-lg transition-colors border border-gray-200 dark:border-transparent"
+                        >
+                            Open Profile
+                        </button>
+                    </div>
                 </div>
 
-                <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-12 transition-all hover:border-gray-300 dark:hover:border-white/20 shadow-sm dark:shadow-none">
-                    {/* Avatar with PRO Badge */}
-                    <div className="relative shrink-0">
-                        <div className="w-24 h-24 rounded-2xl bg-indigo-50 dark:bg-[#002b1f] flex items-center justify-center border border-indigo-100 dark:border-white/10 shadow-lg dark:shadow-2xl overflow-hidden">
-                            <span className="text-5xl font-medium text-indigo-600 dark:text-white/90">
-                                {user?.fullName?.[0] || user?.primaryEmailAddress?.emailAddress?.[0] || "U"}
-                            </span>
-                        </div>
-                        <div className="absolute -bottom-2 -right-2 bg-indigo-600 dark:bg-[#4f46e5] text-white text-[10px] font-black px-2.5 py-1 rounded-lg border-4 border-white dark:border-[#0d0d14] shadow-xl tracking-tight uppercase">
-                            PRO
-                        </div>
-                    </div>
+                {/* Content Area */}
+                <div className="md:col-span-9">
+                    <div className="bg-white dark:bg-[#0d0d14] rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-white/10 p-6 sm:p-8 md:p-10 shadow-sm dark:shadow-none min-h-[400px]">
 
-                    <div className="flex-1 grid gap-8 sm:grid-cols-2 w-full">
-                        <div className="space-y-2.5">
-                            <label className="text-[10px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest">Full Name</label>
-                            <div className="bg-gray-50 dark:bg-white/[0.02] text-gray-500 dark:text-white/50 font-medium px-4 py-3.5 rounded-xl border border-gray-200 dark:border-white/5 cursor-not-allowed text-[15px] shadow-inner select-none">
-                                {user?.fullName || "Loading..."}
-                            </div>
-                        </div>
-                        <div className="space-y-2.5">
-                            <label className="text-[10px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest">Email Address</label>
-                            <div className="bg-gray-50 dark:bg-white/[0.02] text-gray-500 dark:text-white/50 font-medium px-4 py-3.5 rounded-xl border border-gray-200 dark:border-white/5 cursor-not-allowed text-[15px] shadow-inner select-none overflow-hidden text-ellipsis">
-                                {user?.primaryEmailAddress?.emailAddress || "Loading..."}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                        {/* Profile Info Content */}
+                        {activeTab === "profile" && (
+                            <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/5 pb-4">
+                                    <div className="w-5 h-5 rounded-full border border-indigo-500 dark:border-[#7c3aed] flex items-center justify-center text-indigo-500 dark:text-[#7c3aed]">
+                                        <CheckCircle2 size={12} />
+                                    </div>
+                                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Profile Information</h2>
+                                </div>
 
-            {/* Social Accounts Section */}
-            <section className="space-y-6">
-                <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/5 pb-4">
-                    <Share2 className="text-indigo-500 dark:text-indigo-400 transform rotate-45" size={20} />
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Social Media Connections</h2>
-                </div>
+                                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 sm:gap-12">
+                                    {/* Avatar with PRO Badge */}
+                                    <div className="relative shrink-0">
+                                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-indigo-50 dark:bg-[#002b1f] flex items-center justify-center border border-indigo-100 dark:border-white/10 shadow-lg dark:shadow-2xl overflow-hidden">
+                                            <span className="text-4xl sm:text-5xl font-medium text-indigo-600 dark:text-white/90">
+                                                {user?.fullName?.[0] || user?.primaryEmailAddress?.emailAddress?.[0] || "U"}
+                                            </span>
+                                        </div>
+                                        <div className="absolute -bottom-2 -right-2 bg-indigo-600 dark:bg-[#4f46e5] text-white text-[9px] sm:text-[10px] font-black px-2 sm:px-2.5 py-1 rounded-lg border-2 sm:border-4 border-white dark:border-[#0d0d14] shadow-xl tracking-tight uppercase">
+                                            PRO
+                                        </div>
+                                    </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {platforms.map((platform) => (
-                        <div key={platform.id} className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-[32px] p-8 flex flex-col items-center transition-all hover:border-gray-300 dark:hover:border-white/20 shadow-md dark:shadow-xl group">
-                            {/* Platform Icon Box */}
-                            <div className={`w-28 h-28 rounded-[2rem] flex items-center justify-center mb-6 border border-gray-100 dark:border-white/5 transition-transform group-hover:scale-105 ${platform.id === 'youtube' ? 'bg-rose-50 dark:bg-rose-500/10' :
-                                platform.id === 'instagram' ? 'bg-pink-50 dark:bg-pink-500/10' : 'bg-gray-50 dark:bg-white/10'
-                                }`}>
-                                <div className="transform scale-125">
-                                    {platform.icon}
+                                    <div className="flex-1 grid gap-4 sm:gap-8 sm:grid-cols-2 w-full">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest">Full Name</label>
+                                            <div className="bg-gray-50 dark:bg-white/[0.02] text-gray-500 dark:text-white/50 font-medium px-4 py-2.5 sm:py-3.5 rounded-xl border border-gray-200 dark:border-white/5 cursor-not-allowed text-sm sm:text-[15px] shadow-inner select-none">
+                                                {user?.fullName || "Loading..."}
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black text-gray-400 dark:text-white/30 uppercase tracking-widest">Email Address</label>
+                                            <div className="bg-gray-50 dark:bg-white/[0.02] text-gray-500 dark:text-white/50 font-medium px-4 py-2.5 sm:py-3.5 rounded-xl border border-gray-200 dark:border-white/5 cursor-not-allowed text-sm sm:text-[15px] shadow-inner select-none overflow-hidden text-ellipsis">
+                                                {user?.primaryEmailAddress?.emailAddress || "Loading..."}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl p-6 border border-indigo-100 dark:border-indigo-500/20">
+                                    <h3 className="font-bold text-indigo-900 dark:text-indigo-300 mb-2 flex items-center gap-2 text-sm">
+                                        <CheckCircle2 size={16} /> Subscription Active
+                                    </h3>
+                                    <p className="text-xs text-indigo-700 dark:text-indigo-200/70">
+                                        Your Pro plan is active. You have unlimited video generations and priority rendering enabled for all your series.
+                                    </p>
                                 </div>
                             </div>
+                        )}
 
-                            {/* Platform Name */}
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1 uppercase tracking-tight">{platform.name.split(' ')[0]}</h3>
+                        {/* Social Accounts Content */}
+                        {activeTab === "social" && (
+                            <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/5 pb-4">
+                                    <Share2 className="text-indigo-500 dark:text-indigo-400 transform rotate-45" size={20} />
+                                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Social Media Connections</h2>
+                                </div>
 
-                            {isConnected(platform.id) ? (
-                                <>
-                                    <p className="text-[10px] font-black text-emerald-500 dark:text-emerald-400 uppercase tracking-[0.2em] mb-8">CONNECTED</p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                    {platforms.map((platform) => (
+                                        <div key={platform.id} className="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex flex-col items-center transition-all hover:border-gray-300 dark:hover:border-white/20 shadow-sm group">
+                                            {/* Platform Icon Box */}
+                                            <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center mb-3 sm:mb-4 border border-gray-100 dark:border-white/5 transition-transform group-hover:scale-105 ${platform.id === 'youtube' ? 'bg-rose-50 dark:bg-rose-500/10' :
+                                                platform.id === 'instagram' ? 'bg-pink-50 dark:bg-pink-500/10' : 'bg-white dark:bg-white/10'
+                                                }`}>
+                                                <div className="transform scale-90 sm:scale-110">
+                                                    {platform.icon}
+                                                </div>
+                                            </div>
 
-                                    <div className="w-full space-y-4">
-                                        {/* Account Name Pill */}
-                                        <div className="w-full bg-gray-50 dark:bg-white/[0.02] border border-gray-200 dark:border-white/5 py-4 px-4 rounded-2xl text-gray-600 dark:text-white/70 text-sm font-medium text-center truncate shadow-inner">
-                                            {getAccountName(platform.id)}
-                                        </div>
+                                            {/* Platform Name */}
+                                            <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-1 uppercase tracking-tight">{platform.name}</h3>
 
-                                        {/* Disconnect Button */}
-                                        <Button
-                                            variant="ghost"
-                                            className="w-full bg-transparent border border-rose-200 dark:border-rose-500/20 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-600 rounded-2xl h-14 gap-2 font-bold transition-all text-base"
-                                            onClick={() => handleDisconnect(platform.id)}
-                                            disabled={actionLoading === platform.id}
-                                        >
-                                            {actionLoading === platform.id ? (
-                                                <Loader2 className="animate-spin" size={20} />
+                                            {isConnected(platform.id) ? (
+                                                <>
+                                                    <p className="text-[8px] sm:text-[9px] font-black text-emerald-500 dark:text-emerald-400 uppercase tracking-[0.2em] mb-3 sm:mb-4">CONNECTED</p>
+
+                                                    <div className="w-full space-y-2 sm:space-y-3">
+                                                        <div className="w-full bg-white dark:bg-white/[0.02] border border-gray-200 dark:border-white/5 py-2.5 sm:py-3 px-3 rounded-xl text-gray-600 dark:text-white/70 text-[10px] sm:text-xs font-medium text-center truncate shadow-inner">
+                                                            {getAccountName(platform.id)}
+                                                        </div>
+
+                                                        <Button
+                                                            variant="ghost"
+                                                            className="w-full bg-transparent border border-rose-200 dark:border-rose-500/20 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-600 rounded-xl h-10 sm:h-11 gap-2 font-bold transition-all text-[10px] sm:text-xs"
+                                                            onClick={() => handleDisconnect(platform.id)}
+                                                            disabled={actionLoading === platform.id}
+                                                        >
+                                                            {actionLoading === platform.id ? (
+                                                                <Loader2 className="animate-spin" size={14} />
+                                                            ) : (
+                                                                <LogOut size={14} className="transform rotate-180" />
+                                                            )}
+                                                            Disconnect
+                                                        </Button>
+                                                    </div>
+                                                </>
                                             ) : (
-                                                <LogOut size={20} className="transform rotate-180" />
+                                                <>
+                                                    <p className="text-[8px] sm:text-[9px] font-black text-gray-400 dark:text-white/20 uppercase tracking-[0.2em] mb-4 sm:mb-6">DISCONNECTED</p>
+                                                    <Button
+                                                        className="w-full bg-gray-900 dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-slate-100 font-bold h-10 sm:h-11 rounded-xl text-[10px] sm:text-xs transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2"
+                                                        onClick={() => handleConnect(platform.id)}
+                                                        disabled={actionLoading === platform.id}
+                                                    >
+                                                        {actionLoading === platform.id ? (
+                                                            <Loader2 className="animate-spin" size={14} />
+                                                        ) : (
+                                                            <>
+                                                                <Share2 size={14} className="transform rotate-45" />
+                                                                Connect
+                                                            </>
+                                                        )}
+                                                    </Button>
+                                                </>
                                             )}
-                                            Disconnect
-                                        </Button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Danger Zone Content */}
+                        {activeTab === "danger" && (
+                            <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                                <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/5 pb-4">
+                                    <AlertTriangle className="text-rose-500" size={20} />
+                                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Danger Zone</h2>
+                                </div>
+
+                                <div className="bg-rose-50 dark:bg-rose-500/5 border border-rose-200 dark:border-rose-500/20 rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8">
+                                    <div className="text-center lg:text-left">
+                                        <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-1.5 sm:mb-2">Delete Account</h3>
+                                        <p className="text-gray-500 dark:text-white/40 text-xs sm:text-sm max-w-md">
+                                            Permanently delete your account, all your series, and generated videos. This action is irreversible.
+                                        </p>
                                     </div>
-                                </>
-                            ) : (
-                                <>
-                                    <p className="text-[10px] font-black text-gray-400 dark:text-white/20 uppercase tracking-[0.2em] mb-12">DISCONNECTED</p>
-                                    <Button
-                                        className="w-full bg-gray-900 dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-slate-100 font-black h-14 rounded-2xl text-base transition-all shadow-lg active:scale-[0.98] flex items-center justify-center gap-2"
-                                        onClick={() => handleConnect(platform.id)}
-                                        disabled={actionLoading === platform.id}
-                                    >
-                                        {actionLoading === platform.id ? (
-                                            <Loader2 className="animate-spin" size={20} />
-                                        ) : (
-                                            <>
-                                                <Share2 size={20} className="transform rotate-45" />
-                                                Connect Account
-                                            </>
-                                        )}
-                                    </Button>
-                                </>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            </section>
 
-            {/* Danger Zone Section */}
-            <section className="space-y-6 pt-10 border-t border-gray-200 dark:border-white/5">
-                <div className="flex items-center gap-2 pb-4">
-                    <AlertTriangle className="text-rose-500" size={20} />
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Danger Zone</h2>
-                </div>
+                                    {!showDeleteConfirm ? (
+                                        <Button
+                                            variant="destructive"
+                                            className="w-full lg:w-auto bg-rose-600 hover:bg-rose-700 text-white font-bold h-11 sm:h-12 px-6 sm:px-8 rounded-xl shadow-lg shadow-rose-900/10 dark:shadow-rose-900/20 text-xs sm:text-sm"
+                                            onClick={() => setShowDeleteConfirm(true)}
+                                        >
+                                            <Trash2 size={16} className="mr-2" />
+                                            Delete Account
+                                        </Button>
+                                    ) : (
+                                        <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                                            <Button
+                                                variant="ghost"
+                                                className="w-full sm:w-auto text-gray-500 dark:text-white/40 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 text-xs sm:text-sm"
+                                                onClick={() => setShowDeleteConfirm(false)}
+                                                disabled={actionLoading === "delete"}
+                                            >
+                                                Cancel
+                                            </Button>
+                                            <Button
+                                                variant="destructive"
+                                                className="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white font-bold h-11 sm:h-12 px-6 sm:px-8 rounded-xl text-xs sm:text-sm"
+                                                onClick={handleDeleteAccount}
+                                                disabled={actionLoading === "delete"}
+                                            >
+                                                {actionLoading === "delete" ? (
+                                                    <Loader2 className="animate-spin mr-2" size={16} />
+                                                ) : (
+                                                    <Trash2 size={16} className="mr-2" />
+                                                )}
+                                                Confirm Delete
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
 
-                <div className="bg-rose-50 dark:bg-rose-500/5 border border-rose-200 dark:border-rose-500/20 rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div className="text-center md:text-left">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Delete Account</h3>
-                        <p className="text-gray-500 dark:text-white/40 text-sm max-w-md">
-                            Permanently delete your account, all your series, and generated videos. This action is irreversible.
-                        </p>
                     </div>
-
-                    {!showDeleteConfirm ? (
-                        <Button
-                            variant="destructive"
-                            className="bg-rose-600 hover:bg-rose-700 text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-rose-900/10 dark:shadow-rose-900/20"
-                            onClick={() => setShowDeleteConfirm(true)}
-                        >
-                            <Trash2 size={18} className="mr-2" />
-                            Delete Account
-                        </Button>
-                    ) : (
-                        <div className="flex flex-col sm:flex-row gap-3">
-                            <Button
-                                variant="ghost"
-                                className="text-gray-500 dark:text-white/40 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
-                                onClick={() => setShowDeleteConfirm(false)}
-                                disabled={actionLoading === "delete"}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                variant="destructive"
-                                className="bg-rose-600 hover:bg-rose-700 text-white font-bold h-12 px-8 rounded-xl"
-                                onClick={handleDeleteAccount}
-                                disabled={actionLoading === "delete"}
-                            >
-                                {actionLoading === "delete" ? (
-                                    <Loader2 className="animate-spin mr-2" size={18} />
-                                ) : (
-                                    <Trash2 size={18} className="mr-2" />
-                                )}
-                                Confirm Delete
-                            </Button>
-                        </div>
-                    )}
                 </div>
-            </section>
+
+            </div>
 
             {/* Loading Overlay */}
             {loading && (
