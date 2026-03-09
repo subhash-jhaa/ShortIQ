@@ -37,38 +37,56 @@ export default function SeriesPage() {
     }
 
     return (
-        <div className="space-y-8">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">Automated Series</h1>
-                    <p className="text-gray-500 dark:text-white/35 text-sm">Manage your video automation projects and triggers</p>
+        <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-12 animate-in fade-in duration-500">
+            {/* Hero Section */}
+            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-indigo-500/10 via-rose-500/5 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
+
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8">
+                    <div className="max-w-xl">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-indigo-100 dark:border-indigo-500/20">
+                            <PlaySquare size={16} />
+                            Automation Engine
+                        </div>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3 sm:mb-4">
+                            Your <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-indigo-500">
+                                Automated Series
+                            </span>
+                        </h1>
+                        <p className="text-sm sm:text-base md:text-lg text-gray-500 dark:text-white/60 leading-relaxed">
+                            Define your niche, schedule, and style. Our AI engines will handle the scripting, voicing, and rendering of your viral shorts.
+                        </p>
+                    </div>
+
+                    <Link href="/dashboard/create" className="w-full md:w-auto">
+                        <button className="w-full flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl sm:rounded-2xl font-black uppercase tracking-widest text-[10px] sm:text-xs transition-all shadow-xl shadow-indigo-500/25 active:scale-95 group">
+                            <Plus size={18} className="group-hover:rotate-90 transition-transform duration-300" />
+                            Create New Series
+                        </button>
+                    </Link>
                 </div>
-                <Link href="/dashboard/create">
-                    <button className="flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-rose-500/20 active:scale-95">
-                        <Plus size={20} />
-                        Create New
-                    </button>
-                </Link>
             </div>
 
+            {/* Content Area */}
             {series.length === 0 ? (
-                <div className="bg-white dark:bg-white/[0.02] border border-dashed border-gray-200 dark:border-white/10 rounded-2xl p-12 text-center shadow-sm dark:shadow-none">
-                    <div className="w-16 h-16 bg-gray-50 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100 dark:border-transparent">
-                        <PlaySquare size={32} className="text-gray-400 dark:text-white/20" />
+                <div className="bg-white dark:bg-[#0d0d14] border border-dashed border-gray-200 dark:border-white/10 rounded-2xl sm:rounded-[32px] p-10 sm:p-20 text-center shadow-sm dark:shadow-none">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-50 dark:bg-white/5 rounded-2xl sm:rounded-3xl flex items-center justify-center mx-auto mb-6 border border-gray-100 dark:border-white/5">
+                        <PlaySquare size={32} className="text-gray-300 dark:text-white/10" />
                     </div>
-                    <h3 className="text-gray-900 dark:text-white font-bold text-lg mb-2">No series yet</h3>
-                    <p className="text-gray-500 dark:text-white/40 text-sm max-w-sm mx-auto mb-8">
-                        Create your first automated series to start generating viral short-form content.
+                    <h3 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white mb-2">No active series</h3>
+                    <p className="text-gray-500 dark:text-white/30 text-xs sm:text-sm max-w-sm mx-auto mb-8 sm:mb-10">
+                        Launch your first automated content pipeline and start scaling your social presence today.
                     </p>
                     <Link
                         href="/dashboard/create"
-                        className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20"
+                        className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl sm:rounded-2xl font-bold transition-all shadow-xl shadow-indigo-500/20 active:scale-95"
                     >
-                        Get Started
+                        Initialize First Series
                     </Link>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                     {series.map((item) => (
                         <SeriesCard key={item.id} series={item} onRefresh={fetchSeries} />
                     ))}

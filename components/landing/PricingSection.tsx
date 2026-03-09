@@ -2,54 +2,49 @@
 
 const plans = [
     {
-        name: "Starter",
-        price: "₹19",
+        name: "Free",
+        price: "$0",
         period: "/month",
-        desc: "Perfect for solo creators just getting started.",
+        desc: "Perfect for testing the power of ShortIQ.",
         features: [
-            "30 AI videos / month",
-            "3 platforms",
-            "Basic analytics",
-            "720p export",
-            "Email scheduling",
-            "Community support",
+            "3 Video Generations",
+            "Basic Quality",
+            "ShortIQ Watermark",
+            "Standard Rendering",
         ],
         highlight: false,
-        cta: "Start Free Trial",
+        cta: "Start for Free",
     },
     {
-        name: "Pro",
-        price: "₹49",
+        name: "Basic",
+        price: "$7",
         period: "/month",
-        desc: "For creators and small teams who publish consistently.",
+        desc: "For serious content creators building an audience.",
         features: [
-            "150 AI videos / month",
-            "All 5 platforms",
-            "Advanced analytics",
-            "1080p + 4K export",
-            "Auto-scheduling AI",
-            "Brand kit & watermark",
-            "Priority support",
+            "Unlimited Video Generation",
+            "Max 5 Series Created",
+            "No Watermarks",
+            "High Quality (1080p)",
+            "Standard Rendering Speed",
+        ],
+        highlight: false,
+        cta: "Get Started",
+    },
+    {
+        name: "Advanced",
+        price: "$10",
+        period: "/month",
+        desc: "The ultimate power for faceless channel empires.",
+        features: [
+            "Unlimited Video Generation",
+            "Unlimited Series Created",
+            "Direct Social Publishing",
+            "Priority Rendering Speed",
+            "Advanced AI Scripting",
+            "Priority Support",
         ],
         highlight: true,
-        cta: "Get Pro — Most Popular",
-    },
-    {
-        name: "Business",
-        price: "₹129",
-        period: "/month",
-        desc: "For agencies and brands running at scale.",
-        features: [
-            "Unlimited AI videos",
-            "All 5 platforms + API",
-            "Cross-platform analytics",
-            "4K + bulk export",
-            "Custom AI voice cloning",
-            "White-label dashboard",
-            "Dedicated account manager",
-        ],
-        highlight: false,
-        cta: "Start Business Trial",
+        cta: "Go Pro — Most Popular",
     },
 ];
 
@@ -65,12 +60,12 @@ export default function PricingSection() {
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-8 items-start">
+                <div className="grid md:grid-cols-3 gap-8">
                     {plans.map((plan) => (
                         <div
                             key={plan.name}
-                            className={`rounded-3xl p-8 border transition-all duration-500 ${plan.highlight
-                                ? "bg-gradient-to-b from-rose-50 dark:from-indigo-600/20 to-white dark:to-rose-600/10 border-rose-200 dark:border-rose-500/50 shadow-xl dark:shadow-2xl shadow-rose-500/10 dark:shadow-rose-500/20 scale-105 z-10"
+                            className={`rounded-3xl p-8 border transition-all duration-500 flex flex-col h-full ${plan.highlight
+                                ? "bg-gradient-to-b from-rose-50 dark:from-indigo-600/20 to-white dark:to-rose-600/10 border-rose-200 dark:border-rose-500/50 shadow-xl dark:shadow-2xl shadow-rose-500/10 dark:shadow-rose-500/20 z-10"
                                 : "bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10"
                                 } relative`}
                         >

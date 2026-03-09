@@ -9,46 +9,47 @@ const plans = [
     {
         name: "Free",
         price: "$0",
-        description: "Perfect for getting started",
+        description: "Perfect for testing the power of ShortIQ.",
         features: [
-            "3 AI Videos per month",
-            "Standard Voiceovers",
-            "Auto-scheduling to 1 platform",
-            "720p Resolution"
+            "3 Video Generations",
+            "Basic Quality",
+            "ShortIQ Watermark",
+            "Standard Rendering"
         ],
         cta: "Get Started",
         icon: <Zap className="text-emerald-400" size={24} />,
         popular: false
     },
     {
-        name: "Pro",
-        price: "$19",
-        description: "Best for content creators",
+        name: "Basic",
+        price: "$7",
+        description: "For serious content creators building an audience.",
         features: [
-            "20 AI Videos per month",
-            "Premium AI Voices",
-            "Auto-scheduling to all platforms",
-            "1080p Resolution",
-            "No Watermark"
+            "Unlimited Video Generation",
+            "Max 5 Series Created",
+            "No Watermarks",
+            "High Quality (1080p)",
+            "Standard Rendering Speed"
         ],
-        cta: "Upgrade to Pro",
+        cta: "Choose Basic",
         icon: <Rocket className="text-indigo-400" size={24} />,
-        popular: true
+        popular: false
     },
     {
-        name: "Business",
-        price: "$49",
-        description: "For agencies and brands",
+        name: "Advanced",
+        price: "$10",
+        description: "The ultimate power for faceless channel empires.",
         features: [
-            "Unlimited AI Videos",
-            "Custom Voice Cloning",
-            "Multi-account management",
-            "Priority Rendering",
-            "Dedicated Support"
+            "Unlimited Video Generation",
+            "Unlimited Series Created",
+            "Direct Social Publishing",
+            "Priority Rendering Speed",
+            "Advanced AI Scripting",
+            "Priority Support"
         ],
-        cta: "Go Unlimited",
+        cta: "Go Pro",
         icon: <Crown className="text-amber-400" size={24} />,
-        popular: false
+        popular: true
     }
 ];
 
@@ -84,9 +85,9 @@ export default function PricingPage() {
                 {plans.map((plan) => (
                     <div
                         key={plan.name}
-                        className={`relative p-8 rounded-[40px] border transition-all hover:scale-[1.02] flex flex-col ${plan.popular
-                                ? "bg-indigo-500/10 border-indigo-500/50 shadow-2xl shadow-indigo-500/10"
-                                : "bg-white/5 border-white/10"
+                        className={`relative p-8 rounded-[40px] border transition-all h-full flex flex-col ${plan.popular
+                            ? "bg-indigo-500/10 border-indigo-500/50 shadow-2xl shadow-indigo-500/10"
+                            : "bg-white/5 border-white/10"
                             }`}
                     >
                         {plan.popular && (
@@ -123,8 +124,8 @@ export default function PricingPage() {
                         <Button
                             onClick={() => handleSubscribe(plan.name)}
                             className={`w-full h-14 rounded-2xl font-black text-base shadow-lg transition-all active:scale-95 ${plan.popular
-                                    ? "bg-indigo-500 text-white hover:bg-indigo-600"
-                                    : "bg-white text-black hover:bg-slate-100"
+                                ? "bg-indigo-500 text-white hover:bg-indigo-600"
+                                : "bg-white text-black hover:bg-slate-100"
                                 }`}
                         >
                             {plan.cta}
