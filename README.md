@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ShortIQ - Your Faceless Content Empire
 
-## Getting Started
+ShortIQ is a premium, AI-powered video generation platform designed to help content creators build and scale faceless channel empires with ease. From automated scripting to high-performance rendering and direct social publishing, ShortIQ provides everything you need to dominate the short-form content landscape.
 
-First, run the development server:
+## 🚀 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Automated AI Scripting**: Generate viral-ready scripts tailored for TikTok, Reels, and Shorts.
+- **High-Performance Rendering**: Fast, reliable video generation powered by high-end infrastructure.
+- **Premium Design System**: A sleek, modern dashboard with glassmorphism and smooth micro-animations.
+- **Full Mobile Responsiveness**: Seamless experience across all devices with a specialized mobile sidebar and adaptive grids.
+- **Integrated Billing**: Simple, tiered subscription plans ($0, $7, $10) managed via Clerk & Stripe.
+- **Direct Social Publishing**: Connect your YouTube, TikTok, and Instagram accounts to publish directly from the dashboard.
+- **Guided Onboarding**: Comprehensive in-app guide to help you master every feature.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: [Next.js 15+](https://nextjs.org) (App Router, Turbopack)
+- **Styling**: Vanilla CSS with Tailwind-inspired utilities
+- **Authentication**: [Clerk](https://clerk.com)
+- **Database**: Supabase
+- **Rendering**: Custom rendering pipeline with Creatomate integration
+- **Workflow**: Inngest for robust background processing
+- **Icons**: Lucide React
+- **Notifications**: Sonner
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📱 Mobile-First Experience
 
-## Learn More
+ShortIQ has been meticulously optimized for mobile. Whether you're tracking your latest series or initiating a new generation on the go, the interface remains intuitive and fast:
+- **Slide-over Sidebar**: Easy navigation on small screens.
+- **Adaptive Grids**: Content stacks perfectly on mobile viewports.
+- **Touch-Optimized Interaction**: Elements are sized for easy tapping.
 
-To learn more about Next.js, take a look at the following resources:
+## 📈 Getting Started
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Clone the repository**:
+   ```bash
+   git clone <repository-url>
+   ```
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Set up environment variables**:
+   Create a `.env.local` file with your Clerk, Supabase, and Creatomate credentials.
+4. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📜 Maintenance Scripts
 
-## Deploy on Vercel
+- `npm run inngest:dev`: Start the Inngest Dev Server locally for background task debugging.
+- `npx tsc --noEmit`: Run type checks across the codebase.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with ❤️ for Content Creators.
