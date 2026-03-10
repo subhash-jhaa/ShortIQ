@@ -12,14 +12,14 @@ export interface CreatomateRenderProps {
     durationSeconds: number;
 }
 
-// --- Caption style to Creatomate font/color mapping ---
-const CAPTION_STYLES: Record<string, { color: string; fontFamily: string; fontWeight: string; background?: string }> = {
-    classic: { color: "#ffffff", fontFamily: "Arial", fontWeight: "Bold" },
-    karaoke: { color: "#FFD700", fontFamily: "Arial", fontWeight: "Bold" },
-    popup: { color: "#ffffff", fontFamily: "Impact", fontWeight: "Bold" },
-    glow: { color: "#a5b4fc", fontFamily: "Arial", fontWeight: "Bold" },
-    gradient: { color: "#c084fc", fontFamily: "Poppins", fontWeight: "Bold" },
-    typewriter: { color: "#ffffff", fontFamily: "Courier New", fontWeight: "Regular" },
+// --- Caption style with Google Fonts and premium effects ---
+const CAPTION_STYLES: Record<string, { color: string; fontFamily: string; fontWeight: string; background?: string; shadowColor?: string }> = {
+    classic: { color: "#ffffff", fontFamily: "Montserrat", fontWeight: "900", shadowColor: "rgba(0,0,0,0.5)" },
+    karaoke: { color: "#FFD700", fontFamily: "Montserrat", fontWeight: "900", shadowColor: "rgba(0,0,0,0.5)" },
+    popup: { color: "#ffffff", fontFamily: "Inter", fontWeight: "900", shadowColor: "rgba(0,0,0,0.8)" },
+    glow: { color: "#ffffff", fontFamily: "Montserrat", fontWeight: "900", shadowColor: "rgba(165,180,252,0.8)" },
+    gradient: { color: "#ffffff", fontFamily: "Montserrat", fontWeight: "900", shadowColor: "rgba(192,132,252,0.8)" },
+    typewriter: { color: "#ffffff", fontFamily: "Courier New", fontWeight: "700" },
 };
 
 // --- Parse SRT -> array of caption objects ---
@@ -27,18 +27,25 @@ function parseSrt(srtContent: string): Array<{ start: number; end: number; text:
     const blocks = srtContent.trim().split(/\n\s*\n/);
     return blocks.map((block) => {
         const lines = block.split("\n");
+        // Ensure there are enough lines to parse the time block (SRT usually has 1. Index, 2. Time, 3. Text)
+        if (lines.length < 3) return null;
+
         const timeLine = lines[1] || "";
         const text = lines.slice(2).join(" ").trim();
         const [startStr, endStr] = timeLine.split(" --> ");
 
+        if (!startStr || !endStr) return null;
+
         const parseTime = (ts: string) => {
-            const [hms, ms] = ts.split(",");
-            const [h, m, s] = hms.split(":").map(Number);
+            // Whisper format might use . or , for milliseconds
+            const cleanTs = ts.trim().replace(",", ".");
+            const [hms, ms = "000"] = cleanTs.split(".");
+            const [h = 0, m = 0, s = 0] = hms.split(":").map(Number);
             return h * 3600 + m * 60 + s + Number(ms) / 1000;
         };
 
         return { start: parseTime(startStr), end: parseTime(endStr), text };
-    }).filter(c => c.text);
+    }).filter((c): c is NonNullable<typeof c> => c !== null && Boolean(c.text));
 }
 
 // --- Build Creatomate JSON template ---
@@ -79,13 +86,15 @@ function buildCreatomateTemplate(props: CreatomateRenderProps) {
         duration: cue.end - cue.start,
         font_family: style.fontFamily,
         font_weight: style.fontWeight,
-        font_size: "7 vmin",
+        font_size: "8 vmin",
         fill_color: style.color,
         stroke_color: "#000000",
-        stroke_width: "0.4 vmin",
+        stroke_width: "0.8 vmin",
+        shadow_color: style.shadowColor || "rgba(0,0,0,0.5)",
+        shadow_blur: "1 vmin",
         x_alignment: "50%",
-        y_alignment: "80%",
-        width: "80%",
+        y_alignment: "75%", // Slightly higher to avoid bottom-heavy layout
+        width: "90%",
         height: "auto",
         x_anchor: "50%",
         y_anchor: "50%",

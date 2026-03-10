@@ -12,7 +12,7 @@ export default function Navbar() {
     const { signOut } = useClerk();
 
     useEffect(() => {
-        const handler = () => setScrolled(window.scrollY > 20);
+        const handler = () => setScrolled(window.scrollY > 200);
         window.addEventListener("scroll", handler);
         return () => window.removeEventListener("scroll", handler);
     }, []);
@@ -20,70 +20,72 @@ export default function Navbar() {
     return (
         <header className="fixed top-0 left-0 right-0 z-50 pt-4 px-4 pointer-events-none">
             <div
-                className={`max-w-5xl mx-auto h-16 flex items-center justify-between px-6 transition-all duration-500 pointer-events-auto rounded-2xl border ${scrolled
-                    ? "bg-white/90 dark:bg-black/80 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-lg"
-                    : "bg-white/50 dark:bg-white/5 backdrop-blur-md border-transparent"
-                    }`}
+                className={`mx-auto flex items-center justify-between transition-all duration-700 ease-in-out pointer-events-auto rounded-3xl border shadow-lg ${
+                    scrolled
+                        ? "max-w-xl h-16 px-4 bg-white/95 dark:bg-black/90 backdrop-blur-2xl border-gray-200/80 dark:border-white/20"
+                        : "max-w-5xl h-20 px-8 bg-white/70 dark:bg-white/5 backdrop-blur-md border-transparent shadow-none"
+                }`}
             >
                 {/* Logo */}
-                <a href="#" className="flex items-center gap-2 group shrink-0">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-rose-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <Link 
+                    href="/" 
+                    className="flex items-center gap-2.5 font-bold text-xl transition-all hover:scale-105 group"
+                >
+                    <div className="flex items-center justify-center rounded-xl transition-all">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:animate-pulse">
+                            <rect width="24" height="24" rx="6" fill="url(#rose_anim_nav)" />
+                            <path d="M18 5H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M9 12H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M9 19H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                             <path
-                                d="M5 3l14 9-14 9V3z"
+                                d="M13 12.003a0.7 0.7 0 0 1 1.062-.597l3.498 2.098a0.7 0.7 0 0 1 0 1.203l-3.498 2.098a0.7 0.7 0 0 1-1.062-.598z"
                                 fill="white"
-                                stroke="white"
-                                strokeWidth="1.5"
-                                strokeLinejoin="round"
                             />
+                            <defs>
+                                <linearGradient id="rose_anim_nav" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                                    <stop stopColor="#fb7185">
+                                        <animate attributeName="stop-color" values="#fb7185; #fda4af; #fb7185" dur="3s" repeatCount="indefinite" />
+                                    </stop>
+                                    <stop offset="1" stopColor="#e11d48">
+                                        <animate attributeName="stop-color" values="#e11d48; #be123c; #e11d48" dur="3s" repeatCount="indefinite" />
+                                    </stop>
+                                </linearGradient>
+                            </defs>
                         </svg>
                     </div>
                     <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight transition-colors">
-                        Short<span className="text-violet-600 dark:text-violet-400">IQ</span>
+                        Short<span className="text-rose-600 dark:text-rose-400">IQ</span>
                     </span>
-                </a>
+                </Link>
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-6 lg:gap-8">
-                    {["Features", "How It Works", "Platforms", "Pricing", "Testimonials"].map((item) => (
-                        <a
-                            key={item}
-                            href={`#${item.toLowerCase().replace(/ /g, "-")}`}
-                            className="text-sm text-gray-600 dark:text-white/70 hover:text-indigo-600 dark:hover:text-white transition-colors font-medium whitespace-nowrap"
-                        >
-                            {item}
-                        </a>
-                    ))}
-                </nav>
-
-                {/* CTAs */}
-                <div className="flex items-center gap-2 sm:gap-4">
-                    <div className="hidden sm:flex items-center gap-4">
+                {/* Desktop Nav Actions */}
+                <div className="flex items-center gap-3">
+                    <div className="hidden sm:flex items-center gap-3">
                         {!isSignedIn ? (
                             <>
-                                <Link href="/sign-in" className="text-sm text-gray-600 dark:text-white/70 hover:text-indigo-600 dark:hover:text-white transition-colors font-medium px-2 py-2">
+                                <Link href="/sign-in" className="text-sm font-medium text-gray-600 dark:text-white/70 hover:text-indigo-600 dark:hover:text-white transition-colors px-2 py-2">
                                     Sign In
                                 </Link>
-                                <Link href="/sign-up" className="btn-primary text-sm px-5 py-2.5 rounded-xl font-semibold shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all">
+                                <Link href="/sign-up" className="bg-gradient-to-r from-indigo-600 to-rose-600 text-white text-sm px-5 py-2 rounded-xl font-bold shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all">
                                     Get Started
                                 </Link>
                             </>
                         ) : (
                             <>
-                                <Link href="/dashboard" className="text-sm text-gray-600 dark:text-white/70 hover:text-indigo-600 dark:hover:text-white transition-colors font-medium px-4 py-2 border border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5">
+                                <Link href="/dashboard" className="text-sm font-medium text-gray-600 dark:text-white/70 hover:text-indigo-600 dark:hover:text-white transition-colors px-4 py-2 border border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5">
                                     Dashboard
                                 </Link>
-                                <button
-                                    onClick={() => signOut({ callbackUrl: "/" })}
-                                    className="text-sm text-gray-400 dark:text-white/50 hover:text-indigo-600 dark:hover:text-white border border-gray-200 dark:border-white/10 px-4 py-2 rounded-xl transition-colors"
+                                <button 
+                                    onClick={() => signOut({ redirectUrl: "/" })}
+                                    className="text-sm font-medium text-gray-400 hover:text-red-500 transition-colors px-2 py-2"
                                 >
                                     Sign out
                                 </button>
                             </>
                         )}
                     </div>
-
-                    <div className="hidden sm:block w-px h-6 bg-gray-200 dark:bg-white/10 ml-1" />
+                    
+                    <div className="hidden sm:block w-px h-4 bg-gray-200 dark:bg-white/10 mx-1" />
                     <ThemeToggle />
 
                     {/* Mobile Menu Toggle */}
@@ -114,23 +116,17 @@ export default function Navbar() {
             {menuOpen && (
                 <div className="md:hidden mt-2 max-w-5xl mx-auto bg-white/95 dark:bg-black/90 backdrop-blur-xl border border-gray-200/50 dark:border-white/10 rounded-2xl p-6 shadow-2xl animate-in slide-in-from-top-2 duration-300 pointer-events-auto">
                     <div className="flex flex-col gap-4">
-                        {["Features", "How It Works", "Platforms", "Pricing", "Testimonials"].map((item) => (
-                            <a
-                                key={item}
-                                href={`#${item.toLowerCase().replace(/ /g, "-")}`}
-                                onClick={() => setMenuOpen(false)}
-                                className="text-gray-600 dark:text-white/80 hover:text-indigo-600 dark:hover:text-white text-base font-bold transition-colors py-2"
-                            >
-                                {item}
-                            </a>
-                        ))}
-                        <div className="h-px bg-gray-100 dark:bg-white/10 my-2" />
                         {!isSignedIn ? (
-                            <Link href="/sign-up" onClick={() => setMenuOpen(false)} className="btn-primary text-base px-6 py-3 rounded-xl font-bold text-center w-full shadow-lg">
-                                Get Started Free
-                            </Link>
+                            <>
+                                <Link href="/sign-in" onClick={() => setMenuOpen(false)} className="text-gray-900 dark:text-white text-base font-bold py-2">
+                                    Sign In
+                                </Link>
+                                <Link href="/sign-up" onClick={() => setMenuOpen(false)} className="bg-gradient-to-r from-indigo-600 to-rose-600 text-white text-center py-4 rounded-xl font-bold shadow-lg">
+                                    Get Started
+                                </Link>
+                            </>
                         ) : (
-                            <div className="flex flex-col gap-4">
+                            <>
                                 <Link
                                     href="/dashboard"
                                     onClick={() => setMenuOpen(false)}
@@ -141,13 +137,13 @@ export default function Navbar() {
                                 <button
                                     onClick={() => {
                                         setMenuOpen(false);
-                                        signOut({ callbackUrl: "/" });
+                                        signOut({ redirectUrl: "/" });
                                     }}
-                                    className="text-gray-500 dark:text-white/50 hover:text-indigo-600 dark:hover:text-white text-base font-medium text-left py-2"
+                                    className="text-red-500 text-left text-base font-bold py-2"
                                 >
-                                    Sign out
+                                    Sign Out
                                 </button>
-                            </div>
+                            </>
                         )}
                     </div>
                 </div>

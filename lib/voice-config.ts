@@ -2,7 +2,7 @@
  * Centralized Voice Configuration System
  *
  * - Language list with country flags
- * - Static voice pools for Deepgram and Fonadalabs (no dynamic API calls)
+ * - Static voice pools for Deepgram and Sarvam AI (no dynamic API calls)
  * - Indian language detection
  * - Helper to get exactly 2 male + 2 female voices per language
  */
@@ -51,10 +51,10 @@ export const INDIAN_LANGUAGES = new Set([
 ]);
 
 // ── Provider detection ───────────────────────────────────────────────
-export type Provider = "deepgram" | "fonadalabs";
+export type Provider = "deepgram" | "sarvam";
 
 export function getProvider(language: string): Provider {
-    return INDIAN_LANGUAGES.has(language) ? "fonadalabs" : "deepgram";
+    return INDIAN_LANGUAGES.has(language) ? "sarvam" : "deepgram";
 }
 
 // ── Voice interface ──────────────────────────────────────────────────
@@ -81,24 +81,19 @@ const DEEPGRAM_VOICE_POOL: VoiceOption[] = [
     { id: "aura-2-stella-en", name: "Stella", gender: "female", provider: "deepgram", voiceId: "aura-2-stella-en" },
 ];
 
-// ── Fonadalabs Voice Pool ────────────────────────────────────────────
-// Known voices with assigned gender tags
-const FONADALABS_VOICE_POOL: VoiceOption[] = [
+// ── Sarvam AI Voice Pool ────────────────────────────────────────────
+// High-quality Indian voices using Bulbul v3
+const SARVAM_VOICE_POOL: VoiceOption[] = [
     // Female voices
-    { id: "fonadalabs-dhwani", name: "Dhwani", gender: "female", provider: "fonadalabs", voiceId: "Dhwani" },
-    { id: "fonadalabs-vaanee", name: "Vaanee", gender: "female", provider: "fonadalabs", voiceId: "Vaanee" },
-    { id: "fonadalabs-swara", name: "Swara", gender: "female", provider: "fonadalabs", voiceId: "Swara" },
-    { id: "fonadalabs-geetika", name: "Geetika", gender: "female", provider: "fonadalabs", voiceId: "Geetika" },
-    { id: "fonadalabs-shruti", name: "Shruti", gender: "female", provider: "fonadalabs", voiceId: "Shruti" },
-    { id: "fonadalabs-madhura", name: "Madhura", gender: "female", provider: "fonadalabs", voiceId: "Madhura" },
+    { id: "sarvam-ritu", name: "Ritu", gender: "female", provider: "sarvam", voiceId: "ritu" },
+    { id: "sarvam-neha", name: "Neha", gender: "female", provider: "sarvam", voiceId: "neha" },
+    { id: "sarvam-kavya", name: "Kavya", gender: "female", provider: "sarvam", voiceId: "kavya" },
     // Male voices
-    { id: "fonadalabs-naad", name: "Naad", gender: "male", provider: "fonadalabs", voiceId: "Naad" },
-    { id: "fonadalabs-taal", name: "Taal", gender: "male", provider: "fonadalabs", voiceId: "Taal" },
-    { id: "fonadalabs-raaga", name: "Raaga", gender: "male", provider: "fonadalabs", voiceId: "Raaga" },
-    { id: "fonadalabs-sangeet", name: "Sangeet", gender: "male", provider: "fonadalabs", voiceId: "Sangeet" },
-    { id: "fonadalabs-pancham", name: "Pancham", gender: "male", provider: "fonadalabs", voiceId: "Pancham" },
-    { id: "fonadalabs-rishabh", name: "Rishabh", gender: "male", provider: "fonadalabs", voiceId: "Rishabh" },
+    { id: "sarvam-rahul", name: "Rahul", gender: "male", provider: "sarvam", voiceId: "rahul" },
+    { id: "sarvam-amit", name: "Amit", gender: "male", provider: "sarvam", voiceId: "amit" },
+    { id: "sarvam-rohan", name: "Rohan", gender: "male", provider: "sarvam", voiceId: "rohan" },
 ];
+
 
 // ── Language-to-code mapping (for TTS API calls) ─────────────────────
 export const LANGUAGE_CODES: Record<string, string> = {
@@ -110,15 +105,23 @@ export const LANGUAGE_CODES: Record<string, string> = {
     Dutch: "nl",
     Italian: "it",
     Japanese: "ja",
-    // Indian languages
-    Hindi: "hi",
-    Tamil: "ta",
-    Telugu: "te",
-    Bengali: "bn",
-    Marathi: "mr",
-    Kannada: "kn",
-    Malayalam: "ml",
-    Gujarati: "gu",
+    // Indian languages (Sarvam uses hi-IN, ta-IN, etc.)
+    Hindi: "hi-IN",
+    hi: "hi-IN",
+    Tamil: "ta-IN",
+    ta: "ta-IN",
+    Telugu: "te-IN",
+    te: "te-IN",
+    Bengali: "bn-IN",
+    bn: "bn-IN",
+    Marathi: "mr-IN",
+    mr: "mr-IN",
+    Kannada: "kn-IN",
+    kn: "kn-IN",
+    Malayalam: "ml-IN",
+    ml: "ml-IN",
+    Gujarati: "gu-IN",
+    gu: "gu-IN",
 };
 
 // ── Main helper: get voices for a language ───────────────────────────
@@ -134,7 +137,7 @@ export interface VoiceResult {
  */
 export function getVoicesForLanguage(language: string): VoiceResult {
     const provider = getProvider(language);
-    const pool = provider === "deepgram" ? DEEPGRAM_VOICE_POOL : FONADALABS_VOICE_POOL;
+    const pool = provider === "deepgram" ? DEEPGRAM_VOICE_POOL : SARVAM_VOICE_POOL;
 
     const males = pool.filter((v) => v.gender === "male");
     const females = pool.filter((v) => v.gender === "female");
@@ -158,7 +161,7 @@ export function getVoicesForLanguage(language: string): VoiceResult {
  * Returns a voice option by its unique internal ID.
  */
 export function getVoiceById(id: string): VoiceOption | undefined {
-    const allVoices = [...DEEPGRAM_VOICE_POOL, ...FONADALABS_VOICE_POOL];
+    const allVoices = [...DEEPGRAM_VOICE_POOL, ...SARVAM_VOICE_POOL];
     return allVoices.find((v) => v.id === id);
 }
 
@@ -166,5 +169,6 @@ export function getVoiceById(id: string): VoiceOption | undefined {
  * Returns the full voice pool for a provider (for admin/debug use).
  */
 export function getVoicePool(provider: Provider): VoiceOption[] {
-    return provider === "deepgram" ? DEEPGRAM_VOICE_POOL : FONADALABS_VOICE_POOL;
+    if (provider === "deepgram") return DEEPGRAM_VOICE_POOL;
+    return SARVAM_VOICE_POOL;
 }

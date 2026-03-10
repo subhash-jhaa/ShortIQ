@@ -4,7 +4,7 @@
  * Generates a short TTS audio preview on-demand.
  * Streams audio back as audio/mpeg — does NOT store files.
  *
- * - Indian languages → Fonadalabs API
+ * - Indian languages → Sarvam AI API
  * - Foreign languages → Deepgram API
  */
 
@@ -12,7 +12,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getProvider, LANGUAGE_CODES } from "@/lib/voice-config";
 
 const DEEPGRAM_API_KEY = process.env.DEEPGRAM_API_KEY || "";
-const FONADALABS_API_KEY = process.env.FONADALABS_API_KEY || "";
+const SARVAM_API_KEY = process.env.SARVAM_API_KEY || "";
 
 // Default preview text per language
 const DEFAULT_PREVIEW_TEXT: Record<string, string> = {
@@ -88,86 +88,49 @@ export async function GET(request: NextRequest) {
             contentType = response.headers.get("content-type") || "audio/mpeg";
 
         } else {
-            // ── Fonadalabs TTS ───────────────────────────────────────
-            if (!FONADALABS_API_KEY) {
+        } else {
+            // ── Sarvam AI TTS ────────────────────────────────────────
+            if (!SARVAM_API_KEY) {
                 return NextResponse.json(
-                    { error: "FONADALABS_API_KEY not configured" },
+                    { error: "SARVAM_API_KEY not configured" },
                     { status: 500 }
                 );
             }
 
-            const fonadaLang = LANGUAGE_CODES[language] || "Hindi";
+            const sarvamLang = LANGUAGE_CODES[language] || "hi-IN";
 
-            // Try with requested language first
-            let response = await fetch(
-                "https://api.fonada.ai/tts/generate-audio-large",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${FONADALABS_API_KEY}`,
-                    },
-                    body: JSON.stringify({
-                        input: previewText,
-                        voice: voice,
-                        language: fonadaLang,
-                    }),
-                }
-            );
-
-            // Fallback: if language not supported, retry with Hindi
-            if (!response.ok && fonadaLang !== "Hindi") {
-                console.warn(`Fonadalabs: ${fonadaLang} failed (${response.status}), falling back to Hindi`);
-                const hindiText = DEFAULT_PREVIEW_TEXT["Hindi"];
-                response = await fetch(
-                    "https://api.fonada.ai/tts/generate-audio-large",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${FONADALABS_API_KEY}`,
-                        },
-                        body: JSON.stringify({
-                            input: hindiText,
-                            voice: voice,
-                            language: "Hindi",
-                        }),
-                    }
-                );
-            }
-
-            // Fallback 2: try English if Hindi also fails
-            if (!response.ok) {
-                console.warn(`Fonadalabs: Hindi fallback failed (${response.status}), trying English`);
-                const englishText = DEFAULT_PREVIEW_TEXT["English"];
-                response = await fetch(
-                    "https://api.fonada.ai/tts/generate-audio-large",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${FONADALABS_API_KEY}`,
-                        },
-                        body: JSON.stringify({
-                            input: englishText,
-                            voice: voice,
-                            language: "English",
-                        }),
-                    }
-                );
-            }
+            const response = await fetch("https://api.sarvam.ai/text-to-speech", {
+                method: "POST",
+                headers: {
+                    "api-subscription-key": SARVAM_API_KEY,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    inputs: [previewText],
+                    target_language_code: sarvamLang,
+                    speaker: voice,
+                    model: "bulbul:v3",
+                }),
+            });
 
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error(`Fonadalabs TTS error: ${response.status}`, errorText);
+                console.error(`Sarvam AI TTS error: ${response.status}`, errorText);
                 return NextResponse.json(
-                    { error: `Fonadalabs API error: ${response.status}`, detail: errorText },
+                    { error: `Sarvam AI API error: ${response.status}`, detail: errorText },
                     { status: response.status }
                 );
             }
 
-            audioBuffer = await response.arrayBuffer();
-            contentType = response.headers.get("content-type") || "audio/mpeg";
+            const data = await response.json();
+            if (!data.audios || !data.audios[0]) {
+                throw new Error("Sarvam AI TTS returned no audio data.");
+            }
+
+            const base64Audio = data.audios[0];
+            const buffer = Buffer.from(base64Audio, "base64");
+            audioBuffer = buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength) as ArrayBuffer;
+            contentType = "audio/mpeg";
         }
 
         // ── Stream audio back ────────────────────────────────────────
