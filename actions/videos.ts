@@ -45,6 +45,32 @@ export async function getVideos() {
     }
 }
 
+export async function getVideoById(videoId: string) {
+    const { userId } = await auth();
+    if (!userId) {
+        throw new Error("Unauthorized");
+    }
+
+    try {
+        const { data, error } = await supabaseAdmin
+            .from("video_projects")
+            .select("*")
+            .eq("id", videoId)
+            .eq("user_id", userId)
+            .single();
+
+        if (error) {
+            console.error("Error fetching video:", error);
+            throw new Error(`Failed to fetch video: ${error.message}`);
+        }
+
+        return { success: true, data: data as VideoProject };
+    } catch (err: any) {
+        console.error("getVideoById failure:", err);
+        return { success: false, error: err.message };
+    }
+}
+
 export async function cancelVideoGeneration(videoId: string) {
     const { userId } = await auth();
     if (!userId) {

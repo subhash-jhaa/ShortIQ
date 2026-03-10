@@ -3,18 +3,18 @@
 import { useEffect, useState } from "react";
 import { getVideos, VideoProject, cancelVideoGeneration, deleteVideo } from "@/actions/videos";
 import { formatDistanceToNow, differenceInMinutes } from "date-fns";
-import { Loader2, Video, Clock, ExternalLink, Play, XCircle, Eye, Download, Trash2 } from "lucide-react";
+import { Loader2, Video, Clock, ExternalLink, Play, XCircle, Eye, Download, Trash2, Maximize2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
-import { VideoDetailsModal } from "@/components/dashboard/VideoDetailsModal";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { VideoPreviewModal } from "@/components/dashboard/VideoPreviewModal";
 
 export default function VideosPage() {
+    const router = useRouter();
     const [videos, setVideos] = useState<VideoProject[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedVideo, setSelectedVideo] = useState<VideoProject | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [previewVideo, setPreviewVideo] = useState<VideoProject | null>(null);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [currentTime, setCurrentTime] = useState(new Date());
@@ -44,10 +44,10 @@ export default function VideosPage() {
 
     useEffect(() => {
         fetchVideos();
-        const hasGenerating = videos.some(v => v.status === "generating");
+        const hasInProgress = videos.some(v => v.status === "generating" || v.status === "rendering");
 
         // Polling for data
-        const pollRate = (hasGenerating || videos.length === 0) ? 5000 : 30000;
+        const pollRate = (hasInProgress || videos.length === 0) ? 5000 : 30000;
         const dataInterval = setInterval(fetchVideos, pollRate);
 
         // Timer for the 5-minute cancel button UI
@@ -59,7 +59,7 @@ export default function VideosPage() {
             clearInterval(dataInterval);
             clearInterval(timerInterval);
         };
-    }, [videos.length, videos.some(v => v.status === "generating")]);
+    }, [videos.length, videos.some(v => v.status === "generating" || v.status === "rendering")]);
 
     if (isLoading) {
         return (
@@ -107,33 +107,23 @@ export default function VideosPage() {
                             Manage, preview, and download your generated video assets. All your high-retention content in one place.
                         </p>
                     </div>
-
-                    <button
-                        onClick={fetchVideos}
-                        disabled={isLoading}
-                        className="flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl sm:rounded-2xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white/80 font-bold text-sm hover:bg-gray-50 dark:hover:bg-white/10 transition-all active:scale-95 disabled:opacity-50 shadow-sm"
-                    >
-                        <Loader2 className={isLoading ? "animate-spin" : ""} size={18} />
-                        Refresh Assets
-                    </button>
                 </div>
             </div>
 
             {/* Content Area */}
             {videos.length === 0 ? (
-                <div className="bg-white dark:bg-[#0d0d14] border border-dashed border-gray-200 dark:border-white/10 rounded-[32px] p-20 text-center shadow-sm dark:shadow-none">
-                    <div className="w-20 h-20 bg-gray-50 dark:bg-white/5 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-gray-100 dark:border-white/5 antialiased">
-                        <Video size={40} className="text-gray-300 dark:text-white/10" />
+                <div className="bg-white dark:bg-[#0d0d14] border-2 border-dashed border-gray-100 dark:border-white/5 rounded-[40px] p-20 text-center">
+                    <div className="w-24 h-24 bg-indigo-50 dark:bg-indigo-500/5 rounded-full flex items-center justify-center mx-auto mb-8">
+                        <Video size={40} className="text-indigo-500" />
                     </div>
-                    <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2">No videos ready yet</h3>
-                    <p className="text-gray-500 dark:text-white/30 text-sm max-w-sm mx-auto mb-10">
-                        Once your automated series starts generating content, all your viral assets will appear here.
+                    <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-4 tracking-tighter">Your Creative Studio is Empty</h3>
+                    <p className="text-gray-500 dark:text-white/40 text-sm max-w-sm mx-auto mb-10 leading-relaxed">
+                        Start your first series to see your automated video pipeline in action.
                     </p>
-                    <Link
-                        href="/dashboard/series"
-                        className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-8 py-3.5 rounded-2xl font-bold transition-all shadow-xl shadow-indigo-500/20 active:scale-95"
-                    >
-                        Explore Series
+                    <Link href="/dashboard/create">
+                        <Button className="bg-indigo-500 hover:bg-indigo-600 text-white font-black text-[10px] uppercase tracking-[0.3em] px-10 h-14 rounded-2xl shadow-2xl shadow-indigo-500/20 active:scale-95 transition-all">
+                            Create New Series
+                        </Button>
                     </Link>
                 </div>
             ) : (
@@ -141,16 +131,18 @@ export default function VideosPage() {
                     {videos.map((video) => (
                         <div
                             key={video.id}
-                            onClick={() => {
-                                if (video.status === "ready") {
-                                    setPreviewVideo(video);
-                                    setIsPreviewOpen(true);
-                                }
-                            }}
-                            className={`group bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 rounded-[28px] overflow-hidden transition-all duration-300 ${video.status === "ready" ? "cursor-pointer hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1" : "cursor-default"}`}
+                            className="group bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 rounded-[28px] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1"
                         >
                             {/* Thumbnail Area */}
-                            <div className="relative aspect-video w-full overflow-hidden bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/5">
+                            <div
+                                className="relative aspect-video w-full overflow-hidden bg-gray-50 dark:bg-white/5 border-b border-gray-100 dark:border-white/5 cursor-pointer"
+                                onClick={() => {
+                                    if (video.status === "ready" || video.status === "rendering") {
+                                        setPreviewVideo(video);
+                                        setIsPreviewOpen(true);
+                                    }
+                                }}
+                            >
                                 {(video.status === "generating" || video.status === "cancelled") ? (
                                     <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 ${video.status === 'cancelled' ? 'bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-white/20' : 'bg-indigo-50/30 dark:bg-indigo-500/5 text-indigo-500 dark:text-indigo-400'
                                         }`}>
@@ -176,6 +168,17 @@ export default function VideosPage() {
                                             <>
                                                 <XCircle size={40} className="text-gray-300 dark:text-white/10" />
                                                 <span className="text-[10px] uppercase font-black tracking-[0.2em] text-gray-400 dark:text-white/20">Process Halted</span>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDelete(video.id);
+                                                    }}
+                                                    className="mt-2 flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-rose-500/10 hover:bg-rose-50 dark:hover:bg-rose-500/20 text-rose-500 dark:text-rose-400 text-[10px] font-black uppercase tracking-widest border border-rose-100 dark:border-rose-500/20 transition-all active:scale-95"
+                                                    title="Delete this video"
+                                                >
+                                                    <Trash2 size={14} />
+                                                    Delete
+                                                </button>
                                             </>
                                         )}
                                     </div>
@@ -193,6 +196,8 @@ export default function VideosPage() {
                                                 <Video size={48} />
                                             </div>
                                         )}
+
+
                                         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 dark:from-black/90 to-transparent pointer-events-none" />
 
                                         {/* Status Badge */}
@@ -237,12 +242,9 @@ export default function VideosPage() {
 
                             {/* Info Area */}
                             <div className="p-6">
-                                <h3 className="text-gray-900 dark:text-white font-black truncate text-lg mb-2 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors tracking-tight"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setSelectedVideo(video);
-                                        setIsModalOpen(true);
-                                    }}
+                                <h3
+                                    onClick={() => router.push(`/dashboard/videos/${video.id}`)}
+                                    className="text-gray-900 dark:text-white font-black truncate text-lg mb-2 cursor-pointer hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors tracking-tight"
                                 >
                                     {video.title}
                                 </h3>
@@ -303,12 +305,6 @@ export default function VideosPage() {
                     ))}
                 </div>
             )}
-
-            <VideoDetailsModal
-                video={selectedVideo}
-                open={isModalOpen}
-                onOpenChange={setIsModalOpen}
-            />
 
             {previewVideo && (
                 <VideoPreviewModal

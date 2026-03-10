@@ -9,13 +9,13 @@ interface VoiceOption {
     id: string;
     name: string;
     gender: "male" | "female";
-    provider: "deepgram" | "fonadalabs";
+    provider: "deepgram" | "sarvam";
     voiceId: string;
 }
 
 interface VoiceResult {
     language: string;
-    provider: "deepgram" | "fonadalabs";
+    provider: "deepgram" | "sarvam";
     voices: VoiceOption[];
 }
 
@@ -171,7 +171,7 @@ export function LanguageVoiceSelection({
         }
     };
 
-    const providerLabel = voiceResult?.provider === "deepgram" ? "Deepgram" : "Fonadalabs";
+    const providerLabel = voiceResult?.provider === "deepgram" ? "Deepgram" : "Sarvam AI";
 
     return (
         <div className="flex flex-col gap-8 text-gray-900 dark:text-white">

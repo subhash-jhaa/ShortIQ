@@ -4,7 +4,7 @@
  * Returns curated voice list: 2 male + 2 female voices
  * based on the selected language.
  *
- * - Indian languages → Fonadalabs voices
+ * - Indian languages → Sarvam AI voices
  * - Foreign languages → Deepgram voices
  *
  * No external API calls are made — uses static voice pool.

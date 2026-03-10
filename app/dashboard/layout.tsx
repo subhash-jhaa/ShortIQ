@@ -58,13 +58,30 @@ export default function DashboardLayout({
                 {/* Sidebar Header: Logo & Overview */}
                 <div className="mb-8">
                     <Link href="/" className="flex items-center gap-3 mb-6 group" onClick={() => setIsMobileMenuOpen(false)}>
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-rose-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <path d="M5 3l14 9-14 9V3z" fill="white" />
+                        <div className="flex items-center justify-center rounded-xl transition-all">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:animate-pulse">
+                                <rect width="24" height="24" rx="6" fill="url(#rose_anim_sidebar)" />
+                                <path d="M18 5H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                <path d="M9 12H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                <path d="M9 19H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                <path
+                                    d="M13 12.003a0.7 0.7 0 0 1 1.062-.597l3.498 2.098a0.7 0.7 0 0 1 0 1.203l-3.498 2.098a0.7 0.7 0 0 1-1.062-.598z"
+                                    fill="white"
+                                />
+                                <defs>
+                                    <linearGradient id="rose_anim_sidebar" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                                        <stop stopColor="#fb7185">
+                                            <animate attributeName="stop-color" values="#fb7185; #fda4af; #fb7185" dur="3s" repeatCount="indefinite" />
+                                        </stop>
+                                        <stop offset="1" stopColor="#e11d48">
+                                            <animate attributeName="stop-color" values="#e11d48; #be123c; #e11d48" dur="3s" repeatCount="indefinite" />
+                                        </stop>
+                                    </linearGradient>
+                                </defs>
                             </svg>
                         </div>
                         <span className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            Short<span className="text-violet-600 dark:text-violet-400">IQ</span>
+                            Short<span className="text-rose-600 dark:text-rose-400">IQ</span>
                         </span>
                     </Link>
 

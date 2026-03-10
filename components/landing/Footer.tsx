@@ -56,9 +56,26 @@ export default function Footer() {
                     {/* Brand column */}
                     <div className="lg:col-span-2 text-left">
                         <div className="flex items-center gap-2 mb-4">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-rose-500 flex items-center justify-center shadow-lg">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                    <path d="M5 3l14 9-14 9V3z" fill="white" stroke="white" strokeWidth="1.5" strokeLinejoin="round" />
+                            <div className="flex items-center justify-center rounded-xl transition-all">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="hover:animate-pulse">
+                                    <rect width="24" height="24" rx="6" fill="url(#rose_anim_footer)" />
+                                    <path d="M18 5H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                    <path d="M9 12H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                    <path d="M9 19H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                                    <path
+                                        d="M13 12.003a0.7 0.7 0 0 1 1.062-.597l3.498 2.098a0.7 0.7 0 0 1 0 1.203l-3.498 2.098a0.7 0.7 0 0 1-1.062-.598z"
+                                        fill="white"
+                                    />
+                                    <defs>
+                                        <linearGradient id="rose_anim_footer" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                                            <stop stopColor="#fb7185">
+                                                <animate attributeName="stop-color" values="#fb7185; #fda4af; #fb7185" dur="3s" repeatCount="indefinite" />
+                                            </stop>
+                                            <stop offset="1" stopColor="#e11d48">
+                                                <animate attributeName="stop-color" values="#e11d48; #be123c; #e11d48" dur="3s" repeatCount="indefinite" />
+                                            </stop>
+                                        </linearGradient>
+                                    </defs>
                                 </svg>
                             </div>
                             <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight transition-colors">
