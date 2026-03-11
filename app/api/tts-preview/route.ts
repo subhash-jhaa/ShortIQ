@@ -88,7 +88,6 @@ export async function GET(request: NextRequest) {
             contentType = response.headers.get("content-type") || "audio/mpeg";
 
         } else {
-        } else {
             // ── Sarvam AI TTS ────────────────────────────────────────
             if (!SARVAM_API_KEY) {
                 return NextResponse.json(
