@@ -47,7 +47,7 @@ export function RecentVideos() {
                 <h2 className="text-xl font-extrabold text-gray-900 dark:text-white">Recent Videos</h2>
                 {videos.length > 0 && (
                     <Link href="/dashboard/videos">
-                        <button className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors flex items-center gap-1 group">
+                        <button className="text-xs font-bold text-primary hover:opacity-80 transition-all flex items-center gap-1 group">
                             View All <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                         </button>
                     </Link>
@@ -81,14 +81,14 @@ export function RecentVideos() {
                                     </div>
                                 )}
                                 {video.status === "generating" && (
-                                    <div className="absolute inset-0 bg-indigo-500/20 backdrop-blur-sm flex items-center justify-center">
+                                    <div className="absolute inset-0 bg-primary/20 backdrop-blur-sm flex items-center justify-center">
                                         <Loader2 className="animate-spin text-white" size={14} />
                                     </div>
                                 )}
                             </div>
 
                             <div className="flex-1 min-w-0">
-                                <h4 className="text-sm font-bold text-gray-900 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                <h4 className="text-sm font-bold text-gray-900 dark:text-white truncate group-hover:text-primary transition-colors">
                                     {video.title}
                                 </h4>
                                 <p className="text-[10px] text-gray-400 dark:text-white/30 font-medium">

@@ -32,7 +32,7 @@ export function RecentProjects() {
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-extrabold text-gray-900 dark:text-white">Your Series</h2>
                 <Link href="/dashboard/series">
-                    <button className="text-sm font-bold text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 transition-colors bg-rose-50 dark:bg-rose-500/10 px-4 py-2 rounded-lg border border-rose-200 dark:border-rose-500/20">
+                    <button className="text-sm font-bold text-primary hover:text-primary transition-colors bg-primary/10 px-4 py-2 rounded-lg border border-primary/20">
                         View All
                     </button>
                 </Link>
@@ -62,9 +62,9 @@ export function RecentProjects() {
             )}
 
             <Link href="/dashboard/create">
-                <button className="w-full py-8 rounded-2xl border-2 border-dashed border-gray-200 dark:border-white/5 hover:border-rose-300 dark:hover:border-rose-500/30 hover:bg-rose-50 dark:hover:bg-rose-500/5 transition-all text-gray-300 dark:text-white/20 hover:text-rose-500 dark:hover:text-rose-400 font-extrabold text-sm flex flex-col items-center justify-center gap-3 group">
-                    <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center group-hover:scale-110 group-hover:bg-rose-100 dark:group-hover:bg-rose-500/20 transition-all">
-                        <Plus size={20} className="group-hover:text-rose-500" />
+                <button className="w-full py-8 rounded-2xl border-2 border-dashed border-gray-200 dark:border-white/5 hover:border-primary/30 hover:bg-primary/5 transition-all text-gray-300 dark:text-white/20 hover:text-primary font-extrabold text-sm flex flex-col items-center justify-center gap-3 group">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center group-hover:scale-110 group-hover:bg-primary/20 transition-all">
+                        <Plus size={20} className="group-hover:text-primary" />
                     </div>
                     <span>Create New Series</span>
                 </button>

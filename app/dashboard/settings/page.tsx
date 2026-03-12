@@ -3,8 +3,6 @@
 import { useState, useEffect } from "react";
 import { useUser, useClerk } from "@clerk/nextjs";
 import {
-    Youtube,
-    Instagram as InstagramIcon,
     Share2,
     CheckCircle2,
     Trash2,
@@ -68,7 +66,6 @@ export default function SettingsPage() {
 
     const handleDisconnect = async (platform: string) => {
         if (!confirm(`Are you sure you want to disconnect your ${platform} account?`)) return;
-
         setActionLoading(platform);
         const res = await disconnectAccount(platform);
         if (res.success) {
@@ -138,7 +135,7 @@ export default function SettingsPage() {
         {
             id: "email",
             name: "Email",
-            icon: <Mail size={40} className="text-indigo-500" />,
+            icon: <Mail size={40} className="text-primary" />,
             description: "Receive notifications and send video copies."
         },
     ];
@@ -149,18 +146,15 @@ export default function SettingsPage() {
         <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-12 animate-in fade-in duration-500">
             {/* Hero Section */}
             <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-indigo-500/20 via-purple-500/10 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
-
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-primary/20 via-primary/10 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
                 <div className="relative z-10 max-w-2xl">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-indigo-100 dark:border-indigo-500/20">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 text-primary font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-primary/20">
                         <SettingsIcon size={16} />
                         Account Settings
                     </div>
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3 sm:mb-4">
                         Manage Your <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-rose-500">
-                            Preferences
-                        </span>
+                        <span className="gradient-text">Preferences</span>
                     </h1>
                     <p className="text-sm sm:text-base md:text-lg text-gray-500 dark:text-white/60 leading-relaxed">
                         Configure your profile, connect social media accounts, and manage your account security settings in one place.
@@ -188,11 +182,11 @@ export default function SettingsPage() {
                                     }
                                 }}
                                 className={`flex-1 md:flex-none flex items-center gap-3 px-4 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition-all text-left whitespace-nowrap md:whitespace-normal ${activeTab === tab.id
-                                    ? "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-100 dark:border-white/5"
+                                    ? "bg-primary/10 text-primary shadow-sm border border-primary/20"
                                     : "text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent"
                                     }`}
                             >
-                                <span className={activeTab === tab.id ? "text-indigo-500" : "text-gray-400 dark:text-white/40"}>
+                                <span className={activeTab === tab.id ? "text-primary" : "text-gray-400 dark:text-white/40"}>
                                     {tab.icon}
                                 </span>
                                 {tab.name}
@@ -203,8 +197,8 @@ export default function SettingsPage() {
                         ))}
                     </div>
 
-                    <div className="hidden md:block mt-8 p-5 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 text-center">
-                        <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center mx-auto mb-3 text-indigo-500">
+                    <div className="hidden md:block mt-8 p-5 rounded-2xl bg-primary/10 border border-primary/20 text-center">
+                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-3 text-primary">
                             <UserCircle size={20} />
                         </div>
                         <h4 className="text-gray-900 dark:text-white font-bold text-sm mb-1">Need to update Auth?</h4>
@@ -226,7 +220,7 @@ export default function SettingsPage() {
                         {activeTab === "profile" && (
                             <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                                 <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/5 pb-4">
-                                    <div className="w-5 h-5 rounded-full border border-indigo-500 dark:border-[#7c3aed] flex items-center justify-center text-indigo-500 dark:text-[#7c3aed]">
+                                    <div className="w-5 h-5 rounded-full border border-primary flex items-center justify-center text-primary">
                                         <CheckCircle2 size={12} />
                                     </div>
                                     <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Profile Information</h2>
@@ -235,12 +229,12 @@ export default function SettingsPage() {
                                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 sm:gap-12">
                                     {/* Avatar with PRO Badge */}
                                     <div className="relative shrink-0">
-                                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-indigo-50 dark:bg-[#002b1f] flex items-center justify-center border border-indigo-100 dark:border-white/10 shadow-lg dark:shadow-2xl overflow-hidden">
-                                            <span className="text-4xl sm:text-5xl font-medium text-indigo-600 dark:text-white/90">
+                                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-lg overflow-hidden">
+                                            <span className="text-4xl sm:text-5xl font-medium text-primary">
                                                 {user?.fullName?.[0] || user?.primaryEmailAddress?.emailAddress?.[0] || "U"}
                                             </span>
                                         </div>
-                                        <div className="absolute -bottom-2 -right-2 bg-indigo-600 dark:bg-[#4f46e5] text-white text-[9px] sm:text-[10px] font-black px-2 sm:px-2.5 py-1 rounded-lg border-2 sm:border-4 border-white dark:border-[#0d0d14] shadow-xl tracking-tight uppercase">
+                                        <div className="absolute -bottom-2 -right-2 bg-primary text-white text-[9px] sm:text-[10px] font-black px-2 sm:px-2.5 py-1 rounded-lg border-2 sm:border-4 border-white dark:border-[#0d0d14] shadow-xl tracking-tight uppercase">
                                             PRO
                                         </div>
                                     </div>
@@ -261,11 +255,11 @@ export default function SettingsPage() {
                                     </div>
                                 </div>
 
-                                <div className="bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl p-6 border border-indigo-100 dark:border-indigo-500/20">
-                                    <h3 className="font-bold text-indigo-900 dark:text-indigo-300 mb-2 flex items-center gap-2 text-sm">
+                                <div className="bg-primary/10 rounded-2xl p-6 border border-primary/20">
+                                    <h3 className="font-bold text-primary mb-2 flex items-center gap-2 text-sm">
                                         <CheckCircle2 size={16} /> Subscription Active
                                     </h3>
-                                    <p className="text-xs text-indigo-700 dark:text-indigo-200/70">
+                                    <p className="text-xs text-gray-700 dark:text-white/70">
                                         Your Pro plan is active. You have unlimited video generations and priority rendering enabled for all your series.
                                     </p>
                                 </div>
@@ -276,7 +270,7 @@ export default function SettingsPage() {
                         {activeTab === "social" && (
                             <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                                 <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/5 pb-4">
-                                    <Share2 className="text-indigo-500 dark:text-indigo-400 transform rotate-45" size={20} />
+                                    <Share2 className="text-primary transform rotate-45" size={20} />
                                     <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Social Media Connections</h2>
                                 </div>
 
@@ -292,18 +286,15 @@ export default function SettingsPage() {
                                                 </div>
                                             </div>
 
-                                            {/* Platform Name */}
                                             <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-1 uppercase tracking-tight">{platform.name}</h3>
 
                                             {isConnected(platform.id) ? (
                                                 <>
                                                     <p className="text-[8px] sm:text-[9px] font-black text-emerald-500 dark:text-emerald-400 uppercase tracking-[0.2em] mb-3 sm:mb-4">CONNECTED</p>
-
                                                     <div className="w-full space-y-2 sm:space-y-3">
                                                         <div className="w-full bg-white dark:bg-white/[0.02] border border-gray-200 dark:border-white/5 py-2.5 sm:py-3 px-3 rounded-xl text-gray-600 dark:text-white/70 text-[10px] sm:text-xs font-medium text-center truncate shadow-inner">
                                                             {getAccountName(platform.id)}
                                                         </div>
-
                                                         <Button
                                                             variant="ghost"
                                                             className="w-full bg-transparent border border-rose-200 dark:border-rose-500/20 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-600 rounded-xl h-10 sm:h-11 gap-2 font-bold transition-all text-[10px] sm:text-xs"
@@ -400,14 +391,13 @@ export default function SettingsPage() {
 
                     </div>
                 </div>
-
             </div>
 
             {/* Loading Overlay */}
             {loading && (
                 <div className="fixed inset-0 bg-white/50 dark:bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
                     <div className="flex flex-col items-center gap-3">
-                        <Loader2 className="animate-spin text-indigo-500" size={40} />
+                        <Loader2 className="animate-spin text-primary" size={40} />
                         <p className="text-gray-600 dark:text-white/60 font-medium">Loading settings...</p>
                     </div>
                 </div>
