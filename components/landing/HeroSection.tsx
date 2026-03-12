@@ -39,9 +39,14 @@ export default function HeroSection() {
 
     return (
         <section className="relative min-h-screen flex items-center justify-center pt-40 overflow-hidden">
-            <div className="absolute inset-0 hero-grid opacity-5 dark:opacity-20 pointer-events-none transition-opacity duration-500" />
+            <div className="absolute inset-0 hero-grid opacity-30 pointer-events-none transition-opacity duration-500" />
+            
+            {/* Background Orbs from Mockup */}
+            <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] animate-pulse" />
+            <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] -delay-1000" />
+            
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[700px] h-[700px] bg-primary/10 rounded-full blur-[120px]" />
+                <div className="w-[800px] h-[800px] bg-primary/[0.03] rounded-full blur-[150px]" />
             </div>
 
             <div className="relative max-w-6xl mx-auto px-6 text-center">
@@ -53,117 +58,118 @@ export default function HeroSection() {
                     AI-Powered • Auto-Schedule • Multi-Platform
                 </div>
 
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-[1.1] tracking-tight mb-6 animate-fade-up animation-delay-100 transition-colors">
+                <h1 className="text-6xl sm:text-7xl lg:text-8xl font-[900] text-gray-900 dark:text-white leading-[0.95] tracking-[-0.05em] mb-8 animate-fade-up animation-delay-100 transition-colors">
                     Generate & Schedule
                     <br />
-                    <span className="gradient-text">AI Short Videos</span>
-                    <br />
-                    <span className="text-gray-400 dark:text-white/60 text-4xl sm:text-5xl lg:text-6xl transition-colors">for </span>
-                    <span className="text-primary typewriter">{typed}</span>
-                    <span className="typewriter-cursor">|</span>
+                    <span className="text-primary">AI Short Videos</span>
                 </h1>
 
-                <p className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-white/60 mb-10 leading-relaxed animate-fade-up animation-delay-200 transition-colors">
-                    ShortIQ uses cutting-edge AI to create stunning short-form videos from your ideas, then automatically schedules and publishes them across all your social channels — all from one powerful dashboard.
+                <p className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-white/60 mb-12 leading-relaxed animate-fade-up animation-delay-200 transition-colors font-medium">
+                    Transform long videos into engaging short-form content for TikTok, Reels, & Shorts automatically. Schedule posts with powerful AI insights.
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-up animation-delay-300">
-                    {!isSignedIn ? (
-                        <Link href="/sign-up" className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-primary/20 flex items-center gap-2">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <path d="M5 3l14 9-14 9V3z" fill="white" />
-                            </svg>
-                            Start Generating Free
-                        </Link>
-                    ) : (
-                        <Link
-                            href="/dashboard"
-                            className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-primary/20 flex items-center gap-2"
-                        >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                                <line x1="3" y1="9" x2="21" y2="9" />
-                                <line x1="9" y1="21" x2="9" y2="9" />
-                            </svg>
-                            Go to Dashboard
-                        </Link>
-                    )}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20 animate-fade-up animation-delay-300">
+                    <Link href="/sign-up" className="btn-primary px-10 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-primary/20 flex items-center gap-2 transition-all hover:scale-105 active:scale-95">
+                        Start Creating Free
+                    </Link>
                     <a
                         href="#how-it-works"
-                        className="px-8 py-4 rounded-2xl text-base font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-white/20 hover:bg-gray-50 dark:hover:bg-white/5 transition-all flex items-center gap-2"
+                        className="px-10 py-4 rounded-2xl text-base font-bold text-gray-900 dark:text-white border-2 border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 transition-all flex items-center gap-2"
                     >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none" />
-                        </svg>
-                        Watch Demo
+                        Book a Demo
                     </a>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-8 animate-fade-up animation-delay-400">
-                    {[
-                        { value: "500K+", label: "Videos Generated" },
-                        { value: "50K+", label: "Active Creators" },
-                        { value: "12M+", label: "Total Views Driven" },
-                        { value: "5", label: "Platforms Supported" },
-                    ].map((stat) => (
-                        <div key={stat.label} className="flex flex-col items-center">
-                            <span className="text-3xl font-extrabold gradient-text">{stat.value}</span>
-                            <span className="text-sm text-white/50 mt-1">{stat.label}</span>
-                        </div>
-                    ))}
-                </div>
-
                 <div className="mt-20 relative">
-                    <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-black via-transparent to-transparent z-10 pointer-events-none rounded-3xl transition-all duration-500" />
-                    <div className="glass-card relative overflow-hidden rounded-2xl bg-white dark:bg-[#0d0d14] border border-gray-200/50 dark:border-white/10 shadow-2xl shadow-primary/10 dark:shadow-primary/20 mx-auto max-w-4xl transition-all">
-                        <div className="bg-gray-50 dark:bg-[#0d0d14] px-4 py-3 flex items-center gap-3 border-b border-gray-200 dark:border-white/10 transition-colors">
-                            <div className="flex gap-1.5">
-                                <div className="w-3 h-3 rounded-full bg-red-500" />
-                                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                                <div className="w-3 h-3 rounded-full bg-green-500" />
+                    <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white dark:from-[#0a0a0b] via-white/80 dark:via-[#0a0a0b]/80 to-transparent z-20 pointer-events-none transition-all duration-500" />
+                    <div className="glass-card relative overflow-hidden rounded-[40px] bg-white dark:bg-[#0d0d14] border-8 border-gray-100 dark:border-white/5 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] dark:shadow-primary/10 mx-auto max-w-5xl transition-all">
+                        {/* Browser Window Header */}
+                        <div className="bg-gray-50 dark:bg-[#0d0d14] px-6 py-4 flex items-center gap-4 border-b border-gray-100 dark:border-white/10 transition-colors">
+                            <div className="flex gap-2">
+                                <div className="w-3 h-3 rounded-full bg-[#FF5F57]" />
+                                <div className="w-3 h-3 rounded-full bg-[#FEBC2E]" />
+                                <div className="w-3 h-3 rounded-full bg-[#28C840]" />
                             </div>
-                            <div className="flex-1 bg-white/5 rounded-md h-6 mx-8 flex items-center px-3">
-                                <span className="text-xs text-white/40">app.shortIQ.ai/dashboard</span>
+                            <div className="flex-1 bg-gray-200/50 dark:bg-white/5 rounded-xl h-8 mx-12 flex items-center px-4">
+                                <span className="text-[11px] text-gray-500 dark:text-white/40 font-bold uppercase tracking-widest">Dashboard • ShortIQ.ai</span>
                             </div>
                         </div>
 
-                        <div className="bg-white dark:bg-[#0a0a12] p-6 grid grid-cols-3 gap-4 min-h-[300px] transition-colors">
-                            <div className="col-span-1 space-y-3">
-                                {["📋 Projects", "🎬 Generate", "📅 Schedule", "📊 Analytics", "⚙️ Settings"].map((item) => (
-                                    <div
-                                        key={item}
-                                        className={`px-3 py-2 rounded-lg text-sm text-center transition-colors ${item.includes("Generate")
-                                            ? "bg-primary/10 dark:bg-primary/30 text-primary font-semibold"
-                                            : "text-gray-400 dark:text-white/50 hover:bg-gray-50 dark:hover:bg-white/5"
-                                            }`}
-                                    >
-                                        {item}
+                        {/* Dashboard Simulation */}
+                        <div className="bg-[#fcfcfd] dark:bg-[#0a0a12] p-8 grid grid-cols-12 gap-6 transition-colors min-h-[500px]">
+                            {/* Left Widget - Timeline */}
+                            <div className="col-span-12 lg:col-span-8 space-y-6">
+                                <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
+                                    <div className="flex items-center justify-between mb-6">
+                                        <h3 className="text-sm font-[800] text-gray-900 dark:text-white tracking-tight uppercase">Generation Timeline</h3>
+                                        <div className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-tighter">AI Active</div>
                                     </div>
-                                ))}
+                                    <div className="flex items-center gap-4">
+                                        {[1, 2, 3, 4, 5].map((i) => (
+                                            <div key={i} className={`flex-1 aspect-video rounded-xl border border-gray-100 dark:border-white/10 overflow-hidden relative group cursor-pointer ${i === 3 ? 'ring-2 ring-primary shadow-lg scale-105' : 'opacity-40 hover:opacity-100 transition-opacity'}`}>
+                                                <div className="absolute inset-0 bg-gray-900" />
+                                                {i === 3 && (
+                                                    <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
+                                                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                                                            <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-1" />
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                <div className="absolute bottom-2 left-2 right-2 h-1 bg-white/20 rounded-full overflow-hidden">
+                                                    <div className={`h-full bg-primary ${i === 3 ? 'w-[75%]' : 'w-0'}`} />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-6">
+                                    <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
+                                        <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">Performance Analytics</div>
+                                        <div className="flex items-end gap-2 h-24">
+                                            {[40, 70, 45, 90, 65, 100, 85].map((h, i) => (
+                                                <div key={i} className="flex-1 bg-gray-100 dark:bg-white/5 rounded-t-lg relative group">
+                                                    <div className="absolute bottom-0 w-full bg-primary/40 group-hover:bg-primary transition-all rounded-t-lg duration-500" style={{ height: `${h}%` }} />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
+                                        <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">Engagement Rate</div>
+                                        <div className="flex items-center justify-center h-24">
+                                            <div className="w-20 h-20 rounded-full border-[8px] border-gray-100 dark:border-white/5 relative flex items-center justify-center">
+                                                <svg className="absolute inset-0 transform -rotate-90">
+                                                    <circle cx="40" cy="40" r="32" fill="none" stroke="currentColor" strokeWidth="8" strokeDasharray="200" strokeDashoffset="40" className="text-primary" />
+                                                </svg>
+                                                <span className="text-lg font-black text-gray-900 dark:text-white">82%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className="col-span-2 space-y-4">
-                                <div className="bg-white/5 rounded-xl p-4">
-                                    <div className="text-xs text-white/40 mb-2">AI Prompt</div>
-                                    <div className="text-sm text-white/80 font-mono text-left">
-                                        "Create a 30-second product showcase for my tech startup with upbeat music..."
+                            {/* Right Widget - Post Schedule */}
+                            <div className="col-span-12 lg:col-span-4 space-y-6 text-left">
+                                <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm h-full">
+                                    <div className="text-sm font-[800] text-gray-900 dark:text-white tracking-tight uppercase mb-6">Upcoming Posts</div>
+                                    <div className="space-y-4">
+                                        {["TikTok Series #14", "Instagram Reel #2", "YouTube Short"].map((post, i) => (
+                                            <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-gray-100 dark:border-white/5">
+                                                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+                                                    <span className="text-xs font-black">{i + 1}</span>
+                                                </div>
+                                                <div className="flex-1">
+                                                    <div className="text-xs font-black text-gray-800 dark:text-white/90">{post}</div>
+                                                    <div className="text-[10px] font-bold text-gray-500 dark:text-white/40 mt-0.5">Tomorrow, 9:00 AM</div>
+                                                </div>
+                                                <div className="w-2 h-2 rounded-full bg-green-500" />
+                                            </div>
+                                        ))}
                                     </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-3">
-                                    {["YouTube", "Instagram", "TikTok", "Facebook"].map((p) => (
-                                        <div key={p} className="bg-white/5 rounded-lg px-3 py-2 flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full bg-green-400" />
-                                            <span className="text-xs text-white/70">{p} — Scheduled</span>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="bg-primary/10 rounded-xl p-4 border border-primary/20">
-                                    <div className="text-xs text-primary mb-1 text-left">🎬 Generating video...</div>
-                                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                        <div className="h-full w-3/4 bg-primary rounded-full animate-pulse" />
+                                    <div className="mt-8 p-6 rounded-3xl bg-primary/5 dark:bg-primary/10 border border-primary/20 text-center">
+                                        <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">Queue Health</div>
+                                        <div className="text-2xl font-[900] text-primary transition-colors">Excellent</div>
                                     </div>
-                                    <div className="text-xs text-white/40 mt-1 text-left">75% complete</div>
                                 </div>
                             </div>
                         </div>

@@ -30,21 +30,21 @@ export default function GuidePage() {
         <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-12 animate-in fade-in duration-500">
             {/* Hero Section */}
             <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-indigo-500/20 via-purple-500/10 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-primary/20 via-primary/10 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
 
                 <div className="relative z-10 max-w-2xl">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-indigo-100 dark:border-indigo-500/20">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 text-primary font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-primary/20">
                         <BookOpen size={16} />
                         ShortIQ Documentation
                     </div>
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3 sm:mb-4">
                         Master the Art of <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-rose-500">
+                        <span className="gradient-text">
                             Automated Content
                         </span>
                     </h1>
                     <p className="text-sm sm:text-base md:text-lg text-gray-500 dark:text-white/60 leading-relaxed">
-                        Learn how to set up, customize, and automatically publish faceless viral videos to all your social platforms using ShortIQ's powerful engine.
+                        Learn how to set up, customize, and automatically publish faceless viral videos to all your social platforms using ShortIQ&apos;s powerful engine.
                     </p>
                 </div>
             </div>
@@ -63,11 +63,11 @@ export default function GuidePage() {
                                 key={category.id}
                                 onClick={() => setActiveTab(category.id)}
                                 className={`flex-1 md:flex-none flex items-center gap-3 px-4 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition-all text-left whitespace-nowrap md:whitespace-normal ${activeTab === category.id
-                                    ? "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shadow-sm border border-indigo-100 dark:border-white/5"
+                                    ? "bg-primary/10 text-primary shadow-sm border border-primary/20"
                                     : "text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent"
                                     }`}
                             >
-                                <span className={activeTab === category.id ? "text-indigo-500" : "text-gray-400 dark:text-white/40"}>
+                                <span className={activeTab === category.id ? "text-primary" : "text-gray-400 dark:text-white/40"}>
                                     {category.icon}
                                 </span>
                                 {category.name}
@@ -78,8 +78,8 @@ export default function GuidePage() {
                         ))}
                     </div>
 
-                    <div className="hidden md:block mt-8 p-5 rounded-2xl bg-gradient-to-br from-rose-500/10 to-orange-500/10 border border-rose-500/20 text-center">
-                        <div className="w-10 h-10 rounded-full bg-rose-500/20 flex items-center justify-center mx-auto mb-3 text-rose-500">
+                    <div className="hidden md:block mt-8 p-5 rounded-2xl bg-primary/10 border border-primary/20 text-center">
+                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-3 text-primary">
                             <Zap size={20} fill="currentColor" />
                         </div>
                         <h4 className="text-gray-900 dark:text-white font-bold text-sm mb-1">Need Quick Help?</h4>
@@ -106,14 +106,14 @@ export default function GuidePage() {
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="p-5 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
-                                        <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-500 mb-4">
+                                        <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary mb-4">
                                             <PlaySquare size={18} />
                                         </div>
                                         <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-2">1. Connect Accounts</h3>
                                         <p className="text-xs text-gray-500 dark:text-white/50">Link your TikTok, YouTube, and Instagram accounts in the Settings page to enable auto-posting.</p>
                                     </div>
                                     <div className="p-5 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
-                                        <div className="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center text-rose-500 mb-4">
+                                        <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary mb-4">
                                             <Video size={18} />
                                         </div>
                                         <h3 className="font-bold text-gray-900 dark:text-white text-sm mb-2">2. Create a Series</h3>
@@ -121,12 +121,12 @@ export default function GuidePage() {
                                     </div>
                                 </div>
 
-                                <div className="bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl p-6 border border-indigo-100 dark:border-indigo-500/20">
-                                    <h3 className="font-bold text-indigo-900 dark:text-indigo-300 mb-2 flex items-center gap-2">
+                                <div className="bg-primary/10 rounded-2xl p-6 border border-primary/20">
+                                    <h3 className="font-bold text-primary mb-2 flex items-center gap-2">
                                         <CheckCircle2 size={18} /> Pro Tip
                                     </h3>
-                                    <p className="text-sm text-indigo-700 dark:text-indigo-200/70">
-                                        You don't need to stay logged in! Once a series is scheduled, our cloud engines will generate and publish the videos at your specified times.
+                                    <p className="text-sm text-gray-700 dark:text-white/70">
+                                        You don&apos;t need to stay logged in! Once a series is scheduled, our cloud engines will generate and publish the videos at your specified times.
                                     </p>
                                 </div>
                             </div>
@@ -138,7 +138,7 @@ export default function GuidePage() {
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Creating Your First Series</h2>
                                     <p className="text-gray-500 dark:text-white/60 leading-relaxed">
-                                        A "Series" is an automated content pipeline. When you create a series, you are defining the rules for all future videos generated under that topic.
+                                        A &quot;Series&quot; is an automated content pipeline. When you create a series, you are defining the rules for all future videos generated under that topic.
                                     </p>
                                 </div>
 
@@ -151,12 +151,12 @@ export default function GuidePage() {
                                         { step: "04", title: "Scheduling", desc: "Set the time of day you want videos to post. The AI will render the video 3-6 hours before the scheduled time.", icon: <Clock size={16} /> },
                                     ].map((item, i) => (
                                         <div key={i} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                                            <div className="flex items-center justify-center w-8 h-8 rounded-full border-4 border-white dark:border-[#0d0d14] bg-indigo-500 text-white shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm">
+                                            <div className="flex items-center justify-center w-8 h-8 rounded-full border-4 border-white dark:border-[#0d0d14] bg-primary text-white shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm">
                                                 <span className="text-[10px] font-bold">{item.step}</span>
                                             </div>
-                                            <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-5 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 transition-colors hover:border-indigo-500/50">
+                                            <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-5 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 transition-colors hover:border-primary/50">
                                                 <div className="flex items-center gap-2 mb-2">
-                                                    <div className="text-indigo-500">{item.icon}</div>
+                                                    <div className="text-primary">{item.icon}</div>
                                                     <h3 className="font-bold text-gray-900 dark:text-white text-sm">{item.title}</h3>
                                                 </div>
                                                 <p className="text-xs text-gray-500 dark:text-white/50 leading-relaxed">{item.desc}</p>
@@ -179,7 +179,7 @@ export default function GuidePage() {
 
                                 <div className="grid gap-6">
                                     <div className="flex gap-4 p-5 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
-                                        <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500 shrink-0">
+                                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
                                             <Type size={24} />
                                         </div>
                                         <div>
@@ -194,12 +194,12 @@ export default function GuidePage() {
                                     </div>
 
                                     <div className="flex gap-4 p-5 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10">
-                                        <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
+                                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
                                             <Video size={24} />
                                         </div>
                                         <div>
                                             <h3 className="font-bold text-gray-900 dark:text-white mb-1">Visual Themes</h3>
-                                            <p className="text-sm text-gray-500 dark:text-white/50">The AI image generator uses these themes as base prompts to maintain consistency across episodes. Experiment with 'Gta Style' for gaming niches, or 'Cinematic' for history and facts.</p>
+                                            <p className="text-sm text-gray-500 dark:text-white/50">The AI image generator uses these themes as base prompts to maintain consistency across episodes. Experiment with &apos;Gta Style&apos; for gaming niches, or &apos;Cinematic&apos; for history and facts.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -210,7 +210,7 @@ export default function GuidePage() {
                         {activeTab === "publishing" && (
                             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                                 <div>
-                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Auto-Publishing & Distribution</h2>
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Auto-Publishing &amp; Distribution</h2>
                                     <p className="text-gray-500 dark:text-white/60 leading-relaxed">
                                         ShortIQ can automatically post your rendered videos directly to your connected social channels.
                                     </p>
@@ -256,8 +256,8 @@ export default function GuidePage() {
                                         <span className="px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400 text-[10px] font-bold uppercase tracking-wider">Coming Soon</span>
                                     </div>
                                 </div>
-                            </div>
-                        )}
+            </div>
+        )}
 
                     </div>
                 </div>

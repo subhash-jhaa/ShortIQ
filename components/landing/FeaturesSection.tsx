@@ -280,7 +280,7 @@ export default function FeaturesSection() {
                                         <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${f.color} mb-6 shadow-lg ${f.shadow} text-white`}>
                                             {f.icon}
                                         </div>
-                                        <h3 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white transition-colors">{f.title}</h3>
+                                        <h3 className="mb-4 text-3xl font-[800] text-gray-900 dark:text-white transition-colors tracking-tight">{f.title}</h3>
                                         <p className="text-lg leading-relaxed text-gray-600 dark:text-white/60 mb-8 transition-colors">{f.desc}</p>
                                         <div className="flex items-center gap-2 text-sm font-bold text-gray-900 dark:text-white transition-colors tracking-widest opacity-60">
                                             <span className="h-px w-8 bg-gray-900 dark:bg-white"></span>

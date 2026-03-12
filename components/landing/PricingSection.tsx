@@ -75,12 +75,12 @@ export default function PricingSection() {
                                 </div>
                             )}
                             <div className="mb-6">
-                                <h3 className="text-gray-900 dark:text-white font-bold text-lg mb-1 text-left transition-colors">{plan.name}</h3>
+                                <h3 className="text-gray-900 dark:text-white font-[800] text-xl mb-1 text-left transition-colors tracking-tight">{plan.name}</h3>
                                 <div className="flex items-end gap-1 mb-2">
-                                    <span className="text-4xl font-extrabold text-gray-900 dark:text-white transition-colors">{plan.price}</span>
-                                    <span className="text-gray-400 dark:text-white/40 pb-1 transition-colors">{plan.period}</span>
+                                    <span className="text-5xl font-[900] text-gray-900 dark:text-white transition-colors tracking-tighter">{plan.price}</span>
+                                    <span className="text-gray-400 dark:text-white/40 pb-1.5 transition-colors font-medium">{plan.period}</span>
                                 </div>
-                                <p className="text-gray-600 dark:text-white/60 text-sm text-left transition-colors">{plan.desc}</p>
+                                <p className="text-gray-600 dark:text-white/60 text-sm text-left transition-colors font-medium">{plan.desc}</p>
                             </div>
 
                             <ul className="space-y-3 mb-8">

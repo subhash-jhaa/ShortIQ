@@ -13,6 +13,9 @@ export default function ProfilePage() {
                 routing="hash"
                 appearance={{
                     baseTheme: theme === "dark" ? dark : undefined,
+                    variables: {
+                        colorPrimary: "oklch(0.586 0.253 17.585)",
+                    },
                     elements: {
                         rootBox: "!w-full !flex !flex-1",
                         cardBox: "!w-full !max-w-none !shadow-none !border-none !rounded-none !flex-1",
@@ -34,22 +37,16 @@ export default function ProfilePage() {
                         headerSubtitle: "!text-gray-500 dark:!text-white/50 !text-base",
                         profileSectionTitleText: "!text-gray-900 dark:!text-white !font-bold",
 
-                        // Elements
-                        badge: "!bg-indigo-100 dark:!bg-indigo-500/20 !text-indigo-700 dark:!text-indigo-400 !border !border-indigo-200 dark:!border-indigo-500/30 !px-3 !py-1 !text-xs",
-                        button: "!text-indigo-600 dark:!text-indigo-400 hover:!bg-indigo-50 dark:hover:!bg-indigo-500/10 !font-bold",
-                        avatarImageActionsUpload: "!text-indigo-600 dark:!text-indigo-400 !border !border-indigo-200 dark:!border-indigo-500/30 !bg-transparent hover:!bg-indigo-50 dark:hover:!bg-indigo-500/10 !rounded-xl",
-                        primaryButton: "!bg-indigo-600 hover:!bg-indigo-700 !text-white !font-bold !h-11 !px-6 !rounded-xl !shadow-md !shadow-indigo-500/20 active:!scale-[0.98] !transition-transform",
+                        // Elements — colorPrimary handles most tinting automatically
                         secondaryButton: "!text-gray-700 dark:!text-white/80 !border !border-gray-300 dark:!border-white/20 hover:!bg-gray-100 dark:hover:!bg-white/10 !font-bold !h-11 !px-6 !rounded-xl !transition-colors",
 
                         // Forms & Inputs
                         formFieldLabel: "!text-[11px] !font-black !uppercase !tracking-widest !text-gray-500 dark:!text-white/40 !mb-2",
-                        formFieldInput: "!bg-gray-50 dark:!bg-[#1a1a24] !border !border-gray-200 dark:!border-white/10 !text-gray-900 dark:!text-white focus:!ring-2 focus:!ring-indigo-500 focus:!border-transparent !h-12 !rounded-xl !px-4 !text-base",
-                        formButtonPrimary: "!bg-indigo-600 hover:!bg-indigo-700 !text-white !font-bold !h-12 !rounded-xl",
+                        formFieldInput: "!bg-gray-50 dark:!bg-[#1a1a24] !border !border-gray-200 dark:!border-white/10 !text-gray-900 dark:!text-white !h-12 !rounded-xl !px-4 !text-base",
                         formFieldWarningText: "!text-rose-500 !font-medium !text-sm",
                         formFieldErrorText: "!text-rose-500 !font-medium !text-sm !mt-1",
 
                         // Misc Elements
-                        breadcrumbsItem: "!text-gray-500 dark:!text-white/60 hover:!text-indigo-600 dark:hover:!text-indigo-400 !font-medium",
                         breadcrumbsItemDivider: "!text-gray-300 dark:!text-white/20",
                         accordionTriggerButton: "!text-gray-900 dark:!text-white hover:!bg-gray-50 dark:hover:!bg-white/5 !font-semibold !py-4 !rounded-xl !transition-colors",
                         activeDeviceIcon: "!text-emerald-500",
