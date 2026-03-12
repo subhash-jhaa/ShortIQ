@@ -33,7 +33,7 @@ export default function Navbar() {
                 >
                     <div className="flex items-center justify-center rounded-xl transition-all">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:animate-pulse">
-                            <rect width="24" height="24" rx="6" fill="url(#rose_anim_nav)" />
+                            <rect width="24" height="24" rx="6" fill="var(--brand-primary)" />
                             <path d="M18 5H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                             <path d="M9 12H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                             <path d="M9 19H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
@@ -41,20 +41,10 @@ export default function Navbar() {
                                 d="M13 12.003a0.7 0.7 0 0 1 1.062-.597l3.498 2.098a0.7 0.7 0 0 1 0 1.203l-3.498 2.098a0.7 0.7 0 0 1-1.062-.598z"
                                 fill="white"
                             />
-                            <defs>
-                                <linearGradient id="rose_anim_nav" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                                    <stop stopColor="#fb7185">
-                                        <animate attributeName="stop-color" values="#fb7185; #fda4af; #fb7185" dur="3s" repeatCount="indefinite" />
-                                    </stop>
-                                    <stop offset="1" stopColor="#e11d48">
-                                        <animate attributeName="stop-color" values="#e11d48; #be123c; #e11d48" dur="3s" repeatCount="indefinite" />
-                                    </stop>
-                                </linearGradient>
-                            </defs>
                         </svg>
                     </div>
                     <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight transition-colors">
-                        Short<span className="text-rose-600 dark:text-rose-400">IQ</span>
+                        Short<span className="text-primary">IQ</span>
                     </span>
                 </Link>
 
@@ -63,16 +53,16 @@ export default function Navbar() {
                     <div className="hidden sm:flex items-center gap-3">
                         {!isSignedIn ? (
                             <>
-                                <Link href="/sign-in" className="text-sm font-medium text-gray-600 dark:text-white/70 hover:text-indigo-600 dark:hover:text-white transition-colors px-2 py-2">
+                                <Link href="/sign-in" className="text-sm font-medium text-gray-600 dark:text-white/70 hover:text-primary transition-colors px-2 py-2">
                                     Sign In
                                 </Link>
-                                <Link href="/sign-up" className="bg-gradient-to-r from-indigo-600 to-rose-600 text-white text-sm px-5 py-2 rounded-xl font-bold shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                                <Link href="/sign-up" className="bg-primary text-white text-sm px-5 py-2 rounded-xl font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
                                     Get Started
                                 </Link>
                             </>
                         ) : (
                             <>
-                                <Link href="/dashboard" className="text-sm font-medium text-gray-600 dark:text-white/70 hover:text-indigo-600 dark:hover:text-white transition-colors px-4 py-2 border border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5">
+                                <Link href="/dashboard" className="text-sm font-medium text-gray-600 dark:text-white/70 hover:text-primary transition-colors px-4 py-2 border border-gray-200 dark:border-white/10 rounded-xl hover:bg-gray-50 dark:hover:bg-white/5">
                                     Dashboard
                                 </Link>
                                 <button 
@@ -121,7 +111,7 @@ export default function Navbar() {
                                 <Link href="/sign-in" onClick={() => setMenuOpen(false)} className="text-gray-900 dark:text-white text-base font-bold py-2">
                                     Sign In
                                 </Link>
-                                <Link href="/sign-up" onClick={() => setMenuOpen(false)} className="bg-gradient-to-r from-indigo-600 to-rose-600 text-white text-center py-4 rounded-xl font-bold shadow-lg">
+                                <Link href="/sign-up" onClick={() => setMenuOpen(false)} className="bg-primary text-white text-center py-4 rounded-xl font-bold shadow-lg shadow-primary/20">
                                     Get Started
                                 </Link>
                             </>

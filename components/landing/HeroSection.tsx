@@ -41,14 +41,14 @@ export default function HeroSection() {
         <section className="relative min-h-screen flex items-center justify-center pt-40 overflow-hidden">
             <div className="absolute inset-0 hero-grid opacity-5 dark:opacity-20 pointer-events-none transition-opacity duration-500" />
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[700px] h-[700px] bg-rose-600/10 rounded-full blur-[120px]" />
+                <div className="w-[700px] h-[700px] bg-primary/10 rounded-full blur-[120px]" />
             </div>
 
             <div className="relative max-w-6xl mx-auto px-6 text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-rose-500/20 dark:border-rose-500/40 bg-rose-500/5 dark:bg-rose-500/10 text-rose-600 dark:text-rose-300 text-sm font-medium mb-8 animate-fade-up">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium mb-8 animate-fade-up">
                     <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/70 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
                     </span>
                     AI-Powered • Auto-Schedule • Multi-Platform
                 </div>
@@ -59,7 +59,7 @@ export default function HeroSection() {
                     <span className="gradient-text">AI Short Videos</span>
                     <br />
                     <span className="text-gray-400 dark:text-white/60 text-4xl sm:text-5xl lg:text-6xl transition-colors">for </span>
-                    <span className="text-rose-400 typewriter">{typed}</span>
+                    <span className="text-primary typewriter">{typed}</span>
                     <span className="typewriter-cursor">|</span>
                 </h1>
 
@@ -69,7 +69,7 @@ export default function HeroSection() {
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-up animation-delay-300">
                     {!isSignedIn ? (
-                        <Link href="/sign-up" className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/20 flex items-center gap-2">
+                        <Link href="/sign-up" className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-primary/20 flex items-center gap-2">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                                 <path d="M5 3l14 9-14 9V3z" fill="white" />
                             </svg>
@@ -78,7 +78,7 @@ export default function HeroSection() {
                     ) : (
                         <Link
                             href="/dashboard"
-                            className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/20 flex items-center gap-2"
+                            className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-primary/20 flex items-center gap-2"
                         >
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
@@ -116,7 +116,7 @@ export default function HeroSection() {
 
                 <div className="mt-20 relative">
                     <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-black via-transparent to-transparent z-10 pointer-events-none rounded-3xl transition-all duration-500" />
-                    <div className="glass-card relative overflow-hidden rounded-2xl bg-white dark:bg-[#0d0d14] border border-gray-200/50 dark:border-white/10 shadow-2xl shadow-rose-900/10 dark:shadow-rose-900/20 mx-auto max-w-4xl transition-all">
+                    <div className="glass-card relative overflow-hidden rounded-2xl bg-white dark:bg-[#0d0d14] border border-gray-200/50 dark:border-white/10 shadow-2xl shadow-primary/10 dark:shadow-primary/20 mx-auto max-w-4xl transition-all">
                         <div className="bg-gray-50 dark:bg-[#0d0d14] px-4 py-3 flex items-center gap-3 border-b border-gray-200 dark:border-white/10 transition-colors">
                             <div className="flex gap-1.5">
                                 <div className="w-3 h-3 rounded-full bg-red-500" />
@@ -134,7 +134,7 @@ export default function HeroSection() {
                                     <div
                                         key={item}
                                         className={`px-3 py-2 rounded-lg text-sm text-center transition-colors ${item.includes("Generate")
-                                            ? "bg-rose-600/10 dark:bg-rose-600/30 text-rose-600 dark:text-rose-300 font-semibold"
+                                            ? "bg-primary/10 dark:bg-primary/30 text-primary font-semibold"
                                             : "text-gray-400 dark:text-white/50 hover:bg-gray-50 dark:hover:bg-white/5"
                                             }`}
                                     >
@@ -158,10 +158,10 @@ export default function HeroSection() {
                                         </div>
                                     ))}
                                 </div>
-                                <div className="bg-gradient-to-r from-indigo-600/20 to-rose-600/20 rounded-xl p-4 border border-indigo-500/20">
-                                    <div className="text-xs text-indigo-300 mb-1 text-left">🎬 Generating video...</div>
+                                <div className="bg-primary/10 rounded-xl p-4 border border-primary/20">
+                                    <div className="text-xs text-primary mb-1 text-left">🎬 Generating video...</div>
                                     <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                        <div className="h-full w-3/4 bg-gradient-to-r from-indigo-500 to-rose-500 rounded-full animate-pulse" />
+                                        <div className="h-full w-3/4 bg-primary rounded-full animate-pulse" />
                                     </div>
                                     <div className="text-xs text-white/40 mt-1 text-left">75% complete</div>
                                 </div>

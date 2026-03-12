@@ -41,15 +41,15 @@ export default function HowItWorksSection() {
 
                 <div className="relative">
                     {/* Connecting line */}
-                    <div className="hidden lg:block absolute top-16 left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-indigo-500/0 via-rose-500/40 to-indigo-500/0" />
+                    <div className="hidden lg:block absolute top-16 left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
                     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {steps.map((step, i) => (
                             <div key={step.num} className="flex flex-col items-center text-center group">
                                 <div className="relative mb-6">
-                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-rose-600 flex items-center justify-center text-2xl shadow-lg shadow-rose-500/30 group-hover:scale-110 transition-transform">
+                                    <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-2xl shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
                                         {step.icon}
                                     </div>
-                                    <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white dark:bg-[#0d0d14] border border-rose-500/20 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 text-xs flex items-center justify-center font-bold transition-colors">
+                                    <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white dark:bg-[#0d0d14] border border-primary/20 text-primary text-xs flex items-center justify-center font-bold transition-colors">
                                         {i + 1}
                                     </span>
                                 </div>

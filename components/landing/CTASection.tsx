@@ -4,9 +4,9 @@ export default function CTASection() {
     return (
         <section className="py-28 relative">
             <div className="max-w-4xl mx-auto px-6 text-center">
-                <div className="relative rounded-3xl overflow-hidden border border-rose-200 dark:border-rose-500/30 bg-gradient-to-br from-rose-50 dark:from-indigo-900/40 via-white dark:via-rose-900/20 to-white dark:to-black p-16 transition-all duration-500">
-                    <div className="absolute inset-0 bg-gradient-to-br from-rose-500/5 dark:from-indigo-600/10 to-rose-600/5 pointer-events-none" />
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-1 bg-gradient-to-r from-transparent via-rose-400 dark:via-rose-500 to-transparent" />
+                <div className="relative rounded-3xl overflow-hidden border border-primary/30 bg-primary/10 p-16 transition-all duration-500">
+                    <div className="absolute inset-0 bg-primary/5 pointer-events-none" />
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
 
                     <span className="section-badge mb-6 block w-fit mx-auto">Get Started Today</span>
                     <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight transition-colors">
@@ -18,7 +18,7 @@ export default function CTASection() {
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <a
                             href="#"
-                            className="btn-primary px-10 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/40 transition-all hover:scale-105"
+                            className="btn-primary px-10 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-primary/40 transition-all hover:scale-105"
                         >
                             🚀 Start Free — No Card Required
                         </a>

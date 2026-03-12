@@ -89,17 +89,17 @@ export default function VideosPage() {
         <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-12 animate-in fade-in duration-500">
             {/* Hero Section */}
             <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-indigo-500/10 via-rose-500/5 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-primary/10 via-primary/5 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8">
                     <div className="max-w-xl">
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-indigo-100 dark:border-indigo-500/20">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 text-primary font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-primary/20">
                             <Video size={16} />
                             ShortIQ Studio
                         </div>
                         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3 sm:mb-4">
                             Your <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-rose-500">
+                            <span className="text-primary">
                                 Video Library
                             </span>
                         </h1>
@@ -113,15 +113,15 @@ export default function VideosPage() {
             {/* Content Area */}
             {videos.length === 0 ? (
                 <div className="bg-white dark:bg-[#0d0d14] border-2 border-dashed border-gray-100 dark:border-white/5 rounded-[40px] p-20 text-center">
-                    <div className="w-24 h-24 bg-indigo-50 dark:bg-indigo-500/5 rounded-full flex items-center justify-center mx-auto mb-8">
-                        <Video size={40} className="text-indigo-500" />
+                    <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center mx-auto mb-8">
+                        <Video size={40} className="text-primary" />
                     </div>
                     <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-4 tracking-tighter">Your Creative Studio is Empty</h3>
                     <p className="text-gray-500 dark:text-white/40 text-sm max-w-sm mx-auto mb-10 leading-relaxed">
                         Start your first series to see your automated video pipeline in action.
                     </p>
                     <Link href="/dashboard/create">
-                        <Button className="bg-indigo-500 hover:bg-indigo-600 text-white font-black text-[10px] uppercase tracking-[0.3em] px-10 h-14 rounded-2xl shadow-2xl shadow-indigo-500/20 active:scale-95 transition-all">
+                        <Button className="bg-primary hover:bg-primary/90 text-white font-black text-[10px] uppercase tracking-[0.3em] px-10 h-14 rounded-2xl shadow-2xl shadow-primary/20 active:scale-95 transition-all">
                             Create New Series
                         </Button>
                     </Link>
@@ -131,7 +131,7 @@ export default function VideosPage() {
                     {videos.map((video) => (
                         <div
                             key={video.id}
-                            className="group bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 rounded-[28px] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1"
+                            className="group bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 rounded-[28px] overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-1"
                         >
                             {/* Thumbnail Area */}
                             <div
@@ -144,7 +144,7 @@ export default function VideosPage() {
                                 }}
                             >
                                 {(video.status === "generating" || video.status === "cancelled") ? (
-                                    <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 ${video.status === 'cancelled' ? 'bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-white/20' : 'bg-indigo-50/30 dark:bg-indigo-500/5 text-indigo-500 dark:text-indigo-400'
+                                    <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 ${video.status === 'cancelled' ? 'bg-gray-100 dark:bg-white/5 text-gray-400 dark:text-white/20' : 'bg-primary/10 text-primary'
                                         }`}>
                                         {video.status === 'generating' ? (
                                             <>
@@ -207,8 +207,8 @@ export default function VideosPage() {
 
                                         {/* Centered Play Button */}
                                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-90 group-hover:scale-100">
-                                            <div className="w-16 h-16 bg-white dark:bg-rose-500 rounded-full flex items-center justify-center shadow-2xl shadow-rose-500/30">
-                                                <Play size={24} fill="currentColor" className="ml-1 text-rose-500 dark:text-white" />
+                                            <div className="w-16 h-16 bg-white dark:bg-primary rounded-full flex items-center justify-center shadow-2xl shadow-primary/30">
+                                                <Play size={24} fill="currentColor" className="ml-1 text-primary dark:text-white" />
                                             </div>
                                         </div>
 
@@ -219,7 +219,7 @@ export default function VideosPage() {
                                                     href={video.video_url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="w-10 h-10 rounded-xl bg-white dark:bg-indigo-500 text-indigo-500 dark:text-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all opacity-0 group-hover:opacity-100 duration-300"
+                                                    className="w-10 h-10 rounded-xl bg-white dark:bg-primary text-primary dark:text-white flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all opacity-0 group-hover:opacity-100 duration-300"
                                                     onClick={(e) => e.stopPropagation()}
                                                 >
                                                     <Download size={18} />
@@ -244,19 +244,19 @@ export default function VideosPage() {
                             <div className="p-6">
                                 <h3
                                     onClick={() => router.push(`/dashboard/videos/${video.id}`)}
-                                    className="text-gray-900 dark:text-white font-black truncate text-lg mb-2 cursor-pointer hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors tracking-tight"
+                                    className="text-gray-900 dark:text-white font-black truncate text-lg mb-2 cursor-pointer hover:text-primary transition-colors tracking-tight"
                                 >
                                     {video.title}
                                 </h3>
 
                                 <div className="flex items-center gap-4 text-gray-500 dark:text-white/30 text-[10px] font-bold uppercase tracking-widest">
                                     <div className="flex items-center gap-1.5">
-                                        <Clock size={12} className="text-indigo-500" />
+                                        <Clock size={12} className="text-primary" />
                                         {formatDistanceToNow(new Date(video.created_at))} ago
                                     </div>
                                     {video.status === "ready" && video.image_urls && (
                                         <div className="flex items-center gap-1.5">
-                                            <Eye size={12} className="text-rose-500" />
+                                            <Eye size={12} className="text-primary" />
                                             Preview Ready
                                         </div>
                                     )}
@@ -288,7 +288,7 @@ export default function VideosPage() {
                                                 href={video.video_url}
                                                 target="_blank"
                                                 onClick={(e) => e.stopPropagation()}
-                                                className="w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-500/20 active:scale-95"
+                                                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-primary/20 active:scale-95"
                                             >
                                                 <Download size={14} />
                                                 Export MP4

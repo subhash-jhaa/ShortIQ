@@ -60,7 +60,7 @@ export default function DashboardLayout({
                     <Link href="/" className="flex items-center gap-3 mb-6 group" onClick={() => setIsMobileMenuOpen(false)}>
                         <div className="flex items-center justify-center rounded-xl transition-all">
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:animate-pulse">
-                                <rect width="24" height="24" rx="6" fill="url(#rose_anim_sidebar)" />
+                                <rect width="24" height="24" rx="6" fill="var(--brand-primary)" />
                                 <path d="M18 5H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                                 <path d="M9 12H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                                 <path d="M9 19H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
@@ -68,31 +68,21 @@ export default function DashboardLayout({
                                     d="M13 12.003a0.7 0.7 0 0 1 1.062-.597l3.498 2.098a0.7 0.7 0 0 1 0 1.203l-3.498 2.098a0.7 0.7 0 0 1-1.062-.598z"
                                     fill="white"
                                 />
-                                <defs>
-                                    <linearGradient id="rose_anim_sidebar" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                                        <stop stopColor="#fb7185">
-                                            <animate attributeName="stop-color" values="#fb7185; #fda4af; #fb7185" dur="3s" repeatCount="indefinite" />
-                                        </stop>
-                                        <stop offset="1" stopColor="#e11d48">
-                                            <animate attributeName="stop-color" values="#e11d48; #be123c; #e11d48" dur="3s" repeatCount="indefinite" />
-                                        </stop>
-                                    </linearGradient>
-                                </defs>
                             </svg>
                         </div>
                         <span className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            Short<span className="text-rose-600 dark:text-rose-400">IQ</span>
+                            Short<span className="text-primary">IQ</span>
                         </span>
                     </Link>
 
                     <Link
                         href="/dashboard"
                         className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[16px] font-semibold transition-all ${isActive("/dashboard")
-                            ? "bg-indigo-50 dark:bg-[#1e1e2d] border border-indigo-100 dark:border-white/5 text-indigo-600 dark:text-indigo-400 shadow-sm"
+                            ? "bg-primary/10 border border-primary/20 text-primary shadow-sm"
                             : "text-gray-500 dark:text-white/50 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white"
                             }`}
                     >
-                        <LayoutDashboard size={22} className={isActive("/dashboard") ? "text-indigo-500 dark:text-indigo-400" : "text-gray-300 dark:text-white/20"} />
+                        <LayoutDashboard size={22} className={isActive("/dashboard") ? "text-primary" : "text-gray-300 dark:text-white/20"} />
                         Overview
                     </Link>
                 </div>
@@ -101,7 +91,7 @@ export default function DashboardLayout({
                 <Link
                     href="/dashboard/create"
                     className={`w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold text-sm transition-all shadow-lg mb-8 active:scale-[0.98] ${isActive("/dashboard/create")
-                        ? "bg-rose-500 text-white shadow-rose-500/20"
+                        ? "bg-primary text-white shadow-primary/20"
                         : "bg-gray-900 dark:bg-white hover:bg-gray-800 dark:hover:bg-slate-100 text-white dark:text-[#0d0d14]"
                         }`}
                 >
@@ -116,11 +106,11 @@ export default function DashboardLayout({
                             key={item.name}
                             href={item.href}
                             className={`flex items-center gap-4 px-4 py-3 rounded-xl text-[16px] font-medium transition-all group ${isActive(item.href)
-                                ? "bg-indigo-50 dark:bg-[#1e1e2d] border border-indigo-100 dark:border-white/5 text-indigo-600 dark:text-indigo-400 shadow-sm"
+                                ? "bg-primary/10 border border-primary/20 text-primary shadow-sm"
                                 : "text-gray-500 dark:text-white/50 hover:bg-gray-100 dark:hover:bg-white/[0.08] hover:text-gray-900 dark:hover:text-white"
                                 }`}
                         >
-                            <span className={`${isActive(item.href) ? "text-indigo-500 dark:text-indigo-400" : "text-gray-300 dark:text-white/20"} group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors`}>
+                            <span className={`${isActive(item.href) ? "text-primary" : "text-gray-300 dark:text-white/20"} group-hover:text-primary transition-colors`}>
                                 {item.icon}
                             </span>
                             {item.name}
@@ -140,7 +130,7 @@ export default function DashboardLayout({
                             : "text-gray-400 dark:text-white/30 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white"
                             }`}
                     >
-                        <span className={isActive(item.href) ? "text-indigo-500 dark:text-indigo-400" : ""}>{item.icon}</span>
+                        <span className={isActive(item.href) ? "text-primary" : ""}>{item.icon}</span>
                         {item.name}
                     </Link>
                 ))}

@@ -65,12 +65,12 @@ export default function PricingSection() {
                         <div
                             key={plan.name}
                             className={`rounded-3xl p-8 border transition-all duration-500 flex flex-col h-full ${plan.highlight
-                                ? "bg-gradient-to-b from-rose-50 dark:from-indigo-600/20 to-white dark:to-rose-600/10 border-rose-200 dark:border-rose-500/50 shadow-xl dark:shadow-2xl shadow-rose-500/10 dark:shadow-rose-500/20 z-10"
+                                ? "bg-primary/5 dark:bg-primary/10 border-primary shadow-xl dark:shadow-2xl shadow-primary/10 dark:shadow-primary/20 z-10"
                                 : "bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10"
                                 } relative`}
                         >
                             {plan.highlight && (
-                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-indigo-500 to-rose-500 text-white text-xs font-bold shadow-lg">
+                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-primary text-white text-xs font-bold shadow-lg shadow-primary/20">
                                     Most Popular
                                 </div>
                             )}
@@ -86,7 +86,7 @@ export default function PricingSection() {
                             <ul className="space-y-3 mb-8">
                                 {plan.features.map((f) => (
                                     <li key={f} className="flex items-center gap-3 text-sm text-gray-700 dark:text-white/80 text-left transition-colors">
-                                        <svg className="w-4 h-4 text-rose-500 dark:text-rose-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                        <svg className="w-4 h-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                                             <path d="M5 13l4 4L19 7" />
                                         </svg>
                                         {f}
@@ -97,7 +97,7 @@ export default function PricingSection() {
                             <a
                                 href="#"
                                 className={`block text-center py-3 px-6 rounded-xl font-semibold text-sm transition-all duration-300 ${plan.highlight
-                                    ? "btn-primary shadow-lg shadow-rose-500/30 dark:shadow-rose-900/40"
+                                    ? "btn-primary shadow-lg shadow-primary/30"
                                     : "border border-gray-200 dark:border-white/20 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/5"
                                     }`}
                             >
