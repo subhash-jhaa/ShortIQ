@@ -1,4 +1,4 @@
-"use client";
+"use client"; // Required for framer-motion in App Router
 
 import { Button } from "@/components/ui/button";
 import { motion, type Variants } from "framer-motion";
