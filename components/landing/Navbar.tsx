@@ -33,7 +33,7 @@ export default function Navbar() {
                 >
                     <div className="flex items-center justify-center rounded-xl transition-all">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:animate-pulse">
-                            <rect width="24" height="24" rx="6" fill="var(--brand-primary)" />
+                            <rect width="24" height="24" rx="6" fill="var(--primary)" />
                             <path d="M18 5H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                             <path d="M9 12H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                             <path d="M9 19H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />

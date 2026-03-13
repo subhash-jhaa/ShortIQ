@@ -263,7 +263,7 @@ export default function FeaturesSection() {
                             className="sticky group"
                             style={{ top: `${130 + (i * 20)}px` }}
                         >
-                            <div className={`relative overflow-hidden rounded-3xl bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl p-8 shadow-2xl transition-all duration-500 ease-in-out md:p-12 border border-gray-200/50 ring-1 ${f.ring} max-w-5xl mx-auto group-hover:scale-[1.01]`}>
+                            <div className={`relative overflow-hidden rounded-3xl bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl p-8 shadow-2xl transition-all duration-500 ease-in-out md:p-12 border border-gray-200/50 ring-1 ${f.ring} max-w-5xl mx-auto group-hover:bg-primary/5 dark:group-hover:bg-primary/10 group-hover:scale-[1.01]`}>
                                 <div className="grid gap-12 md:grid-cols-2 items-center">
                                     <div className="order-1">
                                         <div className={`relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-50 dark:bg-white/[0.02] shadow-inner bg-gradient-to-br ${f.gradient} border border-gray-200 dark:border-white/10 flex items-center justify-center`}>

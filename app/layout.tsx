@@ -44,6 +44,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { TooltipProvider } from "@/components/ui/tooltip";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -61,7 +63,9 @@ export default function RootLayout({
             enableSystem={false}
             disableTransitionOnChange
           >
-            {children}
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
             <Toaster richColors position="top-center" />
           </ThemeProvider>
         </body>

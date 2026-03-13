@@ -3,7 +3,7 @@
 const platformData = [
     {
         name: "YouTube",
-        color: "from-red-500 to-red-700",
+        color: "bg-primary",
         desc: "Auto-publish Shorts & long-form videos on your schedule",
         svg: (
             <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
@@ -13,7 +13,7 @@ const platformData = [
     },
     {
         name: "Instagram",
-        color: "from-pink-500 via-fuchsia-500 to-violet-500",
+        color: "bg-primary",
         desc: "Distribute Reels effortlessly with auto captions & hashtags",
         svg: (
             <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
@@ -23,7 +23,7 @@ const platformData = [
     },
     {
         name: "TikTok",
-        color: "from-neutral-900 to-neutral-700",
+        color: "bg-primary",
         desc: "Publish trending short clips at peak engagement times",
         svg: (
             <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
@@ -33,7 +33,7 @@ const platformData = [
     },
     {
         name: "Facebook",
-        color: "from-blue-600 to-blue-800",
+        color: "bg-primary",
         desc: "Reach your Facebook audience with AI-optimised content",
         svg: (
             <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
@@ -43,7 +43,7 @@ const platformData = [
     },
     {
         name: "Email",
-        color: "from-amber-400 to-orange-500",
+        color: "bg-primary",
         desc: "Embed videos in newsletters and auto-email campaigns",
         svg: (
             <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
