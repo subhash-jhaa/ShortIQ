@@ -38,136 +38,117 @@ export default function HeroSection() {
     }, []);
 
     return (
-        <section className="relative min-h-screen flex items-center justify-center pt-40 overflow-hidden">
-            <div className="absolute inset-0 hero-grid opacity-5 dark:opacity-20 pointer-events-none transition-opacity duration-500" />
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[700px] h-[700px] bg-rose-600/10 rounded-full blur-[120px]" />
-            </div>
+        <section className="relative min-h-screen flex items-center justify-center pt-12 overflow-hidden">
+            <div className="absolute inset-0 hero-grid opacity-30 pointer-events-none transition-opacity duration-500" />
 
+            {/* Decorative Static Icons */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
+                <svg className="hero-svg-icon left-[8%] top-[15%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <rect className="ico" x="-22" y="-14" width="32" height="14" rx="4"/>
+                        <circle className="ico" cx="-6" cy="-2" r="8"/>
+                        <circle className="ico" cx="-6" cy="-2" r="4"/>
+                        <rect className="ico" x="-20" y="-22" width="10" height="8" rx="2"/>
+                        <circle className="ico-fill2" cx="18" cy="-8" r="3" style={{ opacity: 1 }}/>
+                        <line className="ico" x1="-6" y1="10" x2="-14" y2="26"/>
+                        <line className="ico" x1="-6" y1="10" x2="-6" y2="26"/>
+                        <line className="ico" x1="-6" y1="10" x2="2" y2="26"/>
+                    </g>
+                </svg>
+
+                <svg className="hero-svg-icon left-[15%] bottom-[15%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <rect className="ico" x="-24" y="-20" width="48" height="42" rx="4"/>
+                        <line className="ico" x1="-24" y1="-8" x2="24" y2="-8"/>
+                        <line className="ico" x1="-12" y1="-24" x2="-12" y2="-14"/>
+                        <line className="ico" x1="12" y1="-24" x2="12" y2="-14"/>
+                        <circle className="ico-fill2" cx="-14" cy="0" r="2.5" style={{ opacity: 1 }}/>
+                        <circle className="ico-fill2" cx="-2" cy="0" r="2.5" style={{ opacity: 1 }}/>
+                        <circle className="ico-fill2" cx="10" cy="0" r="2.5" style={{ opacity: 1 }}/>
+                        <circle className="ico-fill2" cx="-14" cy="10" r="2.5" style={{ opacity: 1 }}/>
+                        <circle className="ico-fill2" cx="-2" cy="10" r="2.5" style={{ opacity: 1 }}/>
+                        <circle className="ico" cx="14" cy="12" r="9" style={{ fill: 'var(--brand-primary)', fillOpacity: 0.2 }}/>
+                        <line className="ico" x1="14" y1="12" x2="14" y2="7"/>
+                        <line className="ico" x1="14" y1="12" x2="18" y2="14"/>
+                    </g>
+                </svg>
+
+                <svg className="hero-svg-icon left-[28%] top-[12%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <path className="ico" d="M-20,8 Q-24,-2 -14,-8 Q-14,-22 0,-22 Q12,-22 16,-12 Q24,-14 24,0 Q24,12 14,12 L-16,12 Q-24,12 -20,4 Z"/>
+                        <line className="ico" x1="0" y1="8" x2="0" y2="-4"/>
+                        <polyline className="ico" points="-7,0 0,-8 7,0"/>
+                    </g>
+                </svg>
+
+                <svg className="hero-svg-icon right-[8%] top-[15%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <rect className="ico" x="-8" y="-22" width="16" height="24" rx="8"/>
+                        <path className="ico" d="M-18,0 Q-18,16 0,16 Q18,16 18,0"/>
+                        <line className="ico" x1="0" y1="16" x2="0" y2="24"/>
+                        <line className="ico" x1="-10" y1="24" x2="10" y2="24"/>
+                        <path className="ico" d="M-32,-6 Q-28,-14 -32,-22" style={{ opacity: 0.5, stroke: 'var(--brand-primary)' }}/>
+                        <path className="ico" d="M32,-6 Q28,-14 32,-22" style={{ opacity: 0.5, stroke: 'var(--brand-primary)' }}/>
+                    </g>
+                </svg>
+
+                <svg className="hero-svg-icon right-[15%] bottom-[15%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <rect className="ico" x="-26" y="-18" width="52" height="36" rx="4"/>
+                        <rect className="ico-fill2" x="-18" y="4" width="20" height="5" rx="2" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="6" y="4" width="10" height="5" rx="2" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="-18" y="12" width="14" height="5" rx="2" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="0" y="12" width="16" height="5" rx="2" style={{ opacity: 0.9 }}/>
+                        <polygon className="ico" points="-8,-12 8,-4 -8,4" style={{ fill: 'var(--brand-primary)', fillOpacity: 0.25 }}/>
+                    </g>
+                </svg>
+
+                <svg className="hero-svg-icon right-[28%] top-[12%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <rect className="ico" x="-26" y="-16" width="52" height="32" rx="3"/>
+                        <rect className="ico-fill2" x="-22" y="-12" width="6" height="8" rx="1" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="-22" y="4" width="6" height="8" rx="1" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="16" y="-12" width="6" height="8" rx="1" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="16" y="4" width="6" height="8" rx="1" style={{ opacity: 0.9 }}/>
+                        <polygon className="ico" points="-6,-10 10,0 -6,10" style={{ fill: 'var(--brand-primary)', fillOpacity: 0.3 }}/>
+                    </g>
+                </svg>
+            </div>
             <div className="relative max-w-6xl mx-auto px-6 text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-rose-500/20 dark:border-rose-500/40 bg-rose-500/5 dark:bg-rose-500/10 text-rose-600 dark:text-rose-300 text-sm font-medium mb-8 animate-fade-up">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium mb-8 animate-fade-up">
                     <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/70 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
                     </span>
                     AI-Powered • Auto-Schedule • Multi-Platform
                 </div>
 
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-[1.1] tracking-tight mb-6 animate-fade-up animation-delay-100 transition-colors">
+                <h1 className="text-6xl sm:text-7xl lg:text-8xl font-[900] text-gray-900 dark:text-white leading-[0.95] tracking-[-0.05em] mb-8 animate-fade-up animation-delay-100 transition-colors">
                     Generate & Schedule
                     <br />
-                    <span className="gradient-text">AI Short Videos</span>
-                    <br />
-                    <span className="text-gray-400 dark:text-white/60 text-4xl sm:text-5xl lg:text-6xl transition-colors">for </span>
-                    <span className="text-rose-400 typewriter">{typed}</span>
-                    <span className="typewriter-cursor">|</span>
+                    <span className="text-primary">AI Short Videos</span>
                 </h1>
 
-                <p className="max-w-2xl mx-auto text-lg text-gray-600 dark:text-white/60 mb-10 leading-relaxed animate-fade-up animation-delay-200 transition-colors">
-                    ShortIQ uses cutting-edge AI to create stunning short-form videos from your ideas, then automatically schedules and publishes them across all your social channels — all from one powerful dashboard.
+                <p className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-white/60 mb-12 leading-relaxed animate-fade-up animation-delay-200 transition-colors font-medium">
+                    Transform long videos into engaging short-form content for TikTok, Reels, & Shorts automatically. Schedule posts with powerful AI insights.
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fade-up animation-delay-300">
-                    {!isSignedIn ? (
-                        <Link href="/sign-up" className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/20 flex items-center gap-2">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <path d="M5 3l14 9-14 9V3z" fill="white" />
-                            </svg>
-                            Start Generating Free
-                        </Link>
-                    ) : (
-                        <Link
-                            href="/dashboard"
-                            className="btn-primary px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-rose-500/20 flex items-center gap-2"
-                        >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                                <line x1="3" y1="9" x2="21" y2="9" />
-                                <line x1="9" y1="21" x2="9" y2="9" />
-                            </svg>
-                            Go to Dashboard
-                        </Link>
-                    )}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up animation-delay-300">
+                    <Link href="/sign-up" className="btn-primary px-10 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-primary/20 flex items-center gap-2 transition-all hover:scale-105 active:scale-95">
+                        Start Creating Free
+                    </Link>
                     <a
                         href="#how-it-works"
-                        className="px-8 py-4 rounded-2xl text-base font-semibold text-gray-900 dark:text-white border border-gray-200 dark:border-white/20 hover:bg-gray-50 dark:hover:bg-white/5 transition-all flex items-center gap-2"
+                        className="px-10 py-4 rounded-2xl text-base font-bold text-gray-900 dark:text-white border-2 border-primary/20 hover:bg-primary/5 transition-all flex items-center gap-2"
                     >
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none" />
-                        </svg>
-                        Watch Demo
+                        Book a Demo
                     </a>
-                </div>
-
-                <div className="flex flex-wrap justify-center gap-8 animate-fade-up animation-delay-400">
-                    {[
-                        { value: "500K+", label: "Videos Generated" },
-                        { value: "50K+", label: "Active Creators" },
-                        { value: "12M+", label: "Total Views Driven" },
-                        { value: "5", label: "Platforms Supported" },
-                    ].map((stat) => (
-                        <div key={stat.label} className="flex flex-col items-center">
-                            <span className="text-3xl font-extrabold gradient-text">{stat.value}</span>
-                            <span className="text-sm text-white/50 mt-1">{stat.label}</span>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="mt-20 relative">
-                    <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-black via-transparent to-transparent z-10 pointer-events-none rounded-3xl transition-all duration-500" />
-                    <div className="glass-card relative overflow-hidden rounded-2xl bg-white dark:bg-[#0d0d14] border border-gray-200/50 dark:border-white/10 shadow-2xl shadow-rose-900/10 dark:shadow-rose-900/20 mx-auto max-w-4xl transition-all">
-                        <div className="bg-gray-50 dark:bg-[#0d0d14] px-4 py-3 flex items-center gap-3 border-b border-gray-200 dark:border-white/10 transition-colors">
-                            <div className="flex gap-1.5">
-                                <div className="w-3 h-3 rounded-full bg-red-500" />
-                                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                                <div className="w-3 h-3 rounded-full bg-green-500" />
-                            </div>
-                            <div className="flex-1 bg-white/5 rounded-md h-6 mx-8 flex items-center px-3">
-                                <span className="text-xs text-white/40">app.shortIQ.ai/dashboard</span>
-                            </div>
-                        </div>
-
-                        <div className="bg-white dark:bg-[#0a0a12] p-6 grid grid-cols-3 gap-4 min-h-[300px] transition-colors">
-                            <div className="col-span-1 space-y-3">
-                                {["📋 Projects", "🎬 Generate", "📅 Schedule", "📊 Analytics", "⚙️ Settings"].map((item) => (
-                                    <div
-                                        key={item}
-                                        className={`px-3 py-2 rounded-lg text-sm text-center transition-colors ${item.includes("Generate")
-                                            ? "bg-rose-600/10 dark:bg-rose-600/30 text-rose-600 dark:text-rose-300 font-semibold"
-                                            : "text-gray-400 dark:text-white/50 hover:bg-gray-50 dark:hover:bg-white/5"
-                                            }`}
-                                    >
-                                        {item}
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="col-span-2 space-y-4">
-                                <div className="bg-white/5 rounded-xl p-4">
-                                    <div className="text-xs text-white/40 mb-2">AI Prompt</div>
-                                    <div className="text-sm text-white/80 font-mono text-left">
-                                        "Create a 30-second product showcase for my tech startup with upbeat music..."
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-3">
-                                    {["YouTube", "Instagram", "TikTok", "Facebook"].map((p) => (
-                                        <div key={p} className="bg-white/5 rounded-lg px-3 py-2 flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full bg-green-400" />
-                                            <span className="text-xs text-white/70">{p} — Scheduled</span>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="bg-gradient-to-r from-indigo-600/20 to-rose-600/20 rounded-xl p-4 border border-indigo-500/20">
-                                    <div className="text-xs text-indigo-300 mb-1 text-left">🎬 Generating video...</div>
-                                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                        <div className="h-full w-3/4 bg-gradient-to-r from-indigo-500 to-rose-500 rounded-full animate-pulse" />
-                                    </div>
-                                    <div className="text-xs text-white/40 mt-1 text-left">75% complete</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>

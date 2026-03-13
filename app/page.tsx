@@ -2,6 +2,7 @@ import FloatingOrbs from "@/components/landing/FloatingOrbs";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import PlatformsSection from "@/components/landing/PlatformsSection";
+import DashboardPreview from "@/components/landing/DashboardPreview";
 import FeaturesSection from "@/components/landing/FeaturesSection";
 import HowItWorksSection from "@/components/landing/HowItWorksSection";
 import PricingSection from "@/components/landing/PricingSection";
@@ -11,12 +12,13 @@ import Footer from "@/components/landing/Footer";
 
 export default function Home() {
   return (
-    <div className="shortiq-root dark:bg-gray-950 transition-colors duration-500">
+    <div className="shortiq-root transition-colors duration-500">
       <FloatingOrbs />
       <Navbar />
       <main>
         <HeroSection />
         <PlatformsSection />
+        <DashboardPreview />
         <FeaturesSection />
         <HowItWorksSection />
         <PricingSection />

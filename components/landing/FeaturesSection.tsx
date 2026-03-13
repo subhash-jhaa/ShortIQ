@@ -18,17 +18,17 @@ const features = [
         icon: <Bot className="w-6 h-6" />,
         title: "AI Script & Video Generation",
         desc: "Describe your idea in plain English and watch ShortIQ transform it into a fully produced short video with voiceover, captions, and stock footage — in minutes.",
-        color: "bg-indigo-600",
-        shadow: "shadow-indigo-500/20",
-        ring: "ring-indigo-500/30",
-        border: "border-indigo-500/20",
-        gradient: "from-indigo-500/20 to-indigo-500/5",
+        color: "bg-primary",
+        shadow: "shadow-primary/20",
+        ring: "ring-primary/30",
+        border: "border-primary/20",
+        gradient: "from-primary/20 to-primary/5",
         num: "01",
         graphic: (
             <div className="w-full h-full p-4 md:p-6 flex flex-col justify-center gap-4 animate-in fade-in duration-1000">
                 <div className="w-full bg-white dark:bg-[#0d0d14] rounded-xl border border-gray-200 dark:border-white/10 p-3 shadow-sm transform -rotate-2 hover:rotate-0 transition-transform duration-500">
                     <div className="flex gap-2 mb-2">
-                        <div className="w-2 h-2 rounded-full bg-rose-400"></div>
+                        <div className="w-2 h-2 rounded-full bg-primary/40"></div>
                         <div className="w-2 h-2 rounded-full bg-amber-400"></div>
                         <div className="w-2 h-2 rounded-full bg-green-400"></div>
                     </div>
@@ -36,14 +36,14 @@ const features = [
                         <span className="text-gray-400 dark:text-white/40">&gt;</span> /generate video "Scary Stories"
                     </div>
                 </div>
-                <div className="w-[90%] self-end bg-indigo-500/10 dark:bg-indigo-500/20 rounded-xl border border-indigo-200 dark:border-indigo-500/30 p-3 backdrop-blur-md transform rotate-1 hover:rotate-0 transition-transform duration-500 delay-100">
+                <div className="w-[90%] self-end bg-primary/10 dark:bg-primary/20 rounded-xl border border-primary/20 p-3 backdrop-blur-md transform rotate-1 hover:rotate-0 transition-transform duration-500 delay-100">
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shrink-0">
                             <Bot size={16} />
                         </div>
                         <div className="w-full space-y-2">
-                            <div className="h-2 bg-indigo-200 dark:bg-indigo-400/30 rounded-full w-3/4 animate-pulse"></div>
-                            <div className="h-2 bg-indigo-200 dark:bg-indigo-400/30 rounded-full w-1/2 animate-pulse delay-75"></div>
+                            <div className="h-2 bg-primary/20 rounded-full w-3/4 animate-pulse"></div>
+                            <div className="h-2 bg-primary/20 rounded-full w-1/2 animate-pulse delay-75"></div>
                         </div>
                     </div>
                 </div>
@@ -54,18 +54,18 @@ const features = [
         icon: <Calendar className="w-6 h-6" />,
         title: "Smart Auto-Scheduling",
         desc: "Our AI analyses your audience's behaviour and schedules your content at peak engagement times for maximum reach on every platform.",
-        color: "bg-rose-500",
-        shadow: "shadow-rose-500/20",
-        ring: "ring-rose-500/30",
-        border: "border-rose-500/20",
-        gradient: "from-rose-500/20 to-rose-500/5",
+        color: "bg-primary",
+        shadow: "shadow-primary/20",
+        ring: "ring-primary/30",
+        border: "border-primary/20",
+        gradient: "from-primary/20 to-primary/5",
         num: "02",
         graphic: (
             <div className="w-full h-full p-6 flex items-center justify-center relative">
                 <div className="w-full max-w-[240px] bg-white dark:bg-[#0d0d14] rounded-2xl border border-gray-200 dark:border-white/10 p-4 shadow-xl z-10 animate-fade-in-up">
                     <div className="flex items-center justify-between mb-4">
                         <h4 className="font-bold text-xs text-gray-900 dark:text-white">Next Uploads</h4>
-                        <Calendar size={14} className="text-rose-500" />
+                        <Calendar size={14} className="text-primary" />
                     </div>
                     <div className="space-y-3">
                         {[
@@ -76,15 +76,15 @@ const features = [
                                 <div className="text-[10px] font-bold text-gray-500 dark:text-white/40 w-14">{item.time}</div>
                                 <div className="flex-1">
                                     <div className="text-xs font-bold text-gray-800 dark:text-white/90 truncate">{item.title}</div>
-                                    <div className="text-[9px] text-rose-500 font-medium uppercase tracking-wider">{item.status}</div>
+                                    <div className="text-[9px] text-primary font-medium uppercase tracking-wider">{item.status}</div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
                 {/* Floating elements */}
-                <div className="absolute top-8 right-8 w-12 h-12 bg-indigo-500/20 rounded-xl backdrop-blur-md border border-indigo-500/30 flex items-center justify-center animate-bounce-short delay-200">
-                    <Globe size={20} className="text-indigo-500" />
+                <div className="absolute top-8 right-8 w-12 h-12 bg-primary/20 rounded-xl backdrop-blur-md border border-primary/20 flex items-center justify-center animate-bounce-short delay-200">
+                    <Globe size={20} className="text-primary" />
                 </div>
             </div>
         )
@@ -93,11 +93,11 @@ const features = [
         icon: <Palette className="w-6 h-6" />,
         title: "Brand Customisation",
         desc: "Add your logo, brand colours, custom fonts and watermarks. Maintain a consistent identity across all your video content automatically.",
-        color: "bg-indigo-600",
-        shadow: "shadow-indigo-500/20",
-        ring: "ring-indigo-500/30",
-        border: "border-indigo-500/20",
-        gradient: "from-indigo-500/20 to-indigo-500/5",
+        color: "bg-primary",
+        shadow: "shadow-primary/20",
+        ring: "ring-primary/30",
+        border: "border-primary/20",
+        gradient: "from-primary/20 to-primary/5",
         num: "03",
         graphic: (
             <div className="w-full h-full p-6 relative flex items-center justify-center">
@@ -111,10 +111,10 @@ const features = [
                 </div>
                 {/* Floating Tools */}
                 <div className="absolute right-6 top-10 flex flex-col gap-3 z-20 transform rotate-6 animate-float">
-                    <div className="w-10 h-10 rounded-full bg-white dark:bg-[#0d0d14] shadow-lg border border-gray-200 dark:border-white/10 flex items-center justify-center text-rose-500">
+                    <div className="w-10 h-10 rounded-full bg-white dark:bg-[#0d0d14] shadow-lg border border-gray-200 dark:border-white/10 flex items-center justify-center text-primary">
                         <Palette size={18} />
                     </div>
-                    <div className="w-10 h-10 rounded-full bg-white dark:bg-[#0d0d14] shadow-lg border border-gray-200 dark:border-white/10 flex items-center justify-center text-indigo-500">
+                    <div className="w-10 h-10 rounded-full bg-white dark:bg-[#0d0d14] shadow-lg border border-gray-200 dark:border-white/10 flex items-center justify-center text-primary">
                         <Type size={18} />
                     </div>
                     <div className="w-10 h-10 rounded-full bg-white dark:bg-[#0d0d14] shadow-lg border border-gray-200 dark:border-white/10 flex items-center justify-center text-amber-500">
@@ -128,11 +128,11 @@ const features = [
         icon: <BarChart3 className="w-6 h-6" />,
         title: "Cross-Platform Analytics",
         desc: "Unified dashboard showing views, watch time, engagement, and conversions across YouTube, Instagram, TikTok, Facebook, and email — all in one place.",
-        color: "bg-rose-500",
-        shadow: "shadow-rose-500/20",
-        ring: "ring-rose-500/30",
-        border: "border-rose-500/20",
-        gradient: "from-rose-500/20 to-rose-500/5",
+        color: "bg-primary",
+        shadow: "shadow-primary/20",
+        ring: "ring-primary/30",
+        border: "border-primary/20",
+        gradient: "from-primary/20 to-primary/5",
         num: "04",
         graphic: (
             <div className="w-full h-full p-6 flex flex-col justify-center">
@@ -151,7 +151,7 @@ const features = [
                         {[40, 70, 45, 90, 65, 100, 85].map((height, i) => (
                             <div key={i} className="w-full bg-gray-100 dark:bg-white/5 rounded-t-sm relative group overflow-hidden" style={{ height: '100%' }}>
                                 <div
-                                    className="absolute bottom-0 w-full bg-gradient-to-t from-rose-600 to-rose-400 rounded-t-sm transition-all duration-1000"
+                                    className="absolute bottom-0 w-full bg-primary rounded-t-sm transition-all duration-1000"
                                     style={{ height: `${height}%` }}
                                 />
                             </div>
@@ -165,11 +165,11 @@ const features = [
         icon: <Globe className="w-6 h-6" />,
         title: "Auto-Translate & Dub",
         desc: "Expand your reach globally. ShortIQ auto-translates scripts and dubs voiceovers into 50+ languages with natural-sounding AI voices.",
-        color: "bg-indigo-600",
-        shadow: "shadow-indigo-500/20",
-        ring: "ring-indigo-500/30",
-        border: "border-indigo-500/20",
-        gradient: "from-indigo-500/20 to-indigo-500/5",
+        color: "bg-primary",
+        shadow: "shadow-primary/20",
+        ring: "ring-primary/30",
+        border: "border-primary/20",
+        gradient: "from-primary/20 to-primary/5",
         num: "05",
         graphic: (
             <div className="w-full h-full p-6 flex items-center justify-center relative">
@@ -180,9 +180,9 @@ const features = [
                     </div>
 
                     <div className="flex flex-col gap-1 items-center">
-                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-ping"></div>
-                        <div className="w-8 h-px bg-indigo-200 dark:bg-indigo-500/30"></div>
-                        <div className="text-[10px] font-bold text-indigo-500">AI</div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></div>
+                        <div className="w-8 h-px bg-primary/30"></div>
+                        <div className="text-[10px] font-bold text-primary">AI</div>
                     </div>
 
                     <div className="flex flex-col gap-3 transform translate-y-4">
@@ -200,7 +200,7 @@ const features = [
                 <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
                     <div className="flex items-center gap-1">
                         {[1, 2, 3, 4, 5, 4, 3, 2, 1, 2, 3, 4, 3, 2, 1].map((h, i) => (
-                            <div key={i} className="w-1.5 bg-indigo-500 rounded-full" style={{ height: `${h * 8}px` }}></div>
+                            <div key={i} className="w-1.5 bg-primary rounded-full" style={{ height: `${h * 8}px` }}></div>
                         ))}
                     </div>
                 </div>
@@ -211,11 +211,11 @@ const features = [
         icon: <Zap className="w-6 h-6" />,
         title: "Bulk Video Generation",
         desc: "Create tens or hundreds of unique variations of your video for A/B testing, repurposing, or rolling out entire campaign series at once.",
-        color: "bg-rose-500",
-        shadow: "shadow-rose-500/20",
-        ring: "ring-rose-500/30",
-        border: "border-rose-500/20",
-        gradient: "from-rose-500/20 to-rose-500/5",
+        color: "bg-primary",
+        shadow: "shadow-primary/20",
+        ring: "ring-primary/30",
+        border: "border-primary/20",
+        gradient: "from-primary/20 to-primary/5",
         num: "06",
         graphic: (
             <div className="w-full h-full p-2 relative overflow-hidden flex items-center justify-center">
@@ -223,7 +223,7 @@ const features = [
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
                         <div key={i} className={`
                             w-16 h-20 rounded-lg shadow-lg border border-white/20
-                            ${i % 2 === 0 ? 'bg-indigo-500/20 dark:bg-indigo-500/40' : 'bg-rose-500/20 dark:bg-rose-500/40'}
+                            bg-primary/20 dark:bg-primary/40
                             flex flex-col
                         `}>
                             <div className="flex-1 bg-gray-900 overflow-hidden m-1 rounded relative">
@@ -236,7 +236,7 @@ const features = [
                 </div>
                 {/* Center overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#f8fafc] dark:from-[#0a0a0b] via-transparent to-transparent"></div>
-                <div className="absolute z-10 w-12 h-12 rounded-full bg-white dark:bg-[#0d0d14] shadow-2xl border border-gray-200 dark:border-white/10 flex items-center justify-center text-rose-500 animate-pulse">
+                <div className="absolute z-10 w-12 h-12 rounded-full bg-white dark:bg-[#0d0d14] shadow-2xl border border-gray-200 dark:border-white/10 flex items-center justify-center text-primary animate-pulse">
                     <CheckCircle2 size={24} />
                 </div>
             </div>
@@ -263,7 +263,7 @@ export default function FeaturesSection() {
                             className="sticky group"
                             style={{ top: `${130 + (i * 20)}px` }}
                         >
-                            <div className={`relative overflow-hidden rounded-3xl bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl p-8 shadow-2xl transition-all duration-500 ease-in-out md:p-12 border border-gray-200/50 ring-1 ${f.ring} max-w-5xl mx-auto group-hover:scale-[1.01]`}>
+                            <div className={`relative overflow-hidden rounded-3xl bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl p-8 shadow-2xl transition-all duration-500 ease-in-out md:p-12 border border-gray-200/50 ring-1 ${f.ring} max-w-5xl mx-auto group-hover:bg-primary/5 dark:group-hover:bg-primary/10 group-hover:scale-[1.01]`}>
                                 <div className="grid gap-12 md:grid-cols-2 items-center">
                                     <div className="order-1">
                                         <div className={`relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-50 dark:bg-white/[0.02] shadow-inner bg-gradient-to-br ${f.gradient} border border-gray-200 dark:border-white/10 flex items-center justify-center`}>
@@ -280,7 +280,7 @@ export default function FeaturesSection() {
                                         <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${f.color} mb-6 shadow-lg ${f.shadow} text-white`}>
                                             {f.icon}
                                         </div>
-                                        <h3 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white transition-colors">{f.title}</h3>
+                                        <h3 className="mb-4 text-3xl font-[800] text-gray-900 dark:text-white transition-colors tracking-tight">{f.title}</h3>
                                         <p className="text-lg leading-relaxed text-gray-600 dark:text-white/60 mb-8 transition-colors">{f.desc}</p>
                                         <div className="flex items-center gap-2 text-sm font-bold text-gray-900 dark:text-white transition-colors tracking-widest opacity-60">
                                             <span className="h-px w-8 bg-gray-900 dark:bg-white"></span>
