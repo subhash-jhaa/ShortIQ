@@ -38,17 +38,88 @@ export default function HeroSection() {
     }, []);
 
     return (
-        <section className="relative min-h-screen flex items-center justify-center pt-40 overflow-hidden">
+        <section className="relative min-h-screen flex items-center justify-center pt-12 overflow-hidden">
             <div className="absolute inset-0 hero-grid opacity-30 pointer-events-none transition-opacity duration-500" />
-            
-            {/* Background Orbs from Mockup */}
-            <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] animate-pulse" />
-            <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] -delay-1000" />
-            
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[800px] h-[800px] bg-primary/[0.03] rounded-full blur-[150px]" />
-            </div>
 
+            {/* Decorative Static Icons */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
+                <svg className="hero-svg-icon left-[8%] top-[15%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <rect className="ico" x="-22" y="-14" width="32" height="14" rx="4"/>
+                        <circle className="ico" cx="-6" cy="-2" r="8"/>
+                        <circle className="ico" cx="-6" cy="-2" r="4"/>
+                        <rect className="ico" x="-20" y="-22" width="10" height="8" rx="2"/>
+                        <circle className="ico-fill2" cx="18" cy="-8" r="3" style={{ opacity: 1 }}/>
+                        <line className="ico" x1="-6" y1="10" x2="-14" y2="26"/>
+                        <line className="ico" x1="-6" y1="10" x2="-6" y2="26"/>
+                        <line className="ico" x1="-6" y1="10" x2="2" y2="26"/>
+                    </g>
+                </svg>
+
+                <svg className="hero-svg-icon left-[15%] bottom-[15%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <rect className="ico" x="-24" y="-20" width="48" height="42" rx="4"/>
+                        <line className="ico" x1="-24" y1="-8" x2="24" y2="-8"/>
+                        <line className="ico" x1="-12" y1="-24" x2="-12" y2="-14"/>
+                        <line className="ico" x1="12" y1="-24" x2="12" y2="-14"/>
+                        <circle className="ico-fill2" cx="-14" cy="0" r="2.5" style={{ opacity: 1 }}/>
+                        <circle className="ico-fill2" cx="-2" cy="0" r="2.5" style={{ opacity: 1 }}/>
+                        <circle className="ico-fill2" cx="10" cy="0" r="2.5" style={{ opacity: 1 }}/>
+                        <circle className="ico-fill2" cx="-14" cy="10" r="2.5" style={{ opacity: 1 }}/>
+                        <circle className="ico-fill2" cx="-2" cy="10" r="2.5" style={{ opacity: 1 }}/>
+                        <circle className="ico" cx="14" cy="12" r="9" style={{ fill: 'var(--brand-primary)', fillOpacity: 0.2 }}/>
+                        <line className="ico" x1="14" y1="12" x2="14" y2="7"/>
+                        <line className="ico" x1="14" y1="12" x2="18" y2="14"/>
+                    </g>
+                </svg>
+
+                <svg className="hero-svg-icon left-[28%] top-[12%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <path className="ico" d="M-20,8 Q-24,-2 -14,-8 Q-14,-22 0,-22 Q12,-22 16,-12 Q24,-14 24,0 Q24,12 14,12 L-16,12 Q-24,12 -20,4 Z"/>
+                        <line className="ico" x1="0" y1="8" x2="0" y2="-4"/>
+                        <polyline className="ico" points="-7,0 0,-8 7,0"/>
+                    </g>
+                </svg>
+
+                <svg className="hero-svg-icon right-[8%] top-[15%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <rect className="ico" x="-8" y="-22" width="16" height="24" rx="8"/>
+                        <path className="ico" d="M-18,0 Q-18,16 0,16 Q18,16 18,0"/>
+                        <line className="ico" x1="0" y1="16" x2="0" y2="24"/>
+                        <line className="ico" x1="-10" y1="24" x2="10" y2="24"/>
+                        <path className="ico" d="M-32,-6 Q-28,-14 -32,-22" style={{ opacity: 0.5, stroke: 'var(--brand-primary)' }}/>
+                        <path className="ico" d="M32,-6 Q28,-14 32,-22" style={{ opacity: 0.5, stroke: 'var(--brand-primary)' }}/>
+                    </g>
+                </svg>
+
+                <svg className="hero-svg-icon right-[15%] bottom-[15%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <rect className="ico" x="-26" y="-18" width="52" height="36" rx="4"/>
+                        <rect className="ico-fill2" x="-18" y="4" width="20" height="5" rx="2" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="6" y="4" width="10" height="5" rx="2" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="-18" y="12" width="14" height="5" rx="2" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="0" y="12" width="16" height="5" rx="2" style={{ opacity: 0.9 }}/>
+                        <polygon className="ico" points="-8,-12 8,-4 -8,4" style={{ fill: 'var(--brand-primary)', fillOpacity: 0.25 }}/>
+                    </g>
+                </svg>
+
+                <svg className="hero-svg-icon right-[28%] top-[12%] w-36 h-36" viewBox="0 0 160 160">
+                    <g transform="translate(80, 80)">
+                        <circle className="ico-fill" cx="0" cy="0" r="44"/>
+                        <rect className="ico" x="-26" y="-16" width="52" height="32" rx="3"/>
+                        <rect className="ico-fill2" x="-22" y="-12" width="6" height="8" rx="1" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="-22" y="4" width="6" height="8" rx="1" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="16" y="-12" width="6" height="8" rx="1" style={{ opacity: 0.9 }}/>
+                        <rect className="ico-fill2" x="16" y="4" width="6" height="8" rx="1" style={{ opacity: 0.9 }}/>
+                        <polygon className="ico" points="-6,-10 10,0 -6,10" style={{ fill: 'var(--brand-primary)', fillOpacity: 0.3 }}/>
+                    </g>
+                </svg>
+            </div>
             <div className="relative max-w-6xl mx-auto px-6 text-center">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium mb-8 animate-fade-up">
                     <span className="relative flex h-2 w-2">
@@ -68,112 +139,16 @@ export default function HeroSection() {
                     Transform long videos into engaging short-form content for TikTok, Reels, & Shorts automatically. Schedule posts with powerful AI insights.
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20 animate-fade-up animation-delay-300">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up animation-delay-300">
                     <Link href="/sign-up" className="btn-primary px-10 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-primary/20 flex items-center gap-2 transition-all hover:scale-105 active:scale-95">
                         Start Creating Free
                     </Link>
                     <a
                         href="#how-it-works"
-                        className="px-10 py-4 rounded-2xl text-base font-bold text-gray-900 dark:text-white border-2 border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/5 transition-all flex items-center gap-2"
+                        className="px-10 py-4 rounded-2xl text-base font-bold text-gray-900 dark:text-white border-2 border-primary/20 hover:bg-primary/5 transition-all flex items-center gap-2"
                     >
                         Book a Demo
                     </a>
-                </div>
-
-                <div className="mt-20 relative">
-                    <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white dark:from-[#0a0a0b] via-white/80 dark:via-[#0a0a0b]/80 to-transparent z-20 pointer-events-none transition-all duration-500" />
-                    <div className="glass-card relative overflow-hidden rounded-[40px] bg-white dark:bg-[#0d0d14] border-8 border-gray-100 dark:border-white/5 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] dark:shadow-primary/10 mx-auto max-w-5xl transition-all">
-                        {/* Browser Window Header */}
-                        <div className="bg-gray-50 dark:bg-[#0d0d14] px-6 py-4 flex items-center gap-4 border-b border-gray-100 dark:border-white/10 transition-colors">
-                            <div className="flex gap-2">
-                                <div className="w-3 h-3 rounded-full bg-[#FF5F57]" />
-                                <div className="w-3 h-3 rounded-full bg-[#FEBC2E]" />
-                                <div className="w-3 h-3 rounded-full bg-[#28C840]" />
-                            </div>
-                            <div className="flex-1 bg-gray-200/50 dark:bg-white/5 rounded-xl h-8 mx-12 flex items-center px-4">
-                                <span className="text-[11px] text-gray-500 dark:text-white/40 font-bold uppercase tracking-widest">Dashboard • ShortIQ.ai</span>
-                            </div>
-                        </div>
-
-                        {/* Dashboard Simulation */}
-                        <div className="bg-[#fcfcfd] dark:bg-[#0a0a12] p-8 grid grid-cols-12 gap-6 transition-colors min-h-[500px]">
-                            {/* Left Widget - Timeline */}
-                            <div className="col-span-12 lg:col-span-8 space-y-6">
-                                <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
-                                    <div className="flex items-center justify-between mb-6">
-                                        <h3 className="text-sm font-[800] text-gray-900 dark:text-white tracking-tight uppercase">Generation Timeline</h3>
-                                        <div className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-tighter">AI Active</div>
-                                    </div>
-                                    <div className="flex items-center gap-4">
-                                        {[1, 2, 3, 4, 5].map((i) => (
-                                            <div key={i} className={`flex-1 aspect-video rounded-xl border border-gray-100 dark:border-white/10 overflow-hidden relative group cursor-pointer ${i === 3 ? 'ring-2 ring-primary shadow-lg scale-105' : 'opacity-40 hover:opacity-100 transition-opacity'}`}>
-                                                <div className="absolute inset-0 bg-gray-900" />
-                                                {i === 3 && (
-                                                    <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
-                                                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                                                            <div className="w-0 h-0 border-l-[6px] border-l-white border-y-[4px] border-y-transparent ml-1" />
-                                                        </div>
-                                                    </div>
-                                                )}
-                                                <div className="absolute bottom-2 left-2 right-2 h-1 bg-white/20 rounded-full overflow-hidden">
-                                                    <div className={`h-full bg-primary ${i === 3 ? 'w-[75%]' : 'w-0'}`} />
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-6">
-                                    <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
-                                        <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">Performance Analytics</div>
-                                        <div className="flex items-end gap-2 h-24">
-                                            {[40, 70, 45, 90, 65, 100, 85].map((h, i) => (
-                                                <div key={i} className="flex-1 bg-gray-100 dark:bg-white/5 rounded-t-lg relative group">
-                                                    <div className="absolute bottom-0 w-full bg-primary/40 group-hover:bg-primary transition-all rounded-t-lg duration-500" style={{ height: `${h}%` }} />
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
-                                        <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">Engagement Rate</div>
-                                        <div className="flex items-center justify-center h-24">
-                                            <div className="w-20 h-20 rounded-full border-[8px] border-gray-100 dark:border-white/5 relative flex items-center justify-center">
-                                                <svg className="absolute inset-0 transform -rotate-90">
-                                                    <circle cx="40" cy="40" r="32" fill="none" stroke="currentColor" strokeWidth="8" strokeDasharray="200" strokeDashoffset="40" className="text-primary" />
-                                                </svg>
-                                                <span className="text-lg font-black text-gray-900 dark:text-white">82%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Right Widget - Post Schedule */}
-                            <div className="col-span-12 lg:col-span-4 space-y-6 text-left">
-                                <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm h-full">
-                                    <div className="text-sm font-[800] text-gray-900 dark:text-white tracking-tight uppercase mb-6">Upcoming Posts</div>
-                                    <div className="space-y-4">
-                                        {["TikTok Series #14", "Instagram Reel #2", "YouTube Short"].map((post, i) => (
-                                            <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-gray-100 dark:border-white/5">
-                                                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
-                                                    <span className="text-xs font-black">{i + 1}</span>
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="text-xs font-black text-gray-800 dark:text-white/90">{post}</div>
-                                                    <div className="text-[10px] font-bold text-gray-500 dark:text-white/40 mt-0.5">Tomorrow, 9:00 AM</div>
-                                                </div>
-                                                <div className="w-2 h-2 rounded-full bg-green-500" />
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="mt-8 p-6 rounded-3xl bg-primary/5 dark:bg-primary/10 border border-primary/20 text-center">
-                                        <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">Queue Health</div>
-                                        <div className="text-2xl font-[900] text-primary transition-colors">Excellent</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>

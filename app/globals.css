@@ -8,7 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-plus-jakarta), var(--font-geist-sans), ui-sans-serif, system-ui;
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-script: 'Pacifico', cursive;
 
@@ -48,80 +48,98 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 0.625rem;
 
-  /* Brand Variables - Precise Mockup Palette */
-  --brand-primary: oklch(0.64 0.12 18);
-  --brand-primary-hover: oklch(0.58 0.12 18);
-  --brand-primary-dim: oklch(0.64 0.12 18 / 0.1);
-
-  --background: oklch(0.99 0.005 18);
-  --foreground: oklch(0.15 0.02 18);
+  /* Brand Variables - Premium Rose Theme */
+  --brand-primary: oklch(0.6 0.2 18);
+  --brand-primary-hover: oklch(0.55 0.2 18);
+  --brand-primary-dim: oklch(0.6 0.2 18 / 0.1);
+  
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0.02 18);
+  --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.02 18);
+  --popover-foreground: oklch(0.145 0 0);
 
-  /* Map Primary to the mockup's muted rose color */
+  /* Map Primary to the unified brand color */
   --primary: var(--brand-primary);
   --primary-foreground: oklch(0.99 0.005 18);
 
-  --secondary: oklch(0.97 0.01 18);
-  --secondary-foreground: oklch(0.2 0.02 18);
-  --muted: oklch(0.96 0.01 18);
-  --muted-foreground: oklch(0.5 0.02 18);
-  --accent: var(--brand-primary-dim);
-  --accent-foreground: var(--brand-primary);
-  --destructive: oklch(0.5 0.2 18);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: white;
-  --border: oklch(0.92 0.01 18);
-  --input: oklch(0.92 0.01 18);
-  --ring: var(--primary);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: var(--brand-primary);
 
-  --sidebar: oklch(0.99 0.005 18);
-  --sidebar-foreground: oklch(0.15 0.02 18);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: var(--brand-primary);
   --sidebar-primary-foreground: white;
-  --sidebar-accent: oklch(0.97 0.01 18);
-  --sidebar-accent-foreground: oklch(0.15 0.02 18);
-  --sidebar-border: oklch(0.92 0.01 18);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: var(--brand-primary);
+  
+  --chart-1: oklch(0.81 0.117 11.638);
+  --chart-2: oklch(0.645 0.246 16.439);
+  --chart-3: oklch(0.586 0.253 17.585);
+  --chart-4: oklch(0.514 0.222 16.935);
+  --chart-5: oklch(0.455 0.188 13.697);
 }
 
 .dark {
-  --background: oklch(0.12 0.015 18);
-  --foreground: oklch(0.98 0.005 18);
-  --card: oklch(0.15 0.015 18);
-  --card-foreground: oklch(0.98 0.005 18);
-  --popover: oklch(0.15 0.015 18);
-  --popover-foreground: oklch(0.98 0.005 18);
+  --background: oklch(10.37% 0.014 18); /* Deeper, richer dark */
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(12.5% 0.015 18);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(12.5% 0.015 18);
+  --popover-foreground: oklch(0.985 0 0);
 
   --primary: var(--brand-primary);
   --primary-foreground: oklch(0.99 0.005 18);
 
-  --secondary: oklch(0.2 0.015 18);
-  --secondary-foreground: oklch(0.98 0.005 18);
-  --muted: oklch(0.18 0.015 18);
-  --muted-foreground: oklch(0.65 0.01 18);
+  --secondary: oklch(16% 0.015 18);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(14% 0.015 18);
+  --muted-foreground: oklch(0.708 0 0);
   --accent: var(--brand-primary-dim);
   --accent-foreground: var(--brand-primary);
-  --destructive: oklch(0.4 0.15 20);
+  --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: white;
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: var(--primary);
+  --ring: var(--brand-primary);
 
-  --sidebar: oklch(0.14 0.015 18);
-  --sidebar-foreground: oklch(0.98 0.005 18);
+  --sidebar: oklch(12% 0.015 18);
+  --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: var(--brand-primary);
   --sidebar-primary-foreground: white;
-  --sidebar-accent: oklch(0.18 0.015 18);
-  --sidebar-accent-foreground: white;
+  --sidebar-accent: oklch(16% 0.015 18);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: var(--brand-primary);
+  
+  --chart-1: oklch(0.81 0.117 11.638);
+  --chart-2: oklch(0.645 0.246 16.439);
+  --chart-3: oklch(0.586 0.253 17.585);
+  --chart-4: oklch(0.514 0.222 16.935);
+  --chart-5: oklch(0.455 0.188 13.697);
 }
 
 @layer base {
@@ -142,7 +160,6 @@
   background-size: 24px 24px;
 }
 
-
 .shortiq-root {
   background: var(--background);
   min-height: 100vh;
@@ -162,59 +179,6 @@
 
 .light .shortiq-root {
   --grid-dot: oklch(from var(--brand-primary) l c h / 0.08);
-}
-
-/* ─── Floating Orbs ──────────────────────────────────────────────────────── */
-.orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(140px);
-  opacity: 0.2;
-  animation: float-orb 20s ease-in-out infinite;
-  background: var(--brand-primary);
-  pointer-events: none;
-}
-
-.orb-1 {
-  width: 700px;
-  height: 700px;
-  top: -200px;
-  left: -100px;
-  opacity: 0.1;
-}
-
-.orb-2 {
-  width: 500px;
-  height: 500px;
-  top: 30%;
-  right: -100px;
-  opacity: 0.08;
-  animation-delay: -7s;
-}
-
-.orb-3 {
-  width: 450px;
-  height: 450px;
-  bottom: 10%;
-  left: 20%;
-  opacity: 0.05;
-  animation-delay: -14s;
-}
-
-@keyframes float-orb {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  33% {
-    transform: translate(40px, -30px) scale(1.05);
-  }
-
-  66% {
-    transform: translate(-30px, 40px) scale(0.95);
-  }
 }
 
 /* ─── Modern Grid ──────────────────────────────────────────────────────── */
@@ -293,7 +257,7 @@
 }
 
 .glass-card:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--brand-primary-dim);
   border-color: var(--brand-primary);
   box-shadow: 0 20px 60px var(--brand-primary-dim);
 }
@@ -397,4 +361,34 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--brand-primary-hover);
+}
+
+/* ─── Hero SVG Background Icons ────────────────────────────────────────── */
+.hero-svg-icon {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1; /* Ensure they are above the grid but below content */
+  opacity: 0.35;
+  transition: opacity 0.5s ease;
+}
+
+.dark .hero-svg-icon {
+  opacity: 0.25;
+}
+
+.hero-svg-icon .ico {
+  fill: none;
+  stroke: var(--brand-primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hero-svg-icon .ico-fill {
+  fill: var(--brand-primary);
+  fill-opacity: 0.05;
+}
+
+.hero-svg-icon .ico-fill2 {
+  fill: var(--brand-primary);
 }
