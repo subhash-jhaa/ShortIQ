@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import FloatingOrbs from "@/components/landing/FloatingOrbs";
 
 interface AuthLayoutProps {
     children: React.ReactNode;
@@ -20,19 +21,22 @@ const steps = [
 
 export default function AuthLayout({ children, title, subtitle, heading, headingSubtitle, sidebarGradient }: AuthLayoutProps) {
     return (
-        <div className="flex min-h-screen w-full flex-col md:flex-row bg-white dark:bg-gray-950 transition-colors font-sans selection:bg-indigo-100 selection:text-indigo-900">
-            {/* Left Side - Gradient Branding */}
-            <div className={`relative hidden w-full md:flex md:w-[42%] flex-col justify-between ${sidebarGradient || "bg-gradient-to-br from-indigo-600 via-violet-600 to-rose-500"} p-12 lg:p-16 text-white overflow-hidden`}>
-                {/* Subtle dark overlay for depth */}
-                <div className="absolute inset-0 bg-black/10" />
+        <div className="shortiq-root min-h-screen flex flex-col md:flex-row transition-colors selection:bg-rose-100 selection:text-rose-900 border-none!">
+            <FloatingOrbs />
+            <div className="absolute inset-0 modern-grid opacity-30 pointer-events-none" />
+
+            {/* Left Side - Branding */}
+            <div className={`relative hidden w-full md:flex md:w-[42%] flex-col justify-between p-12 lg:p-16 overflow-hidden border-r border-gray-200 dark:border-white/10`}>
+                {/* Subtle overlay for depth and backdrop blur consistency */}
+                <div className="absolute inset-0 bg-white/30 dark:bg-black/20 backdrop-blur-md" />
 
                 {/* Top content */}
                 <div className="relative z-10 flex flex-col gap-16">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 group w-fit">
+                    <Link href="/" className="flex items-center gap-2.5 font-bold text-xl transition-all hover:scale-105 group w-fit relative z-10">
                         <div className="flex items-center justify-center rounded-xl transition-all">
-                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:animate-pulse">
-                                <rect width="24" height="24" rx="6" fill="url(#rose_anim_auth)" />
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="group-hover:animate-pulse">
+                                <rect width="24" height="24" rx="6" fill="var(--primary)" />
                                 <path d="M18 5H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                                 <path d="M9 12H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                                 <path d="M9 19H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
@@ -40,29 +44,19 @@ export default function AuthLayout({ children, title, subtitle, heading, heading
                                     d="M13 12.003a0.7 0.7 0 0 1 1.062-.597l3.498 2.098a0.7 0.7 0 0 1 0 1.203l-3.498 2.098a0.7 0.7 0 0 1-1.062-.598z"
                                     fill="white"
                                 />
-                                <defs>
-                                    <linearGradient id="rose_anim_auth" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                                        <stop stopColor="#fb7185">
-                                            <animate attributeName="stop-color" values="#fb7185; #fda4af; #fb7185" dur="3s" repeatCount="indefinite" />
-                                        </stop>
-                                        <stop offset="1" stopColor="#e11d48">
-                                            <animate attributeName="stop-color" values="#e11d48; #be123c; #e11d48" dur="3s" repeatCount="indefinite" />
-                                        </stop>
-                                    </linearGradient>
-                                </defs>
                             </svg>
                         </div>
-                        <span className="text-2xl font-bold tracking-tight text-white">
-                            Short<span className="text-rose-200">IQ</span>
+                        <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight transition-colors">
+                            Short<span className="text-primary">IQ</span>
                         </span>
                     </Link>
 
                     {/* Content */}
-                    <div className="flex flex-col gap-0 max-w-sm">
-                        <h1 className="text-4xl font-bold text-white mb-6 leading-tight">
+                    <div className="relative z-10 flex flex-col gap-0 max-w-sm">
+                        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                             {title || "Transform Your Content with AI-Powered Scripts"}
                         </h1>
-                        <p className="text-white/80 text-lg mb-12 leading-relaxed">
+                        <p className="text-gray-600 dark:text-white/60 text-lg mb-12 leading-relaxed font-medium">
                             {subtitle || "Create your free account and start generating viral shorts instantly."}
                         </p>
                     </div>
@@ -73,12 +67,12 @@ export default function AuthLayout({ children, title, subtitle, heading, heading
                     {steps.map((step) => (
                         <div
                             key={step.number}
-                            className="flex-1 p-4 rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 flex flex-col items-start transition-all duration-300 hover:-translate-y-1 hover:bg-white/20"
+                            className="flex-1 p-4 rounded-xl bg-black/5 dark:bg-white/10 backdrop-blur-sm border border-black/5 dark:border-white/20 flex flex-col items-start transition-all duration-300 hover:-translate-y-1 hover:bg-black/10 dark:hover:bg-white/20 group"
                         >
-                            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/25 text-white font-bold mb-3 text-sm border border-white/30">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 dark:bg-white/20 text-primary dark:text-white font-bold mb-3 text-sm border border-primary/20 dark:border-white/30 transition-colors group-hover:bg-primary group-hover:text-white dark:group-hover:bg-primary">
                                 {step.number}
                             </div>
-                            <h3 className="text-white text-sm font-medium leading-tight">
+                            <h3 className="text-gray-900 dark:text-white text-sm font-semibold leading-tight">
                                 {step.text}
                             </h3>
                         </div>
@@ -86,19 +80,19 @@ export default function AuthLayout({ children, title, subtitle, heading, heading
                 </div>
 
                 {/* Footer Copyright */}
-                <div className="relative z-10 mt-8 text-[11px] text-white/50 font-medium">
+                <div className="relative z-10 mt-8 text-[11px] text-gray-600 dark:text-white/40 font-medium">
                     © {new Date().getFullYear()} ShortIQ. All rights reserved.
                 </div>
             </div>
 
             {/* Right Side - Auth Form */}
-            <div className="flex w-full md:w-[58%] items-center justify-center p-8 bg-white dark:bg-gray-950 relative overflow-hidden transition-colors">
+            <div className="flex w-full md:w-[58%] items-center justify-center p-8 bg-white/40 dark:bg-black/40 backdrop-blur-sm relative overflow-hidden transition-colors">
                 {/* Mobile Logo Only */}
                 <div className="absolute top-8 left-8 md:hidden">
                     <Link href="/" className="flex items-center gap-2">
                         <div className="flex items-center justify-center rounded-xl transition-all">
                             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="active:scale-95 transition-transform">
-                                <rect width="24" height="24" rx="6" fill="url(#rose_anim_auth_mob)" />
+                                <rect width="24" height="24" rx="6" fill="var(--primary)" />
                                 <path d="M18 5H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                                 <path d="M9 12H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                                 <path d="M9 19H6" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
@@ -106,26 +100,18 @@ export default function AuthLayout({ children, title, subtitle, heading, heading
                                     d="M13 12.003a0.7 0.7 0 0 1 1.062-.597l3.498 2.098a0.7 0.7 0 0 1 0 1.203l-3.498 2.098a0.7 0.7 0 0 1-1.062-.598z"
                                     fill="white"
                                 />
-                                <defs>
-                                    <linearGradient id="rose_anim_auth_mob" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-                                        <stop stopColor="#fb7185">
-                                            <animate attributeName="stop-color" values="#fb7185; #fda4af; #fb7185" dur="3s" repeatCount="indefinite" />
-                                        </stop>
-                                        <stop offset="1" stopColor="#e11d48">
-                                            <animate attributeName="stop-color" values="#e11d48; #be123c; #e11d48" dur="3s" repeatCount="indefinite" />
-                                        </stop>
-                                    </linearGradient>
-                                </defs>
                             </svg>
                         </div>
-                        <span className="text-xl font-bold dark:text-white">Short<span className="text-rose-600 dark:text-rose-400">IQ</span></span>
+                        <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight transition-colors">
+                            Short<span className="text-primary">IQ</span>
+                        </span>
                     </Link>
                 </div>
 
                 <div className="w-full max-w-[420px] flex flex-col items-center">
                     {/* Script Heading */}
                     <div className="mb-10 text-center">
-                        <h2 className="text-4xl font-script mb-2 tracking-wide drop-shadow-sm select-none bg-gradient-to-r from-indigo-600 via-violet-600 to-rose-500 bg-clip-text text-transparent">
+                        <h2 className="text-4xl font-script mb-2 tracking-wide drop-shadow-sm select-none bg-gradient-to-r from-rose-600 via-pink-600 to-rose-500 bg-clip-text text-transparent">
                             {heading || "Get Started"}
                         </h2>
                         <p className="text-gray-500 dark:text-gray-400 font-bold text-xs tracking-tight uppercase opacity-70">

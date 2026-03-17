@@ -43,7 +43,7 @@ export default function HeroSection() {
 
             {/* Decorative Static Icons */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
-                <svg className="hero-svg-icon left-[8%] top-[15%] w-36 h-36" viewBox="0 0 160 160">
+                <svg className="hero-svg-icon left-[4%] md:left-[8%] top-[12%] md:top-[15%] w-24 h-24 md:w-36 md:h-36" viewBox="0 0 160 160">
                     <g transform="translate(80, 80)">
                         <circle className="ico-fill" cx="0" cy="0" r="44"/>
                         <rect className="ico" x="-22" y="-14" width="32" height="14" rx="4"/>
@@ -57,7 +57,7 @@ export default function HeroSection() {
                     </g>
                 </svg>
 
-                <svg className="hero-svg-icon left-[15%] bottom-[15%] w-36 h-36" viewBox="0 0 160 160">
+                <svg className="hero-svg-icon hidden md:block left-[15%] bottom-[15%] w-36 h-36" viewBox="0 0 160 160">
                     <g transform="translate(80, 80)">
                         <circle className="ico-fill" cx="0" cy="0" r="44"/>
                         <rect className="ico" x="-24" y="-20" width="48" height="42" rx="4"/>
@@ -75,7 +75,7 @@ export default function HeroSection() {
                     </g>
                 </svg>
 
-                <svg className="hero-svg-icon left-[28%] top-[12%] w-36 h-36" viewBox="0 0 160 160">
+                <svg className="hero-svg-icon hidden lg:block left-[28%] top-[12%] w-36 h-36" viewBox="0 0 160 160">
                     <g transform="translate(80, 80)">
                         <circle className="ico-fill" cx="0" cy="0" r="44"/>
                         <path className="ico" d="M-20,8 Q-24,-2 -14,-8 Q-14,-22 0,-22 Q12,-22 16,-12 Q24,-14 24,0 Q24,12 14,12 L-16,12 Q-24,12 -20,4 Z"/>
@@ -84,7 +84,7 @@ export default function HeroSection() {
                     </g>
                 </svg>
 
-                <svg className="hero-svg-icon right-[8%] top-[15%] w-36 h-36" viewBox="0 0 160 160">
+                <svg className="hero-svg-icon right-[4%] md:right-[8%] top-[12%] md:top-[15%] w-24 h-24 md:w-36 md:h-36" viewBox="0 0 160 160">
                     <g transform="translate(80, 80)">
                         <circle className="ico-fill" cx="0" cy="0" r="44"/>
                         <rect className="ico" x="-8" y="-22" width="16" height="24" rx="8"/>
@@ -96,7 +96,7 @@ export default function HeroSection() {
                     </g>
                 </svg>
 
-                <svg className="hero-svg-icon right-[15%] bottom-[15%] w-36 h-36" viewBox="0 0 160 160">
+                <svg className="hero-svg-icon hidden md:block right-[15%] bottom-[15%] w-36 h-36" viewBox="0 0 160 160">
                     <g transform="translate(80, 80)">
                         <circle className="ico-fill" cx="0" cy="0" r="44"/>
                         <rect className="ico" x="-26" y="-18" width="52" height="36" rx="4"/>
@@ -108,7 +108,7 @@ export default function HeroSection() {
                     </g>
                 </svg>
 
-                <svg className="hero-svg-icon right-[28%] top-[12%] w-36 h-36" viewBox="0 0 160 160">
+                <svg className="hero-svg-icon hidden lg:block right-[28%] top-[12%] w-36 h-36" viewBox="0 0 160 160">
                     <g transform="translate(80, 80)">
                         <circle className="ico-fill" cx="0" cy="0" r="44"/>
                         <rect className="ico" x="-26" y="-16" width="52" height="32" rx="3"/>
