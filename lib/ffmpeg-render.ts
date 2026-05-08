@@ -123,7 +123,11 @@ export async function renderVideoWithFFmpeg(props: FFmpegRenderProps): Promise<{
         // Create temp directory
         fs.mkdirSync(tmpDir, { recursive: true });
 
-        console.log(`[FFmpeg] Starting render: ${imageUrls.length} images, ${durationSeconds}s duration`);
+        // Re-apply FFmpeg path inside the function (safety net for Turbopack module isolation)
+        const ffmpegBin = (global as any)._resolvedFfmpegPath || findFfmpegPath();
+        ffmpeg.setFfmpegPath(ffmpegBin);
+        console.log(`[FFmpeg] Starting render with binary: ${ffmpegBin}`);
+        console.log(`[FFmpeg] ${imageUrls.length} images, ${durationSeconds}s duration`);
 
         // ── Step 1: Download all assets ──────────────────────────────────
         const imagePaths: string[] = [];
@@ -155,11 +159,12 @@ export async function renderVideoWithFFmpeg(props: FFmpegRenderProps): Promise<{
         const style = CAPTION_STYLES[captionStyle] || CAPTION_STYLES.classic;
         const captions = parseSrt(srtContent);
 
-        // Resolve font file path — FFmpeg requires explicit .ttf path on Windows
+        // Font path for FFmpeg drawtext — single backslash in the actual string,
+        // but we need to escape the colon separator in the filter chain
         function getFontPath(fontFamily: string): string {
-            const winFonts = "C:\\\\Windows\\\\Fonts\\\\";  // double-escaped for FFmpeg filter string
+            const winFonts = "C:/Windows/Fonts/";  // Use forward slashes — FFmpeg on Windows accepts them
             const fontMap: Record<string, string> = {
-                "Arial":       winFonts + "arialbd.ttf",   // Bold Arial for impact
+                "Arial":       winFonts + "arialbd.ttf",
                 "Courier New": winFonts + "cour.ttf",
                 "Impact":      winFonts + "impact.ttf",
             };
@@ -187,11 +192,10 @@ export async function renderVideoWithFFmpeg(props: FFmpegRenderProps): Promise<{
         });
 
 
-        // Combine: scale to 1080x1920 + Ken Burns zoom + caption overlays
+        // Combine filters: scale to 1080x1920 + caption overlays
+        // NOTE: zoompan is intentionally removed — it's too CPU-heavy for local rendering
         const videoFilters = [
             `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1`,
-            // Subtle zoom effect
-            `zoompan=z='min(zoom+0.001,1.15)':d=${Math.round(imageDuration * 25)}:s=1080x1920:fps=25`,
             ...drawtextFilters,
         ];
 

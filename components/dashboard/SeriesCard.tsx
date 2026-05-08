@@ -146,15 +146,18 @@ export function SeriesCard({ series, onRefresh }: SeriesCardProps) {
 
                 {/* Status Badges */}
                 <div className="absolute bottom-3 left-3 flex gap-2">
-                    <div className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm ${series.status === "active" ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                    {[
+                        { label: series.status, active: series.status === "active", color: series.status === "active" ? "emerald" : "amber" },
+                        { label: series.video_status, show: !!series.video_status, color: "indigo" }
+                    ].filter(b => b.show !== false).map((badge, i) => (
+                        <div key={i} className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm border ${
+                            badge.color === "emerald" ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" :
+                            badge.color === "amber" ? "bg-amber-500/20 text-amber-400 border-amber-500/30" :
+                            "bg-indigo-500/20 text-indigo-400 border-indigo-500/30"
                         }`}>
-                        {series.status}
-                    </div>
-                    {series.video_status && (
-                        <div className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 backdrop-blur-sm">
-                            {series.video_status}
+                            {badge.label}
                         </div>
-                    )}
+                    ))}
                 </div>
             </div>
 

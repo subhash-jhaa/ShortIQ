@@ -3,7 +3,6 @@
 const platformData = [
     {
         name: "YouTube",
-        color: "bg-primary",
         desc: "Auto-publish Shorts & long-form videos on your schedule",
         svg: (
             <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
@@ -13,7 +12,6 @@ const platformData = [
     },
     {
         name: "Instagram",
-        color: "bg-primary",
         desc: "Distribute Reels effortlessly with auto captions & hashtags",
         svg: (
             <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
@@ -23,7 +21,6 @@ const platformData = [
     },
     {
         name: "TikTok",
-        color: "bg-primary",
         desc: "Publish trending short clips at peak engagement times",
         svg: (
             <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
@@ -33,7 +30,6 @@ const platformData = [
     },
     {
         name: "Facebook",
-        color: "bg-primary",
         desc: "Reach your Facebook audience with AI-optimised content",
         svg: (
             <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
@@ -43,7 +39,6 @@ const platformData = [
     },
     {
         name: "Email",
-        color: "bg-primary",
         desc: "Embed videos in newsletters and auto-email campaigns",
         svg: (
             <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">
@@ -52,6 +47,7 @@ const platformData = [
         ),
     },
 ];
+
 
 export default function PlatformsSection() {
     return (
@@ -69,7 +65,7 @@ export default function PlatformsSection() {
                     {platformData.map((p) => (
                         <div key={p.name} className="glass-card group hover:scale-[1.03] transition-transform duration-300">
                             <div
-                                className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${p.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform`}
+                                className="w-14 h-14 rounded-2xl bg-gradient-to-br bg-primary flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform"
                             >
                                 {p.svg}
                             </div>

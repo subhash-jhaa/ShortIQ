@@ -18,11 +18,6 @@ const features = [
         icon: <Bot className="w-6 h-6" />,
         title: "AI Script & Video Generation",
         desc: "Describe your idea in plain English and watch ShortIQ transform it into a fully produced short video with voiceover, captions, and stock footage — in minutes.",
-        color: "bg-primary",
-        shadow: "shadow-primary/20",
-        ring: "ring-primary/30",
-        border: "border-primary/20",
-        gradient: "from-primary/20 to-primary/5",
         num: "01",
         graphic: (
             <div className="w-full h-full p-4 md:p-6 flex flex-col justify-center gap-4 animate-in fade-in duration-1000">
@@ -54,11 +49,6 @@ const features = [
         icon: <Calendar className="w-6 h-6" />,
         title: "Smart Auto-Scheduling",
         desc: "Our AI analyses your audience's behaviour and schedules your content at peak engagement times for maximum reach on every platform.",
-        color: "bg-primary",
-        shadow: "shadow-primary/20",
-        ring: "ring-primary/30",
-        border: "border-primary/20",
-        gradient: "from-primary/20 to-primary/5",
         num: "02",
         graphic: (
             <div className="w-full h-full p-6 flex items-center justify-center relative">
@@ -93,11 +83,6 @@ const features = [
         icon: <Palette className="w-6 h-6" />,
         title: "Brand Customisation",
         desc: "Add your logo, brand colours, custom fonts and watermarks. Maintain a consistent identity across all your video content automatically.",
-        color: "bg-primary",
-        shadow: "shadow-primary/20",
-        ring: "ring-primary/30",
-        border: "border-primary/20",
-        gradient: "from-primary/20 to-primary/5",
         num: "03",
         graphic: (
             <div className="w-full h-full p-6 relative flex items-center justify-center">
@@ -128,11 +113,6 @@ const features = [
         icon: <BarChart3 className="w-6 h-6" />,
         title: "Cross-Platform Analytics",
         desc: "Unified dashboard showing views, watch time, engagement, and conversions across YouTube, Instagram, TikTok, Facebook, and email — all in one place.",
-        color: "bg-primary",
-        shadow: "shadow-primary/20",
-        ring: "ring-primary/30",
-        border: "border-primary/20",
-        gradient: "from-primary/20 to-primary/5",
         num: "04",
         graphic: (
             <div className="w-full h-full p-6 flex flex-col justify-center">
@@ -165,11 +145,6 @@ const features = [
         icon: <Globe className="w-6 h-6" />,
         title: "Auto-Translate & Dub",
         desc: "Expand your reach globally. ShortIQ auto-translates scripts and dubs voiceovers into 50+ languages with natural-sounding AI voices.",
-        color: "bg-primary",
-        shadow: "shadow-primary/20",
-        ring: "ring-primary/30",
-        border: "border-primary/20",
-        gradient: "from-primary/20 to-primary/5",
         num: "05",
         graphic: (
             <div className="w-full h-full p-6 flex items-center justify-center relative">
@@ -211,11 +186,6 @@ const features = [
         icon: <Zap className="w-6 h-6" />,
         title: "Bulk Video Generation",
         desc: "Create tens or hundreds of unique variations of your video for A/B testing, repurposing, or rolling out entire campaign series at once.",
-        color: "bg-primary",
-        shadow: "shadow-primary/20",
-        ring: "ring-primary/30",
-        border: "border-primary/20",
-        gradient: "from-primary/20 to-primary/5",
         num: "06",
         graphic: (
             <div className="w-full h-full p-2 relative overflow-hidden flex items-center justify-center">
@@ -244,6 +214,7 @@ const features = [
     },
 ];
 
+
 export default function FeaturesSection() {
     return (
         <section id="features" className="py-28 relative">
@@ -263,21 +234,21 @@ export default function FeaturesSection() {
                             className="sticky group"
                             style={{ top: `${130 + (i * 20)}px` }}
                         >
-                            <div className={`relative overflow-hidden rounded-3xl bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl p-8 shadow-2xl transition-all duration-500 ease-in-out md:p-12 border border-gray-200/50 ring-1 ${f.ring} max-w-5xl mx-auto group-hover:bg-primary/5 dark:group-hover:bg-primary/10 group-hover:scale-[1.01]`}>
+                            <div className="relative overflow-hidden rounded-3xl bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl p-8 shadow-2xl transition-all duration-500 ease-in-out md:p-12 border border-gray-200/50 ring-1 ring-primary/30 max-w-5xl mx-auto group-hover:bg-primary/5 dark:group-hover:bg-primary/10 group-hover:scale-[1.01]">
                                 <div className="grid gap-12 md:grid-cols-2 items-center">
                                     <div className="order-1">
-                                        <div className={`relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-50 dark:bg-white/[0.02] shadow-inner bg-gradient-to-br ${f.gradient} border border-gray-200 dark:border-white/10 flex items-center justify-center`}>
+                                        <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-50 dark:bg-white/[0.02] shadow-inner bg-gradient-to-br from-primary/20 to-primary/5 border border-gray-200 dark:border-white/10 flex items-center justify-center">
                                             {f.graphic ? f.graphic : (
-                                                <div className={`${f.color.replace('bg-', 'text-')} opacity-80 dark:opacity-60 scale-[6] transition-transform duration-700 group-hover:scale-[6.5]`}>
+                                                <div className="text-primary opacity-80 dark:opacity-60 scale-[6] transition-transform duration-700 group-hover:scale-[6.5]">
                                                     {f.icon}
                                                 </div>
                                             )}
                                             {/* Subtle accent glow */}
-                                            <div className={`absolute inset-0 ${f.color} opacity-[0.03] blur-3xl`} />
+                                            <div className="absolute inset-0 bg-primary opacity-[0.03] blur-3xl" />
                                         </div>
                                     </div>
                                     <div className="order-2 text-left">
-                                        <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl ${f.color} mb-6 shadow-lg ${f.shadow} text-white`}>
+                                        <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary mb-6 shadow-lg shadow-primary/20 text-white">
                                             {f.icon}
                                         </div>
                                         <h3 className="mb-4 text-3xl font-[800] text-gray-900 dark:text-white transition-colors tracking-tight">{f.title}</h3>

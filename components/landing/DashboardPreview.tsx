@@ -18,11 +18,10 @@ export default function DashboardPreview() {
                                 <span className="text-[11px] text-gray-500 dark:text-white/40 font-bold uppercase tracking-widest">Dashboard • ShortIQ.ai</span>
                             </div>
                         </div>
-
                         {/* Dashboard Simulation */}
                         <div className="bg-[#fcfcfd] dark:bg-[#0a0a12] p-8 grid grid-cols-12 gap-6 transition-colors min-h-[500px]">
                             {/* Left Widget - Timeline */}
-                            <div className="col-span-12 lg:col-span-8 space-y-6">
+                            <div className="col-span-12 lg:col-span-8 space-y-6 text-left">
                                 <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
                                     <div className="flex items-center justify-between mb-6">
                                         <h3 className="text-sm font-[800] text-gray-900 dark:text-white tracking-tight uppercase">Generation Timeline</h3>
@@ -48,40 +47,43 @@ export default function DashboardPreview() {
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-6">
-                                    <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
-                                        <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">Performance Analytics</div>
-                                        <div className="flex items-end gap-2 h-24">
-                                            {[40, 70, 45, 90, 65, 100, 85].map((h, i) => (
-                                                <div key={i} className="flex-1 bg-gray-100 dark:bg-white/5 rounded-t-lg relative group">
-                                                    <div className="absolute bottom-0 w-full bg-primary/40 group-hover:bg-primary transition-all rounded-t-lg duration-500" style={{ height: `${h}%` }} />
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
-                                        <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">Engagement Rate</div>
-                                        <div className="flex items-center justify-center h-24">
-                                            <div className="w-20 h-20 rounded-full border-[8px] border-gray-100 dark:border-white/5 relative flex items-center justify-center">
-                                                <svg className="absolute inset-0 transform -rotate-90">
-                                                    <circle cx="40" cy="40" r="32" fill="none" stroke="currentColor" strokeWidth="8" strokeDasharray="200" strokeDashoffset="40" className="text-primary" />
-                                                </svg>
-                                                <span className="text-lg font-black text-gray-900 dark:text-white">82%</span>
+                                    {[
+                                        { title: "Performance Analytics", type: "bar", data: [40, 70, 45, 90, 65, 100, 85] },
+                                        { title: "Engagement Rate", type: "pie", value: "82%" }
+                                    ].map((widget, i) => (
+                                        <div key={i} className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm">
+                                            <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-4">{widget.title}</div>
+                                            <div className="flex items-center justify-center h-24">
+                                                {widget.type === "bar" ? (
+                                                    <div className="flex items-end gap-2 h-full w-full">
+                                                        {widget.data?.map((h, j) => (
+                                                            <div key={j} className="flex-1 bg-gray-100 dark:bg-white/5 rounded-t-lg relative group overflow-hidden">
+                                                                <div className="absolute bottom-0 w-full bg-primary/40 group-hover:bg-primary transition-all rounded-t-lg duration-500" style={{ height: `${h}%` }} />
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div className="w-20 h-20 rounded-full border-[8px] border-gray-100 dark:border-white/5 relative flex items-center justify-center">
+                                                        <svg className="absolute inset-0 transform -rotate-90">
+                                                            <circle cx="40" cy="40" r="32" fill="none" stroke="currentColor" strokeWidth="8" strokeDasharray="200" strokeDashoffset="40" className="text-primary" />
+                                                        </svg>
+                                                        <span className="text-lg font-black text-gray-900 dark:text-white">{widget.value}</span>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
-                                    </div>
+                                    ))}
                                 </div>
                             </div>
 
                             {/* Right Widget - Post Schedule */}
                             <div className="col-span-12 lg:col-span-4 space-y-6 text-left">
-                                <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm h-full">
-                                    <div className="text-sm font-[800] text-gray-900 dark:text-white tracking-tight uppercase mb-6">Upcoming Posts</div>
-                                    <div className="space-y-4">
+                                <div className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/5 shadow-sm h-full flex flex-col">
+                                    <h3 className="text-sm font-[800] text-gray-900 dark:text-white tracking-tight uppercase mb-6">Upcoming Posts</h3>
+                                    <div className="space-y-4 flex-1">
                                         {["TikTok Series #14", "Instagram Reel #2", "YouTube Short"].map((post, i) => (
                                             <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50/50 dark:bg-white/5 border border-gray-100 dark:border-white/5">
-                                                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
-                                                    <span className="text-xs font-black">{i + 1}</span>
-                                                </div>
+                                                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary font-black text-xs">{i + 1}</div>
                                                 <div className="flex-1">
                                                     <div className="text-xs font-black text-gray-800 dark:text-white/90">{post}</div>
                                                     <div className="text-[10px] font-bold text-gray-500 dark:text-white/40 mt-0.5">Tomorrow, 9:00 AM</div>

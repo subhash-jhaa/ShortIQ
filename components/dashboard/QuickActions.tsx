@@ -7,21 +7,21 @@ export function QuickActions() {
         <div className="space-y-6">
             <h2 className="text-xl font-extrabold text-gray-900 dark:text-white">Quick Actions</h2>
             <div className="space-y-3">
-                <Link href="/dashboard/create">
-                    <button className="w-full p-4 rounded-xl bg-primary text-white text-sm font-bold shadow-xl shadow-primary/10 hover:scale-[1.02] active:scale-[0.98] transition-all mb-3">
-                        Generate AI Video
-                    </button>
-                </Link>
-                <Link href="/dashboard/series">
-                    <button className="w-full p-4 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white text-sm font-bold hover:bg-gray-200 dark:hover:bg-white/10 transition-all shadow-sm mb-3">
-                        Schedule Content
-                    </button>
-                </Link>
-                <Link href="/dashboard/billing">
-                    <button className="w-full p-4 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-500 dark:text-white/50 text-sm font-bold hover:bg-gray-200 dark:hover:bg-white/10 transition-all shadow-sm">
-                        Upgrade Plan
-                    </button>
-                </Link>
+                {[
+                    { href: "/dashboard/create", label: "Generate AI Video", primary: true },
+                    { href: "/dashboard/series", label: "Schedule Content" },
+                    { href: "/dashboard/billing", label: "Upgrade Plan", secondary: true },
+                ].map((action, i) => (
+                    <Link key={i} href={action.href} className="block">
+                        <button className={`w-full p-4 rounded-xl text-sm font-bold transition-all mb-3 ${
+                            action.primary 
+                                ? "bg-primary text-white shadow-xl shadow-primary/10 hover:scale-[1.02] active:scale-[0.98]" 
+                                : "bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-white/10 shadow-sm"
+                            } ${action.secondary ? "text-gray-500 dark:text-white/50" : ""}`}>
+                            {action.label}
+                        </button>
+                    </Link>
+                ))}
             </div>
 
             <div className="p-6 rounded-2xl bg-primary/10 border border-primary/20 mt-8 shadow-lg dark:shadow-xl relative overflow-hidden group">
