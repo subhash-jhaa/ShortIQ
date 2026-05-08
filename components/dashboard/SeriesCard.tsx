@@ -10,7 +10,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { deleteSeries, toggleSeriesStatus, triggerVideoGeneration, fastTrackWorkflow } from "@/actions/series";
 import { toast } from "sonner";
@@ -101,7 +101,11 @@ export function SeriesCard({ series, onRefresh }: SeriesCardProps) {
         router.push(`/dashboard/create?id=${series.id}`);
     };
 
+    const isGeneratingRef = useRef(false);
+
     const handleGenerate = async () => {
+        if (isGeneratingRef.current || isLoading) return; // Prevent double-fire
+        isGeneratingRef.current = true;
         setIsLoading(true);
         try {
             const res = await triggerVideoGeneration(series.id);
@@ -115,8 +119,10 @@ export function SeriesCard({ series, onRefresh }: SeriesCardProps) {
             toast.error("Error starting generation");
         } finally {
             setIsLoading(false);
+            isGeneratingRef.current = false;
         }
     };
+
 
     return (
         <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/5 rounded-2xl overflow-hidden hover:shadow-md dark:hover:border-white/10 transition-all group shadow-sm dark:shadow-none">

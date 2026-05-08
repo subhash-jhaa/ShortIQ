@@ -6,8 +6,12 @@ import { groqClient } from "../lib/groq";
 import { getProvider, getVoiceById, LANGUAGE_CODES } from "../lib/voice-config";
 import { plunk } from "../lib/plunk";
 import { buildVideoReadyEmail } from "../lib/email-templates";
-import { renderWithCreatomate, pollCreatomateRender } from "../actions/render";
+import { renderVideoWithFFmpeg } from "../lib/ffmpeg-render";
 import { parseBuffer } from "music-metadata";
+import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
+import * as fs from "fs";
+import * as os from "os";
+import * as nodePath from "path";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -88,30 +92,25 @@ function parseDurationSeconds(videoDuration: string): number {
     return avg;
 }
 
-// ─── TTS: Deepgram ────────────────────────────────────────────────────────────
+// ─── TTS: Microsoft Edge ──────────────────────────────────────────────────────
 
-async function generateDeepgramAudio(
+async function generateEdgeAudio(
     text: string,
     voiceId: string
 ): Promise<ArrayBuffer> {
-    const response = await fetch(
-        `https://api.deepgram.com/v1/speak?model=${encodeURIComponent(voiceId)}`,
-        {
-            method: "POST",
-            headers: {
-                Authorization: `Token ${process.env.DEEPGRAM_API_KEY}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ text }),
-        }
-    );
-
-    if (!response.ok) {
-        const err = await response.text();
-        throw new Error(`Deepgram TTS failed: ${response.status} ${err}`);
+    const tmpDir = nodePath.join(os.tmpdir(), `tts-${Date.now()}`);
+    try {
+        if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+        const tts = new MsEdgeTTS();
+        await tts.setMetadata(voiceId, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3);
+        const { audioFilePath } = await tts.toFile(tmpDir, text);
+        const fileBuffer = fs.readFileSync(audioFilePath);
+        return fileBuffer.buffer.slice(fileBuffer.byteOffset, fileBuffer.byteOffset + fileBuffer.byteLength) as ArrayBuffer;
+    } catch (err: any) {
+        throw new Error(`Edge TTS failed: ${err.message}`);
+    } finally {
+        if (fs.existsSync(tmpDir)) fs.rmSync(tmpDir, { recursive: true, force: true });
     }
-
-    return response.arrayBuffer();
 }
 
 /** 
@@ -249,7 +248,7 @@ async function generateSarvamAudio(
     if (!data.audios || !data.audios[0]) {
         throw new Error("Sarvam AI TTS returned no audio data.");
     }
-    
+
     const base64Audio = data.audios[0];
     const buffer = Buffer.from(base64Audio, "base64");
 
@@ -266,8 +265,7 @@ async function generateSarvamAudio(
 // ─── Inngest Functions ────────────────────────────────────────────────────────
 
 export const helloWorld = inngest.createFunction(
-    { id: "hello-world" },
-    { event: "test/hello.world" },
+    { id: "hello-world", triggers: [{ event: "test/hello.world" }] },
     async ({ event, step }) => {
         await step.sleep("wait-a-moment", "1s");
         return { message: `Hello ${event.data.name || "World"}!` };
@@ -275,8 +273,7 @@ export const helloWorld = inngest.createFunction(
 );
 
 export const generateVideo = inngest.createFunction(
-    { id: "generate-video", retries: 5 },
-    { event: "video/generate" },
+    { id: "generate-video", retries: 5, triggers: [{ event: "video/generate" }] },
     async ({ event, step }) => {
         const { seriesId, testMock } = event.data;
 
@@ -363,7 +360,7 @@ Expected Output Structure:
                 console.log("[Script] Raw LLM response:", rawText);
 
                 let parsed = JSON.parse(rawText);
-                
+
                 // --- ROBUST PARSING ---
                 // If it's wrapped in an outer key (like { "video": { ... } }), unwrap it
                 if (!parsed.scenes && Object.keys(parsed).length === 1) {
@@ -401,132 +398,133 @@ Expected Output Structure:
             throw new Error(`No scenes generated. Check Inngest logs for raw LLM response.`);
         }
 
-        const voice = await step.run("generate-voice", async () => {
-            // Robust case-insensitive lookup
-            const displayLang = series.language || "English";
-            const normalizedLang = displayLang.charAt(0).toUpperCase() + displayLang.slice(1).toLowerCase();
-            
-            const provider = series.model_name || getProvider(displayLang);
-            const langCode = series.model_lang_code || (LANGUAGE_CODES[normalizedLang] ?? LANGUAGE_CODES[displayLang] ?? displayLang);
-            
-            const internalVoiceId = series.voice_id;
-            const voiceOption = getVoiceById(internalVoiceId);
-            const actualVoiceId = voiceOption ? voiceOption.voiceId : internalVoiceId;
-            const script = scriptData.total_script;
-            const fileName = `${seriesId}-${Date.now()}.mp3`;
+        // ── Run voice and image generation IN PARALLEL ────────────────────────
+        const [voice, images] = await Promise.all([
+            step.run("generate-voice", async () => {
+                const displayLang = series.language || "English";
+                const normalizedLang = displayLang.charAt(0).toUpperCase() + displayLang.slice(1).toLowerCase();
 
-            console.log(`[Voice] Generating audio via ${provider} for language: "${displayLang}" (Code: "${langCode}")`);
+                const provider = series.model_name || getProvider(displayLang);
+                const langCode = series.model_lang_code || (LANGUAGE_CODES[normalizedLang] ?? LANGUAGE_CODES[displayLang] ?? displayLang);
 
-            let audioBuffer: ArrayBuffer;
-            let durationSeconds = 0;
+                const internalVoiceId = series.voice_id;
+                const voiceOption = getVoiceById(internalVoiceId);
+                const actualVoiceId = voiceOption ? voiceOption.voiceId : internalVoiceId;
+                const script = scriptData.total_script;
+                const fileName = `${seriesId}-${Date.now()}.mp3`;
 
-            if (provider === "deepgram") {
-                audioBuffer = await generateDeepgramAudio(script, actualVoiceId);
-                const metadata = await parseBuffer(Buffer.from(audioBuffer), 'audio/mpeg');
-                durationSeconds = metadata.format.duration || parseDurationSeconds(series.video_duration);
-            } else {
-                const result = await generateSarvamAudio(script, actualVoiceId, langCode);
-                audioBuffer = result.buffer;
-                durationSeconds = result.duration;
-            }
+                console.log(`[Voice] Generating audio via ${provider} for language: "${displayLang}" (Code: "${langCode}")`);
 
-            if (!audioBuffer) throw new Error(`Failed to generate audio via ${provider}`);
+                let audioBuffer: ArrayBuffer;
+                let durationSeconds = 0;
 
-            const audioUrl = await uploadToStorage("video-audio", fileName, audioBuffer, "audio/mpeg");
-            if (durationSeconds <= 0) durationSeconds = parseDurationSeconds(series.video_duration);
-            
-            console.log(`[Voice] Audio uploaded: ${audioUrl} (Duration: ${durationSeconds}s)`);
-            return { audioUrl, durationSeconds };
-        });
+                if (provider === "edge") {
+                    audioBuffer = await generateEdgeAudio(script, actualVoiceId);
+                    const metadata = await parseBuffer(Buffer.from(audioBuffer), 'audio/mpeg');
+                    durationSeconds = metadata.format.duration || parseDurationSeconds(series.video_duration);
+                } else {
+                    const result = await generateSarvamAudio(script, actualVoiceId, langCode);
+                    audioBuffer = result.buffer;
+                    durationSeconds = result.duration;
+                }
+
+                if (!audioBuffer) throw new Error(`Failed to generate audio via ${provider}`);
+
+                const audioUrl = await uploadToStorage("video-audio", fileName, audioBuffer, "audio/mpeg");
+                if (durationSeconds <= 0) durationSeconds = parseDurationSeconds(series.video_duration);
+
+                console.log(`[Voice] Audio uploaded: ${audioUrl} (Duration: ${durationSeconds}s)`);
+                return { audioUrl, durationSeconds };
+            }),
+
+            step.run("generate-images", async () => {
+                const leonardoKey = process.env.LEONARDO_API_KEY;
+
+                async function generateWithLeonardo(prompt: string): Promise<string> {
+                    if (!leonardoKey) throw new Error("LEONARDO_API_KEY not set");
+
+                    const genRes = await fetch("https://cloud.leonardo.ai/api/rest/v1/generations", {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${leonardoKey}`,
+                            "Content-Type": "application/json",
+                            Accept: "application/json"
+                        },
+                        body: JSON.stringify({
+                            prompt,
+                            modelId: "6b645e3a-d64f-4341-a6d8-7a3690fbf042",
+                            width: 576,
+                            height: 1024,
+                            num_images: 1
+                        })
+                    });
+                    if (!genRes.ok) {
+                        const err = await genRes.text();
+                        throw new Error(`Leonardo failed (${genRes.status}): ${err}`);
+                    }
+                    const genData = await genRes.json();
+                    const generationId = genData?.sdGenerationJob?.generationId;
+                    if (!generationId) throw new Error("No generationId returned from Leonardo");
+
+                    const deadline = Date.now() + 2 * 60 * 1000;
+                    while (Date.now() < deadline) {
+                        await new Promise(r => setTimeout(r, 3000));
+                        const pollRes = await fetch(`https://cloud.leonardo.ai/api/rest/v1/generations/${generationId}`, {
+                            headers: { Authorization: `Bearer ${leonardoKey}`, Accept: "application/json" }
+                        });
+                        if (!pollRes.ok) continue;
+
+                        const pollData = await pollRes.json();
+                        const status = pollData?.generations_by_pk?.status;
+                        const imgs = pollData?.generations_by_pk?.generated_images;
+                        if (status === "COMPLETE" && imgs?.length > 0) return imgs[0].url;
+                        if (status === "FAILED") throw new Error("Leonardo generation failed");
+                    }
+                    throw new Error("Leonardo timeout after 2 minutes");
+                }
+
+                async function generateWithPollinations(prompt: string): Promise<string> {
+                    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=576&height=1024&model=flux&nologo=true&seed=${Date.now()}`;
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error(`Pollinations failed (${res.status})`);
+                    return url;
+                }
+
+                // ── Generate ALL scene images IN PARALLEL ──────────────────────
+                const imagePromises = scriptData.scenes.map(async (scene, i) => {
+                    let tempUrl: string;
+                    try {
+                        console.log(`[Image] Scene ${i + 1}: trying Leonardo.AI...`);
+                        tempUrl = await generateWithLeonardo(scene.image_prompt);
+                        console.log(`[Image] Scene ${i + 1}: Leonardo succeeded.`);
+                    } catch (err: any) {
+                        console.warn(`[Image] Scene ${i + 1}: Leonardo failed (${err.message}), falling back to Pollinations...`);
+                        try {
+                            tempUrl = await generateWithPollinations(scene.image_prompt);
+                            console.log(`[Image] Scene ${i + 1}: Pollinations succeeded.`);
+                        } catch (pErr: any) {
+                            throw new Error(`Both providers failed for scene ${i + 1}: ${pErr.message}`);
+                        }
+                    }
+
+                    const imageRes = await fetch(tempUrl!);
+                    const buffer = Buffer.from(await imageRes.arrayBuffer());
+                    const fileName = `${seriesId}/scene-${i + 1}-${Date.now()}.jpg`;
+                    const url = await uploadToStorage("video-images", fileName, buffer, "image/jpeg");
+                    console.log(`[Image] Scene ${i + 1} uploaded: ${url}`);
+                    return url;
+                });
+
+                const imageUrls = await Promise.all(imagePromises);
+                return { imageUrls };
+            }),
+        ]);
 
         const captions = await step.run("generate-captions", async () => {
             const srtContent = await generateGroqWhisperCaptions(voice.audioUrl, series.language, voice.durationSeconds);
             const fileName = `${seriesId}-${Date.now()}.srt`;
             const captionsUrl = await uploadToStorage("video-captions", fileName, Buffer.from(srtContent, "utf-8"), "text/plain");
             return { captionsUrl };
-        });
-
-        const images = await step.run("generate-images", async () => {
-            const imageUrls: string[] = [];
-            const leonardoKey = process.env.LEONARDO_API_KEY;
-
-            async function generateWithLeonardo(prompt: string): Promise<string> {
-                if (!leonardoKey) throw new Error("LEONARDO_API_KEY not set");
-
-                const genRes = await fetch("https://cloud.leonardo.ai/api/rest/v1/generations", {
-                    method: "POST",
-                    headers: { 
-                        Authorization: `Bearer ${leonardoKey}`, 
-                        "Content-Type": "application/json", 
-                        Accept: "application/json" 
-                    },
-                    body: JSON.stringify({ 
-                        prompt, 
-                        modelId: "6b645e3a-d64f-4341-a6d8-7a3690fbf042", 
-                        width: 576, 
-                        height: 1024, 
-                        num_images: 1 
-                    })
-                });
-                if (!genRes.ok) {
-                    const err = await genRes.text();
-                    throw new Error(`Leonardo failed (${genRes.status}): ${err}`);
-                }
-                const genData = await genRes.json();
-                const generationId = genData?.sdGenerationJob?.generationId;
-                if (!generationId) throw new Error("No generationId returned from Leonardo");
-
-                const deadline = Date.now() + 2 * 60 * 1000;
-                while (Date.now() < deadline) {
-                    await new Promise(r => setTimeout(r, 3000));
-                    const pollRes = await fetch(`https://cloud.leonardo.ai/api/rest/v1/generations/${generationId}`, { 
-                        headers: { Authorization: `Bearer ${leonardoKey}`, Accept: "application/json" } 
-                    });
-                    if (!pollRes.ok) continue;
-
-                    const pollData = await pollRes.json();
-                    const status = pollData?.generations_by_pk?.status;
-                    const imgs = pollData?.generations_by_pk?.generated_images;
-                    if (status === "COMPLETE" && imgs?.length > 0) return imgs[0].url;
-                    if (status === "FAILED") throw new Error("Leonardo generation failed");
-                }
-                throw new Error("Leonardo timeout after 2 minutes");
-            }
-
-            async function generateWithPollinations(prompt: string): Promise<string> {
-                const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=576&height=1024&model=flux&nologo=true&seed=${Date.now()}`;
-                const res = await fetch(url);
-                if (!res.ok) throw new Error(`Pollinations failed (${res.status})`);
-                return url;
-            }
-
-            for (const [i, scene] of scriptData.scenes.entries()) {
-                let tempUrl: string | null = null;
-                let usedProvider = "unknown";
-
-                try {
-                    console.log(`[Image] Scene ${i + 1}: trying Leonardo.AI...`);
-                    tempUrl = await generateWithLeonardo(scene.image_prompt);
-                    usedProvider = "Leonardo.AI";
-                } catch (err: any) {
-                    console.warn(`[Image] Scene ${i + 1}: Leonardo failed (${err.message}), falling back to Pollinations...`);
-                    try {
-                        tempUrl = await generateWithPollinations(scene.image_prompt);
-                        usedProvider = "Pollinations.ai";
-                    } catch (pErr: any) {
-                        throw new Error(`Both providers failed for scene ${i + 1}: ${pErr.message}`);
-                    }
-                }
-
-                const imageRes = await fetch(tempUrl!);
-                const buffer = Buffer.from(await imageRes.arrayBuffer());
-                const fileName = `${seriesId}/scene-${i + 1}-${Date.now()}.jpg`;
-                const url = await uploadToStorage("video-images", fileName, buffer, "image/jpeg");
-                
-                console.log(`[Image] Scene ${i + 1} uploaded via ${usedProvider}: ${url}`);
-                imageUrls.push(url);
-            }
-            return { imageUrls };
         });
 
         await step.run("save-everything", async () => {
@@ -545,38 +543,45 @@ Expected Output Structure:
             return { success: true };
         });
 
-        await step.run("render-and-wait", async () => {
-            const { data: project } = await supabaseAdmin.from("video_projects").select("captions_url, audio_url, image_urls, render_id").eq("id", videoProjectId).single();
-            let renderId = project?.render_id;
-            if (!renderId) {
+        await step.run("render-video", async () => {
+            try {
+                // Download SRT captions content
                 let srtContent = "";
-                if (project?.captions_url) {
-                    const srtRes = await fetch(project.captions_url);
+                if (captions.captionsUrl) {
+                    const srtRes = await fetch(captions.captionsUrl);
                     if (srtRes.ok) srtContent = await srtRes.text();
                 }
-                const renderRes = await renderWithCreatomate({
-                    videoProjectId, imageUrls: project?.image_urls || [], audioUrl: project?.audio_url || "", srtContent,
-                    captionStyle: series.caption_style || "classic", durationSeconds: voice.durationSeconds,
-                    webhookUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhooks/creatomate`,
-                });
-                renderId = renderRes.renderId;
-                await supabaseAdmin.from("video_projects").update({ render_id: renderId, status: "rendering" }).eq("id", videoProjectId);
-            }
 
-            const startTime = Date.now();
-            let status = "planned";
-            while (status !== "succeeded" && status !== "failed") {
-                if (Date.now() - startTime > 4 * 60 * 1000) { status = "failed"; break; }
-                await new Promise(r => setTimeout(r, 5000));
-                const poll = await pollCreatomateRender(renderId!);
-                status = poll.status;
+                // Render video locally with FFmpeg (free, no API key needed)
+                const renderResult = await renderVideoWithFFmpeg({
+                    imageUrls: images.imageUrls,
+                    audioUrl: voice.audioUrl,
+                    srtContent,
+                    captionStyle: series.caption_style || "classic",
+                    durationSeconds: voice.durationSeconds,
+                });
+
+                if (!renderResult.success) {
+                    throw new Error(`FFmpeg render failed: ${renderResult.error}`);
+                }
+
+                // Update DB directly — no polling needed!
                 await supabaseAdmin.from("video_projects").update({
-                    status: status === "succeeded" ? "ready" : status === "failed" ? "failed" : "rendering",
-                    video_url: poll.videoUrl,
+                    status: "ready",
+                    video_url: renderResult.videoUrl,
                     updated_at: new Date().toISOString(),
                 }).eq("id", videoProjectId);
+
+                console.log(`[Render] Video ready: ${renderResult.videoUrl}`);
+                return { status: "succeeded" };
+            } catch (err: any) {
+                // Mark as failed in DB so the UI doesn't stay stuck on "rendering"
+                await supabaseAdmin.from("video_projects").update({
+                    status: "failed",
+                    updated_at: new Date().toISOString(),
+                }).eq("id", videoProjectId);
+                throw err; // Re-throw so Inngest sees the failure
             }
-            return { status };
         });
 
         await step.run("send-email-notification", async () => {

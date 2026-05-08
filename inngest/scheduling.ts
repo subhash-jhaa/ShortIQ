@@ -7,8 +7,7 @@ import { buildVideoReadyEmail } from "@/lib/email-templates";
  * Hourly cron job that checks for scheduled series and triggers their daily workflow.
  */
 export const seriesScheduler = inngest.createFunction(
-    { id: "series-scheduler", name: "Series Scheduler" },
-    { cron: "0 * * * *" }, // Run every hour
+    { id: "series-scheduler", name: "Series Scheduler", triggers: [{ cron: "0 * * * *" }] },
     async ({ step }) => {
         // Fetch all active series
         const { data: activeSeries, error } = await supabaseAdmin
@@ -43,8 +42,7 @@ export const seriesScheduler = inngest.createFunction(
  * 2. Wait until publish time -> Perform Publish (Email/Social)
  */
 export const dailyWorkflow = inngest.createFunction(
-    { id: "daily-workflow", name: "Daily Video Workflow" },
-    { event: "series/daily-workflow" },
+    { id: "daily-workflow", name: "Daily Video Workflow", triggers: [{ event: "series/daily-workflow" }] },
     async ({ event, step }) => {
         const { seriesId, isTest } = event.data;
 

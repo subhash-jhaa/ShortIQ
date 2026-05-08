@@ -51,10 +51,10 @@ export const INDIAN_LANGUAGES = new Set([
 ]);
 
 // ── Provider detection ───────────────────────────────────────────────
-export type Provider = "deepgram" | "sarvam";
+export type Provider = "edge" | "sarvam";
 
 export function getProvider(language: string): Provider {
-    return INDIAN_LANGUAGES.has(language) ? "sarvam" : "deepgram";
+    return INDIAN_LANGUAGES.has(language) ? "sarvam" : "edge";
 }
 
 // ── Voice interface ──────────────────────────────────────────────────
@@ -66,19 +66,26 @@ export interface VoiceOption {
     voiceId: string;     // Actual voice ID sent to the TTS API
 }
 
-// ── Deepgram Aura-2 Voice Pool ───────────────────────────────────────
-// All confirmed Aura-2 voices with gender metadata
-const DEEPGRAM_VOICE_POOL: VoiceOption[] = [
-    // Male voices
-    { id: "aura-2-odysseus-en", name: "Odysseus", gender: "male", provider: "deepgram", voiceId: "aura-2-odysseus-en" },
-    { id: "aura-2-apollo-en", name: "Apollo", gender: "male", provider: "deepgram", voiceId: "aura-2-apollo-en" },
-    { id: "aura-2-arcas-en", name: "Arcas", gender: "male", provider: "deepgram", voiceId: "aura-2-arcas-en" },
-    { id: "aura-2-perseus-en", name: "Perseus", gender: "male", provider: "deepgram", voiceId: "aura-2-perseus-en" },
-    // Female voices
-    { id: "aura-2-thalia-en", name: "Thalia", gender: "female", provider: "deepgram", voiceId: "aura-2-thalia-en" },
-    { id: "aura-2-andromeda-en", name: "Andromeda", gender: "female", provider: "deepgram", voiceId: "aura-2-andromeda-en" },
-    { id: "aura-2-amathea-en", name: "Amathea", gender: "female", provider: "deepgram", voiceId: "aura-2-amathea-en" },
-    { id: "aura-2-stella-en", name: "Stella", gender: "female", provider: "deepgram", voiceId: "aura-2-stella-en" },
+// ── Microsoft Edge TTS Voice Pool ────────────────────────────────────
+// High-quality free voices from Microsoft Edge
+const EDGE_VOICE_POOL: VoiceOption[] = [
+    // English (US)
+    { id: "edge-andrew-en", name: "Andrew", gender: "male", provider: "edge", voiceId: "en-US-AndrewNeural" },
+    { id: "edge-brian-en", name: "Brian", gender: "male", provider: "edge", voiceId: "en-US-BrianNeural" },
+    { id: "edge-emma-en", name: "Emma", gender: "female", provider: "edge", voiceId: "en-US-EmmaNeural" },
+    { id: "edge-ava-en", name: "Ava", gender: "female", provider: "edge", voiceId: "en-US-AvaNeural" },
+    
+    // Spanish (Mexico)
+    { id: "edge-jorge-es", name: "Jorge", gender: "male", provider: "edge", voiceId: "es-MX-JorgeNeural" },
+    { id: "edge-dalia-es", name: "Dalia", gender: "female", provider: "edge", voiceId: "es-MX-DaliaNeural" },
+    
+    // French
+    { id: "edge-henri-fr", name: "Henri", gender: "male", provider: "edge", voiceId: "fr-FR-HenriNeural" },
+    { id: "edge-denise-fr", name: "Denise", gender: "female", provider: "edge", voiceId: "fr-FR-DeniseNeural" },
+
+    // German
+    { id: "edge-conrad-de", name: "Conrad", gender: "male", provider: "edge", voiceId: "de-DE-ConradNeural" },
+    { id: "edge-katja-de", name: "Katja", gender: "female", provider: "edge", voiceId: "de-DE-KatjaNeural" },
 ];
 
 // ── Sarvam AI Voice Pool ────────────────────────────────────────────
@@ -137,10 +144,20 @@ export interface VoiceResult {
  */
 export function getVoicesForLanguage(language: string): VoiceResult {
     const provider = getProvider(language);
-    const pool = provider === "deepgram" ? DEEPGRAM_VOICE_POOL : SARVAM_VOICE_POOL;
+    const pool = provider === "edge" ? EDGE_VOICE_POOL : SARVAM_VOICE_POOL;
 
-    const males = pool.filter((v) => v.gender === "male");
-    const females = pool.filter((v) => v.gender === "female");
+    // Filter by language suffix if needed, or just return pool for simplicity
+    // For Edge, we'll just filter by what's in the pool for now
+    let filteredPool = pool;
+    if (provider === "edge") {
+        const langCode = LANGUAGE_CODES[language] || "en";
+        filteredPool = pool.filter(v => v.voiceId.startsWith(langCode));
+        // Fallback to English if no voices found for that language in our static pool
+        if (filteredPool.length === 0) filteredPool = pool.filter(v => v.voiceId.startsWith("en"));
+    }
+
+    const males = filteredPool.filter((v) => v.gender === "male");
+    const females = filteredPool.filter((v) => v.gender === "female");
 
     // Pick up to 2 of each gender
     const selectedMales = males.slice(0, 2);
@@ -161,7 +178,7 @@ export function getVoicesForLanguage(language: string): VoiceResult {
  * Returns a voice option by its unique internal ID.
  */
 export function getVoiceById(id: string): VoiceOption | undefined {
-    const allVoices = [...DEEPGRAM_VOICE_POOL, ...SARVAM_VOICE_POOL];
+    const allVoices = [...EDGE_VOICE_POOL, ...SARVAM_VOICE_POOL];
     return allVoices.find((v) => v.id === id);
 }
 
@@ -169,6 +186,7 @@ export function getVoiceById(id: string): VoiceOption | undefined {
  * Returns the full voice pool for a provider (for admin/debug use).
  */
 export function getVoicePool(provider: Provider): VoiceOption[] {
-    if (provider === "deepgram") return DEEPGRAM_VOICE_POOL;
+    if (provider === "edge") return EDGE_VOICE_POOL;
     return SARVAM_VOICE_POOL;
 }
+
