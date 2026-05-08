@@ -89,8 +89,8 @@ export const dailyWorkflow = inngest.createFunction(
         }
 
         // Trigger the actual video generation function
-        await step.invoke("trigger-video-generation", {
-            function: "generate-video", // Matches the id in functions.ts
+        await step.sendEvent("trigger-video-generation", {
+            name: "video/generate",
             data: { seriesId },
         });
 

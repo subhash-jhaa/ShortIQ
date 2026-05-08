@@ -52,7 +52,7 @@ const features = [
         num: "02",
         graphic: (
             <div className="w-full h-full p-6 flex items-center justify-center relative">
-                <div className="w-full max-w-[240px] bg-white dark:bg-[#0d0d14] rounded-2xl border border-gray-200 dark:border-white/10 p-4 shadow-xl z-10 animate-fade-in-up">
+                <div className="w-full max-w-[240px] bg-white dark:bg-[#0d0d14] rounded-2xl border border-gray-200 dark:border-white/10 p-4 z-10 animate-fade-in-up">
                     <div className="flex items-center justify-between mb-4">
                         <h4 className="font-bold text-xs text-gray-900 dark:text-white">Next Uploads</h4>
                         <Calendar size={14} className="text-primary" />
@@ -87,7 +87,7 @@ const features = [
         graphic: (
             <div className="w-full h-full p-6 relative flex items-center justify-center">
                 {/* Simulated Video Frame */}
-                <div className="w-32 h-48 bg-gray-900 rounded-xl overflow-hidden relative shadow-2xl border-[4px] border-white dark:border-[#1a1a24] z-10 transform -rotate-6">
+                <div className="w-32 h-48 bg-gray-900 rounded-xl overflow-hidden relative border-[4px] border-white dark:border-[#1a1a24] z-10 transform -rotate-6">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-3">
                         <div className="w-full h-8 bg-white/20 backdrop-blur-md rounded border border-white/30 flex items-center justify-center text-[10px] font-bold text-white shadow-[0_0_10px_rgba(255,255,255,0.5)]">
                             KARAOKE TEXT
@@ -96,13 +96,13 @@ const features = [
                 </div>
                 {/* Floating Tools */}
                 <div className="absolute right-6 top-10 flex flex-col gap-3 z-20 transform rotate-6 animate-float">
-                    <div className="w-10 h-10 rounded-full bg-white dark:bg-[#0d0d14] shadow-lg border border-gray-200 dark:border-white/10 flex items-center justify-center text-primary">
+                    <div className="w-10 h-10 rounded-full bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 flex items-center justify-center text-primary">
                         <Palette size={18} />
                     </div>
-                    <div className="w-10 h-10 rounded-full bg-white dark:bg-[#0d0d14] shadow-lg border border-gray-200 dark:border-white/10 flex items-center justify-center text-primary">
+                    <div className="w-10 h-10 rounded-full bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 flex items-center justify-center text-primary">
                         <Type size={18} />
                     </div>
-                    <div className="w-10 h-10 rounded-full bg-white dark:bg-[#0d0d14] shadow-lg border border-gray-200 dark:border-white/10 flex items-center justify-center text-amber-500">
+                    <div className="w-10 h-10 rounded-full bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 flex items-center justify-center text-amber-500">
                         <ImageIcon size={18} />
                     </div>
                 </div>
@@ -116,7 +116,7 @@ const features = [
         num: "04",
         graphic: (
             <div className="w-full h-full p-6 flex flex-col justify-center">
-                <div className="w-full bg-white dark:bg-[#0d0d14] rounded-2xl border border-gray-200 dark:border-white/10 p-5 shadow-xl">
+                <div className="w-full bg-white dark:bg-[#0d0d14] rounded-2xl border border-gray-200 dark:border-white/10 p-5">
                     <div className="flex items-end justify-between mb-6">
                         <div>
                             <div className="text-[10px] font-bold text-gray-400 dark:text-white/40 uppercase tracking-wider mb-1">Total Views</div>
@@ -149,7 +149,7 @@ const features = [
         graphic: (
             <div className="w-full h-full p-6 flex items-center justify-center relative">
                 <div className="flex items-center gap-4 z-10">
-                    <div className="w-20 p-3 bg-white dark:bg-[#0d0d14] rounded-xl border border-gray-200 dark:border-white/10 shadow-lg text-center transform -translate-y-4">
+                    <div className="w-20 p-3 bg-white dark:bg-[#0d0d14] rounded-xl border border-gray-200 dark:border-white/10 text-center transform -translate-y-4">
                         <div className="text-2xl mb-1">🇺🇸</div>
                         <div className="text-[9px] font-bold text-gray-500 dark:text-white/50">English</div>
                     </div>
@@ -192,7 +192,7 @@ const features = [
                 <div className="grid grid-cols-3 gap-3 transform rotate-12 scale-110 opacity-80">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
                         <div key={i} className={`
-                            w-16 h-20 rounded-lg shadow-lg border border-white/20
+                            w-16 h-20 rounded-lg border border-white/20
                             bg-primary/20 dark:bg-primary/40
                             flex flex-col
                         `}>
@@ -206,7 +206,7 @@ const features = [
                 </div>
                 {/* Center overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#f8fafc] dark:from-[#0a0a0b] via-transparent to-transparent"></div>
-                <div className="absolute z-10 w-12 h-12 rounded-full bg-white dark:bg-[#0d0d14] shadow-2xl border border-gray-200 dark:border-white/10 flex items-center justify-center text-primary animate-pulse">
+                <div className="absolute z-10 w-12 h-12 rounded-full bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 flex items-center justify-center text-primary animate-pulse">
                     <CheckCircle2 size={24} />
                 </div>
             </div>
@@ -234,7 +234,7 @@ export default function FeaturesSection() {
                             className="sticky group"
                             style={{ top: `${130 + (i * 20)}px` }}
                         >
-                            <div className="relative overflow-hidden rounded-3xl bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl p-8 shadow-2xl transition-all duration-500 ease-in-out md:p-12 border border-gray-200/50 ring-1 ring-primary/30 max-w-5xl mx-auto group-hover:bg-primary/5 dark:group-hover:bg-primary/10 group-hover:scale-[1.01]">
+                            <div className="relative overflow-hidden rounded-3xl bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl p-8 transition-all duration-500 ease-in-out md:p-12 border border-gray-200/50 ring-1 ring-primary/30 max-w-5xl mx-auto group-hover:bg-primary/5 dark:group-hover:bg-primary/10 group-hover:scale-[1.01]">
                                 <div className="grid gap-12 md:grid-cols-2 items-center">
                                     <div className="order-1">
                                         <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-50 dark:bg-white/[0.02] shadow-inner bg-gradient-to-br from-primary/20 to-primary/5 border border-gray-200 dark:border-white/10 flex items-center justify-center">

@@ -42,7 +42,7 @@ function LanguageDropdown({
     isOpen: boolean, 
     onToggle: () => void, 
     onSelect: (lang: string) => void,
-    dropdownRef: React.RefObject<HTMLDivElement>
+    dropdownRef: React.RefObject<HTMLDivElement | null>
 }) {
     const current = languages.find(l => l.language === selected);
     

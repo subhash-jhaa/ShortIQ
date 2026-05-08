@@ -10,8 +10,11 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getProvider, LANGUAGE_CODES } from "@/lib/voice-config";
+import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
+import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
 
-const DEEPGRAM_API_KEY = process.env.DEEPGRAM_API_KEY || "";
 const SARVAM_API_KEY = process.env.SARVAM_API_KEY || "";
 
 // Default preview text per language
@@ -54,39 +57,25 @@ export async function GET(request: NextRequest) {
         let audioBuffer: ArrayBuffer;
         let contentType: string;
 
-        if (provider === "deepgram") {
-            // ── Deepgram TTS ─────────────────────────────────────────
-            if (!DEEPGRAM_API_KEY) {
-                return NextResponse.json(
-                    { error: "DEEPGRAM_API_KEY not configured" },
-                    { status: 500 }
-                );
-            }
-
-            const response = await fetch(
-                `https://api.deepgram.com/v1/speak?model=${voice}`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Token ${DEEPGRAM_API_KEY}`,
-                    },
-                    body: JSON.stringify({ text: previewText }),
+        if (provider === "edge") {
+            // ── Microsoft Edge TTS (Foreign Languages) ────────────────
+            const tmpDir = path.join(os.tmpdir(), `tts-preview-${Date.now()}`);
+            try {
+                if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+                const tts = new MsEdgeTTS();
+                await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3);
+                const { audioFilePath } = await tts.toFile(tmpDir, previewText);
+                const fileBuffer = fs.readFileSync(audioFilePath);
+                audioBuffer = fileBuffer.buffer.slice(fileBuffer.byteOffset, fileBuffer.byteOffset + fileBuffer.byteLength) as ArrayBuffer;
+                contentType = "audio/mpeg";
+            } catch (err: any) {
+                console.error("Edge TTS preview failed:", err);
+                throw new Error(`Edge TTS failed: ${err.message}`);
+            } finally {
+                if (fs.existsSync(tmpDir)) {
+                    try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch (e) {}
                 }
-            );
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error(`Deepgram TTS error: ${response.status}`, errorText);
-                return NextResponse.json(
-                    { error: `Deepgram API error: ${response.status}`, detail: errorText },
-                    { status: response.status }
-                );
             }
-
-            audioBuffer = await response.arrayBuffer();
-            contentType = response.headers.get("content-type") || "audio/mpeg";
-
         } else {
             // ── Sarvam AI TTS ────────────────────────────────────────
             if (!SARVAM_API_KEY) {
