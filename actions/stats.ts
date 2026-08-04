@@ -1,9 +1,10 @@
 "use server";
 
-import { auth } from "@/lib/clerk-server";
+import { auth } from "@clerk/nextjs/server";
 import { supabaseAdmin } from "@/lib/supabase";
+import { rateLimitedAction } from "@/lib/rate-limit";
 
-export async function getDashboardStats() {
+export const getDashboardStats = rateLimitedAction("standard", async () => {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
@@ -38,4 +39,4 @@ export async function getDashboardStats() {
         console.error("getDashboardStats error:", error);
         return { success: false, error: error.message };
     }
-}
+});

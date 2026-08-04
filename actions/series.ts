@@ -1,10 +1,11 @@
 "use server";
 
-import { auth } from "@/lib/clerk-server";
+import { auth } from "@clerk/nextjs/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
 import { inngest } from "@/inngest/client";
 import { getProvider, LANGUAGE_CODES } from "@/lib/voice-config";
+import { rateLimitedAction } from "@/lib/rate-limit";
 
 export interface SeriesData {
     seriesName: string;
@@ -19,7 +20,7 @@ export interface SeriesData {
     publishTime: string;
 }
 
-export async function createSeries(data: SeriesData) {
+export const createSeries = rateLimitedAction("strict", async (data: SeriesData) => {
     const { userId } = await auth();
 
     if (!userId) {
@@ -67,9 +68,9 @@ export async function createSeries(data: SeriesData) {
         console.error("createSeries failure:", err);
         return { success: false, error: err.message };
     }
-}
+});
 
-export async function updateSeries(id: string, data: Partial<SeriesData>) {
+export const updateSeries = rateLimitedAction("strict", async (id: string, data: Partial<SeriesData>) => {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
@@ -105,9 +106,9 @@ export async function updateSeries(id: string, data: Partial<SeriesData>) {
         console.error("updateSeries failure:", err);
         return { success: false, error: err.message };
     }
-}
+});
 
-export async function triggerVideoGeneration(seriesId: string) {
+export const triggerVideoGeneration = rateLimitedAction("expensive", async (seriesId: string) => {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
@@ -121,9 +122,9 @@ export async function triggerVideoGeneration(seriesId: string) {
         console.error("triggerVideoGeneration failure:", err);
         return { success: false, error: err.message };
     }
-}
+});
 
-export async function fastTrackWorkflow(seriesId: string) {
+export const fastTrackWorkflow = rateLimitedAction("expensive", async (seriesId: string) => {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
@@ -137,9 +138,9 @@ export async function fastTrackWorkflow(seriesId: string) {
         console.error("fastTrackWorkflow failure:", err);
         return { success: false, error: err.message };
     }
-}
+});
 
-export async function deleteSeries(id: string) {
+export const deleteSeries = rateLimitedAction("strict", async (id: string) => {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
@@ -157,9 +158,9 @@ export async function deleteSeries(id: string) {
         console.error("deleteSeries failure:", err);
         return { success: false, error: err.message };
     }
-}
+});
 
-export async function toggleSeriesStatus(id: string, currentStatus: string) {
+export const toggleSeriesStatus = rateLimitedAction("strict", async (id: string, currentStatus: string) => {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
@@ -179,9 +180,9 @@ export async function toggleSeriesStatus(id: string, currentStatus: string) {
         console.error("toggleSeriesStatus failure:", err);
         return { success: false, error: err.message };
     }
-}
+});
 
-export async function getSeriesById(id: string) {
+export const getSeriesById = rateLimitedAction("standard", async (id: string) => {
     const { userId } = await auth();
     if (!userId) {
         throw new Error("Unauthorized");
@@ -220,4 +221,4 @@ export async function getSeriesById(id: string) {
         console.error("getSeriesById failure:", err);
         return { success: false, error: err.message };
     }
-}
+});

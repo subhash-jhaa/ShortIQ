@@ -14,6 +14,7 @@ import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
+import { withRateLimit } from "@/lib/rate-limit";
 
 const SARVAM_API_KEY = process.env.SARVAM_API_KEY || "";
 
@@ -36,7 +37,7 @@ const DEFAULT_PREVIEW_TEXT: Record<string, string> = {
     Gujarati: "નમસ્તે! હું તમારો વૉઇસ આસિસ્ટન્ટ છું. ચાલો અદ્ભુત કન્ટેન્ટ બનાવીએ.",
 };
 
-export async function GET(request: NextRequest) {
+export const GET = withRateLimit("expensive", async (request: NextRequest) => {
     const { searchParams } = new URL(request.url);
     const voice = searchParams.get("voice");
     const language = searchParams.get("language");
@@ -139,4 +140,4 @@ export async function GET(request: NextRequest) {
             { status: 500 }
         );
     }
-}
+});

@@ -4,6 +4,9 @@ import { CreditCard, Zap, CheckCircle2, Crown, Settings as SettingsIcon, Package
 import { useState } from "react";
 import { useClerk } from "@clerk/nextjs";
 
+import { DashboardPageHero } from "@/components/dashboard/DashboardPageHero";
+import { TabbedPageLayout } from "@/components/dashboard/TabbedPageLayout";
+
 export default function BillingPage() {
     const { openUserProfile } = useClerk();
     const [activeTab, setActiveTab] = useState("overview");
@@ -13,74 +16,43 @@ export default function BillingPage() {
         { id: "pricing", name: "Pricing Plans", icon: <Package size={18} /> },
     ];
 
+    const sidebarExtra = (
+        <div className="hidden md:block mt-8 p-6 rounded-2xl bg-primary/10 border border-primary/20">
+            <h4 className="text-primary font-bold text-xs uppercase tracking-widest mb-3">Your Usage</h4>
+            <div className="space-y-4">
+                <div>
+                    <div className="flex justify-between text-[10px] font-bold text-gray-400 dark:text-white/30 uppercase mb-1.5">
+                        <span>Videos Used</span>
+                        <span>7 / 20</span>
+                    </div>
+                    <div className="h-1.5 w-full bg-gray-100 dark:bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-full w-[35%] bg-primary rounded-full" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
     return (
         <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-12 animate-in fade-in duration-500">
             {/* Hero Section */}
-            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-primary/20 via-primary/5 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
-                <div className="relative z-10 max-w-2xl">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 text-primary font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-primary/20">
-                        <CreditCard size={16} />
-                        Billing &amp; Subscription
-                    </div>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3 sm:mb-4">
-                        Choose Your <br />
-                        <span className="gradient-text">Growth Plan</span>
-                    </h1>
-                    <p className="text-sm sm:text-base md:text-lg text-gray-500 dark:text-white/60 leading-relaxed">
-                        Scale your content creation with high-performance video generation. Manage your subscription and invoices with ease.
-                    </p>
-                </div>
-            </div>
+            <DashboardPageHero
+                icon={<CreditCard size={16} />}
+                badgeText="Billing & Subscription"
+                titleFirst="Choose Your"
+                titleHighlight="Growth Plan"
+                highlightClassName="gradient-text"
+                description="Scale your content creation with high-performance video generation. Manage your subscription and invoices with ease."
+            />
 
             {/* Main Content Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8">
-
-                {/* Sidebar Navigation */}
-                <div className="md:col-span-3 space-y-2">
-                    <h3 className="text-[10px] sm:text-xs font-bold text-gray-400 dark:text-white/40 uppercase tracking-wider mb-2 sm:mb-4 px-3">
-                        Billing Menu
-                    </h3>
-                    <div className="flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible pb-2 md:pb-0 custom-scrollbar">
-                        {tabs.map((tab) => (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`flex-1 md:flex-none flex items-center gap-3 px-4 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition-all text-left whitespace-nowrap md:whitespace-normal ${activeTab === tab.id
-                                    ? "bg-primary/10 text-primary shadow-sm border border-primary/20"
-                                    : "text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent"
-                                    }`}
-                            >
-                                <span className={activeTab === tab.id ? "text-primary" : "text-gray-400 dark:text-white/40"}>
-                                    {tab.icon}
-                                </span>
-                                {tab.name}
-                                {activeTab === tab.id && (
-                                    <ChevronRight size={16} className="hidden md:block ml-auto opacity-50" />
-                                )}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className="hidden md:block mt-8 p-6 rounded-2xl bg-primary/10 border border-primary/20">
-                        <h4 className="text-primary font-bold text-xs uppercase tracking-widest mb-3">Your Usage</h4>
-                        <div className="space-y-4">
-                            <div>
-                                <div className="flex justify-between text-[10px] font-bold text-gray-400 dark:text-white/30 uppercase mb-1.5">
-                                    <span>Videos Used</span>
-                                    <span>7 / 20</span>
-                                </div>
-                                <div className="h-1.5 w-full bg-gray-100 dark:bg-white/5 rounded-full overflow-hidden">
-                                    <div className="h-full w-[35%] bg-primary rounded-full" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Content Area */}
-                <div className="md:col-span-9">
-                    <div className="bg-white dark:bg-[#0d0d14] rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-white/10 p-6 sm:p-8 md:p-10 shadow-sm min-h-[400px]">
+            <TabbedPageLayout
+                tabs={tabs}
+                activeTab={activeTab}
+                onTabClick={(tab) => setActiveTab(tab.id)}
+                sidebarTitle="Billing Menu"
+                sidebarExtra={sidebarExtra}
+            >
 
                         {/* Overview Content */}
                         {activeTab === "overview" && (
@@ -260,9 +232,7 @@ export default function BillingPage() {
                             </div>
                         )}
 
-                    </div>
-                </div>
-            </div>
+            </TabbedPageLayout>
         </div>
     );
 }

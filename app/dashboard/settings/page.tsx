@@ -27,6 +27,9 @@ interface ConnectedAccount {
     platform_account_name: string;
 }
 
+import { DashboardPageHero } from "@/components/dashboard/DashboardPageHero";
+import { TabbedPageLayout } from "@/components/dashboard/TabbedPageLayout";
+
 export default function SettingsPage() {
     const { user, isLoaded } = useUser();
     const { signOut, openUserProfile } = useClerk();
@@ -100,6 +103,30 @@ export default function SettingsPage() {
         return connectedAccounts.find(acc => acc.platform === platform)?.platform_account_name;
     };
 
+    const sidebarExtra = (
+        <div className="hidden md:block mt-8 p-5 rounded-2xl bg-primary/10 border border-primary/20 text-center">
+            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-3 text-primary">
+                <UserCircle size={20} />
+            </div>
+            <h4 className="text-gray-900 dark:text-white font-bold text-sm mb-1">Need to update Auth?</h4>
+            <p className="text-gray-500 dark:text-white/50 text-xs mb-4">Manage password and security via Clerk.</p>
+            <button
+                onClick={() => openUserProfile()}
+                className="w-full py-2 bg-white dark:bg-white/10 hover:bg-gray-50 dark:hover:bg-white/20 text-gray-900 dark:text-white text-xs font-bold rounded-lg transition-colors border border-gray-200 dark:border-transparent"
+            >
+                Open Profile
+            </button>
+        </div>
+    );
+
+    const handleTabClick = (tab: any) => {
+        if (tab.href) {
+            router.push(tab.href);
+        } else {
+            setActiveTab(tab.id);
+        }
+    };
+
     const platforms = [
         {
             id: "youtube",
@@ -145,77 +172,23 @@ export default function SettingsPage() {
     return (
         <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-12 animate-in fade-in duration-500">
             {/* Hero Section */}
-            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-primary/20 via-primary/10 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
-                <div className="relative z-10 max-w-2xl">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 text-primary font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-primary/20">
-                        <SettingsIcon size={16} />
-                        Account Settings
-                    </div>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3 sm:mb-4">
-                        Manage Your <br />
-                        <span className="gradient-text">Preferences</span>
-                    </h1>
-                    <p className="text-sm sm:text-base md:text-lg text-gray-500 dark:text-white/60 leading-relaxed">
-                        Configure your profile, connect social media accounts, and manage your account security settings in one place.
-                    </p>
-                </div>
-            </div>
+            <DashboardPageHero
+                icon={<SettingsIcon size={16} />}
+                badgeText="Account Settings"
+                titleFirst="Manage Your"
+                titleHighlight="Preferences"
+                highlightClassName="gradient-text"
+                description="Configure your profile, connect social media accounts, and manage your account security settings in one place."
+            />
 
             {/* Main Content Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8">
-
-                {/* Sidebar Navigation */}
-                <div className="md:col-span-3 space-y-2">
-                    <h3 className="text-[10px] sm:text-xs font-bold text-gray-400 dark:text-white/40 uppercase tracking-wider mb-2 sm:mb-4 px-3">
-                        Settings Categories
-                    </h3>
-                    <div className="flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible pb-2 md:pb-0 custom-scrollbar">
-                        {tabs.map((tab) => (
-                            <button
-                                key={tab.id}
-                                onClick={() => {
-                                    if ('href' in tab && tab.href) {
-                                        router.push(tab.href);
-                                    } else {
-                                        setActiveTab(tab.id);
-                                    }
-                                }}
-                                className={`flex-1 md:flex-none flex items-center gap-3 px-4 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition-all text-left whitespace-nowrap md:whitespace-normal ${activeTab === tab.id
-                                    ? "bg-primary/10 text-primary shadow-sm border border-primary/20"
-                                    : "text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent"
-                                    }`}
-                            >
-                                <span className={activeTab === tab.id ? "text-primary" : "text-gray-400 dark:text-white/40"}>
-                                    {tab.icon}
-                                </span>
-                                {tab.name}
-                                {activeTab === tab.id && (
-                                    <ChevronRight size={16} className="hidden md:block ml-auto opacity-50" />
-                                )}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className="hidden md:block mt-8 p-5 rounded-2xl bg-primary/10 border border-primary/20 text-center">
-                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-3 text-primary">
-                            <UserCircle size={20} />
-                        </div>
-                        <h4 className="text-gray-900 dark:text-white font-bold text-sm mb-1">Need to update Auth?</h4>
-                        <p className="text-gray-500 dark:text-white/50 text-xs mb-4">Manage password and security via Clerk.</p>
-                        <button
-                            onClick={() => openUserProfile()}
-                            className="w-full py-2 bg-white dark:bg-white/10 hover:bg-gray-50 dark:hover:bg-white/20 text-gray-900 dark:text-white text-xs font-bold rounded-lg transition-colors border border-gray-200 dark:border-transparent"
-                        >
-                            Open Profile
-                        </button>
-                    </div>
-                </div>
-
-                {/* Content Area */}
-                <div className="md:col-span-9">
-                    <div className="bg-white dark:bg-[#0d0d14] rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-white/10 p-6 sm:p-8 md:p-10 shadow-sm dark:shadow-none min-h-[400px]">
-
+            <TabbedPageLayout
+                tabs={tabs}
+                activeTab={activeTab}
+                onTabClick={handleTabClick}
+                sidebarTitle="Settings Categories"
+                sidebarExtra={sidebarExtra}
+            >
                         {/* Profile Info Content */}
                         {activeTab === "profile" && (
                             <div className="space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -389,9 +362,7 @@ export default function SettingsPage() {
                             </div>
                         )}
 
-                    </div>
-                </div>
-            </div>
+            </TabbedPageLayout>
 
             {/* Loading Overlay */}
             {loading && (

@@ -1,8 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { NextResponse } from "next/server";
+import { withRateLimit } from "@/lib/rate-limit";
 
-export async function GET() {
+export const GET = withRateLimit("standard", async () => {
     try {
         const { userId } = await auth();
 
@@ -26,4 +27,4 @@ export async function GET() {
         console.error("API GET series failure:", err);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
-}
+});

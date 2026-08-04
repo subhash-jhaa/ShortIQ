@@ -264,13 +264,6 @@ async function generateSarvamAudio(
 
 // ─── Inngest Functions ────────────────────────────────────────────────────────
 
-export const helloWorld = inngest.createFunction(
-    { id: "hello-world", triggers: [{ event: "test/hello.world" }] },
-    async ({ event, step }) => {
-        await step.sleep("wait-a-moment", "1s");
-        return { message: `Hello ${event.data.name || "World"}!` };
-    }
-);
 
 export const generateVideo = inngest.createFunction(
     { id: "generate-video", retries: 5, triggers: [{ event: "video/generate" }] },

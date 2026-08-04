@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/clerk-server";
+import { auth } from "@clerk/nextjs/server";
 import { supabaseAdmin } from "@/lib/supabase";
 
 export async function getUserProfile() {

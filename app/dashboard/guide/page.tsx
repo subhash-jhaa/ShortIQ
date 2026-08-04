@@ -16,6 +16,9 @@ import {
     Instagram
 } from "lucide-react";
 
+import { DashboardPageHero } from "@/components/dashboard/DashboardPageHero";
+import { TabbedPageLayout } from "@/components/dashboard/TabbedPageLayout";
+
 export default function GuidePage() {
     const [activeTab, setActiveTab] = useState("getting-started");
 
@@ -26,73 +29,39 @@ export default function GuidePage() {
         { id: "publishing", name: "Publishing", icon: <Globe size={18} /> },
     ];
 
+    const sidebarExtra = (
+        <div className="hidden md:block mt-8 p-5 rounded-2xl bg-primary/10 border border-primary/20 text-center">
+            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-3 text-primary">
+                <Zap size={20} fill="currentColor" />
+            </div>
+            <h4 className="text-gray-900 dark:text-white font-bold text-sm mb-1">Need Quick Help?</h4>
+            <p className="text-gray-500 dark:text-white/50 text-xs mb-4">Our support team is available 24/7 to assist you.</p>
+            <button className="w-full py-2 bg-white dark:bg-white/10 hover:bg-gray-50 dark:hover:bg-white/20 text-gray-900 dark:text-white text-xs font-bold rounded-lg transition-colors border border-gray-200 dark:border-transparent">
+                Contact Support
+            </button>
+        </div>
+    );
+
     return (
         <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-12 animate-in fade-in duration-500">
             {/* Hero Section */}
-            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-primary/20 via-primary/10 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
-
-                <div className="relative z-10 max-w-2xl">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 text-primary font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-primary/20">
-                        <BookOpen size={16} />
-                        ShortIQ Documentation
-                    </div>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3 sm:mb-4">
-                        Master the Art of <br />
-                        <span className="gradient-text">
-                            Automated Content
-                        </span>
-                    </h1>
-                    <p className="text-sm sm:text-base md:text-lg text-gray-500 dark:text-white/60 leading-relaxed">
-                        Learn how to set up, customize, and automatically publish faceless viral videos to all your social platforms using ShortIQ&apos;s powerful engine.
-                    </p>
-                </div>
-            </div>
+            <DashboardPageHero
+                icon={<BookOpen size={16} />}
+                badgeText="ShortIQ Documentation"
+                titleFirst="Master the Art of"
+                titleHighlight="Automated Content"
+                highlightClassName="gradient-text"
+                description="Learn how to set up, customize, and automatically publish faceless viral videos to all your social platforms using ShortIQ's powerful engine."
+            />
 
             {/* Main Content Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8">
-
-                {/* Sidebar Navigation */}
-                <div className="md:col-span-3 space-y-2">
-                    <h3 className="text-[10px] sm:text-xs font-bold text-gray-400 dark:text-white/40 uppercase tracking-wider mb-2 sm:mb-4 px-3">
-                        Guide Topics
-                    </h3>
-                    <div className="flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible pb-2 md:pb-0 custom-scrollbar">
-                        {categories.map((category) => (
-                            <button
-                                key={category.id}
-                                onClick={() => setActiveTab(category.id)}
-                                className={`flex-1 md:flex-none flex items-center gap-3 px-4 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-medium transition-all text-left whitespace-nowrap md:whitespace-normal ${activeTab === category.id
-                                    ? "bg-primary/10 text-primary shadow-sm border border-primary/20"
-                                    : "text-gray-600 dark:text-white/60 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent"
-                                    }`}
-                            >
-                                <span className={activeTab === category.id ? "text-primary" : "text-gray-400 dark:text-white/40"}>
-                                    {category.icon}
-                                </span>
-                                {category.name}
-                                {activeTab === category.id && (
-                                    <ChevronRight size={16} className="hidden md:block ml-auto opacity-50" />
-                                )}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className="hidden md:block mt-8 p-5 rounded-2xl bg-primary/10 border border-primary/20 text-center">
-                        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-3 text-primary">
-                            <Zap size={20} fill="currentColor" />
-                        </div>
-                        <h4 className="text-gray-900 dark:text-white font-bold text-sm mb-1">Need Quick Help?</h4>
-                        <p className="text-gray-500 dark:text-white/50 text-xs mb-4">Our support team is available 24/7 to assist you.</p>
-                        <button className="w-full py-2 bg-white dark:bg-white/10 hover:bg-gray-50 dark:hover:bg-white/20 text-gray-900 dark:text-white text-xs font-bold rounded-lg transition-colors border border-gray-200 dark:border-transparent">
-                            Contact Support
-                        </button>
-                    </div>
-                </div>
-
-                {/* Content Area */}
-                <div className="md:col-span-9">
-                    <div className="bg-white dark:bg-[#0d0d14] rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-white/10 p-6 sm:p-8 md:p-10 shadow-sm dark:shadow-none min-h-[400px]">
+            <TabbedPageLayout
+                tabs={categories}
+                activeTab={activeTab}
+                onTabClick={(tab) => setActiveTab(tab.id)}
+                sidebarTitle="Guide Topics"
+                sidebarExtra={sidebarExtra}
+            >
 
                         {/* Getting Started Content */}
                         {activeTab === "getting-started" && (
@@ -259,10 +228,7 @@ export default function GuidePage() {
             </div>
         )}
 
-                    </div>
-                </div>
-
-            </div>
+            </TabbedPageLayout>
         </div>
     );
 }

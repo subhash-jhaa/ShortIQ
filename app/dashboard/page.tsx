@@ -9,7 +9,12 @@ import { getDashboardStats } from "@/actions/stats";
 
 export default async function DashboardPage() {
     const { userId } = await auth();
-    const user = await currentUser();
+    let user = null;
+    try {
+        user = await currentUser();
+    } catch (err) {
+        console.error("Failed to fetch Clerk current user:", err);
+    }
     const profile = await getUserProfile();
     const statsRes = await getDashboardStats();
     const stats = statsRes.success ? statsRes : { seriesCount: 0, videoCount: 0, activeSchedules: 0 };

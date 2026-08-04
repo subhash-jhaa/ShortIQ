@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { VideoPreviewModal } from "@/components/dashboard/VideoPreviewModal";
 
+import { DashboardPageHero } from "@/components/dashboard/DashboardPageHero";
+
 export default function VideosPage() {
     const router = useRouter();
     const [videos, setVideos] = useState<VideoProject[]>([]);
@@ -88,27 +90,13 @@ export default function VideosPage() {
     return (
         <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-12 animate-in fade-in duration-500">
             {/* Hero Section */}
-            <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-white dark:bg-[#0d0d14] border border-gray-200 dark:border-white/10 p-6 sm:p-10 md:p-14 shadow-sm dark:shadow-none">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-primary/10 via-primary/5 to-transparent blur-3xl rounded-full -mr-40 -mt-40 pointer-events-none" />
-
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8">
-                    <div className="max-w-xl">
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 text-primary font-medium text-xs sm:text-sm mb-4 sm:mb-6 border border-primary/20">
-                            <Video size={16} />
-                            ShortIQ Studio
-                        </div>
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3 sm:mb-4">
-                            Your <br />
-                            <span className="text-primary">
-                                Video Library
-                            </span>
-                        </h1>
-                        <p className="text-sm sm:text-base md:text-lg text-gray-500 dark:text-white/60 leading-relaxed">
-                            Manage, preview, and download your generated video assets. All your high-retention content in one place.
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <DashboardPageHero
+                icon={<Video size={16} />}
+                badgeText="ShortIQ Studio"
+                titleFirst="Your"
+                titleHighlight="Video Library"
+                description="Manage, preview, and download your generated video assets. All your high-retention content in one place."
+            />
 
             {/* Content Area */}
             {videos.length === 0 ? (

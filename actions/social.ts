@@ -1,10 +1,11 @@
 "use server";
 
-import { auth } from "@/lib/clerk-server";
+import { auth } from "@clerk/nextjs/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { revalidatePath } from "next/cache";
+import { rateLimitedAction } from "@/lib/rate-limit";
 
-export async function getConnectedAccounts() {
+export const getConnectedAccounts = rateLimitedAction("standard", async () => {
     const { userId } = await auth();
     if (!userId) return { success: false, error: "Unauthorized" };
 
@@ -20,9 +21,9 @@ export async function getConnectedAccounts() {
         console.error("getConnectedAccounts failure:", err);
         return { success: false, error: err.message };
     }
-}
+});
 
-export async function disconnectAccount(platform: string) {
+export const disconnectAccount = rateLimitedAction("strict", async (platform: string) => {
     const { userId } = await auth();
     if (!userId) return { success: false, error: "Unauthorized" };
 
@@ -40,4 +41,4 @@ export async function disconnectAccount(platform: string) {
         console.error("disconnectAccount failure:", err);
         return { success: false, error: err.message };
     }
-}
+});

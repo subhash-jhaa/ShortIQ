@@ -3,6 +3,8 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import { supabaseAdmin } from "./supabase";
+import { parseSrt } from "./srt";
+import { CAPTION_STYLES } from "./caption-styles";
 
 // Resolve the actual ffmpeg binary path at runtime
 // (ffmpeg-static's default export gets mangled by Turbopack to a virtual path)
@@ -39,49 +41,7 @@ if (!resolvedFfmpegPath) {
     console.log(`[FFmpeg] Initialized binary: ${resolvedFfmpegPath}`);
 }
 
-// ─── Caption Styles ──────────────────────────────────────────────────────────
-
-const CAPTION_STYLES: Record<string, {
-    color: string;
-    fontFamily: string;
-    borderColor: string;
-    shadowColor: string;
-}> = {
-    classic:    { color: "white",   fontFamily: "Arial",       borderColor: "black",   shadowColor: "black" },
-    karaoke:    { color: "#FFD700", fontFamily: "Arial",       borderColor: "black",   shadowColor: "black" },
-    popup:      { color: "white",   fontFamily: "Arial",       borderColor: "black",   shadowColor: "black" },
-    glow:       { color: "white",   fontFamily: "Arial",       borderColor: "#A5B4FC", shadowColor: "#A5B4FC" },
-    gradient:   { color: "white",   fontFamily: "Arial",       borderColor: "#C084FC", shadowColor: "#C084FC" },
-    typewriter: { color: "white",   fontFamily: "Courier New", borderColor: "black",   shadowColor: "black" },
-};
-
-// ─── SRT Parser ──────────────────────────────────────────────────────────────
-
-interface Caption {
-    start: number;
-    end: number;
-    text: string;
-}
-
-function parseSrt(srtContent: string): Caption[] {
-    if (!srtContent || !srtContent.trim()) return [];
-    const blocks = srtContent.trim().split(/\n\s*\n/);
-    return blocks.map((block) => {
-        const lines = block.split("\n");
-        if (lines.length < 3) return null;
-        const timeLine = lines[1] || "";
-        const text = lines.slice(2).join(" ").trim();
-        const [startStr, endStr] = timeLine.split(" --> ");
-        if (!startStr || !endStr) return null;
-        const parseTime = (ts: string) => {
-            const cleanTs = ts.trim().replace(",", ".");
-            const [hms, ms = "000"] = cleanTs.split(".");
-            const [h = 0, m = 0, s = 0] = hms.split(":").map(Number);
-            return h * 3600 + m * 60 + s + Number(ms) / 1000;
-        };
-        return { start: parseTime(startStr), end: parseTime(endStr), text };
-    }).filter((c): c is Caption => c !== null && Boolean(c.text));
-}
+// Caption styles and SRT parser imported from shared modules
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 

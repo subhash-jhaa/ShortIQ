@@ -1,8 +1,9 @@
 "use server";
 
-import { auth } from "@/lib/clerk-server";
+import { auth } from "@clerk/nextjs/server";
 
 import { supabaseAdmin } from "@/lib/supabase";
+import { rateLimitedAction } from "@/lib/rate-limit";
 
 export interface VideoProject {
     id: string;
@@ -20,7 +21,7 @@ export interface VideoProject {
     updated_at: string;
 }
 
-export async function getVideos() {
+export const getVideos = rateLimitedAction("standard", async () => {
     const { userId } = await auth();
     if (!userId) {
         throw new Error("Unauthorized");
@@ -43,9 +44,9 @@ export async function getVideos() {
         console.error("getVideos failure:", err);
         return { success: false, error: err.message };
     }
-}
+});
 
-export async function getVideoById(videoId: string) {
+export const getVideoById = rateLimitedAction("standard", async (videoId: string) => {
     const { userId } = await auth();
     if (!userId) {
         throw new Error("Unauthorized");
@@ -69,9 +70,9 @@ export async function getVideoById(videoId: string) {
         console.error("getVideoById failure:", err);
         return { success: false, error: err.message };
     }
-}
+});
 
-export async function cancelVideoGeneration(videoId: string) {
+export const cancelVideoGeneration = rateLimitedAction("strict", async (videoId: string) => {
     const { userId } = await auth();
     if (!userId) {
         throw new Error("Unauthorized");
@@ -94,8 +95,8 @@ export async function cancelVideoGeneration(videoId: string) {
         console.error("cancelVideoGeneration failure:", err);
         return { success: false, error: err.message };
     }
-}
-export async function deleteVideo(videoId: string) {
+});
+export const deleteVideo = rateLimitedAction("strict", async (videoId: string) => {
     const { userId } = await auth();
     if (!userId) {
         throw new Error("Unauthorized");
@@ -118,4 +119,4 @@ export async function deleteVideo(videoId: string) {
         console.error("deleteVideo failure:", err);
         return { success: false, error: err.message };
     }
-}
+});

@@ -12,8 +12,9 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getVoicesForLanguage, LANGUAGE_CODES } from "@/lib/voice-config";
+import { withRateLimit } from "@/lib/rate-limit";
 
-export async function GET(request: NextRequest) {
+export const GET = withRateLimit("standard", async (request: NextRequest) => {
     const { searchParams } = new URL(request.url);
     const language = searchParams.get("language");
 
@@ -39,4 +40,4 @@ export async function GET(request: NextRequest) {
     const result = getVoicesForLanguage(language);
 
     return NextResponse.json(result, { status: 200 });
-}
+});
