@@ -3,7 +3,7 @@ import { inngest } from "@/inngest/client";
 import { generateVideo } from "@/inngest/functions";
 import { seriesScheduler, dailyWorkflow } from "@/inngest/scheduling";
 
-console.log(">>> Inngest route handler loaded. Using Client ID: vidmaxx");
+
 
 export const { GET, POST, PUT } = serve({
     client: inngest,

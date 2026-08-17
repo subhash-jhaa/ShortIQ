@@ -13,9 +13,10 @@ export function RecentVideos() {
 
     const fetchVideos = async () => {
         try {
-            const res = await getVideos();
-            if (res.success) {
-                setVideos(res.data?.slice(0, 3) || []);
+            const res = await fetch("/api/videos", { cache: "no-store" });
+            if (res.ok) {
+                const data = await res.json();
+                setVideos(Array.isArray(data) ? data.slice(0, 3) : []);
             }
         } catch (error) {
             console.error("Failed to fetch recent videos:", error);

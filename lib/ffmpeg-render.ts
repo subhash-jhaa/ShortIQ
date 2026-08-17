@@ -53,10 +53,13 @@ async function downloadToFile(url: string, filePath: string): Promise<void> {
 }
 
 function escapeFFmpegText(text: string): string {
-    // Escape characters that are special in FFmpeg drawtext filter
+    // For -filter_complex_script (file-based): no shell escaping layer,
+    // only FFmpeg drawtext-level escaping is needed.
+    // Replace straight apostrophes with curly ones to avoid quote-boundary issues.
     return text
         .replace(/\\/g, "\\\\")
-        .replace(/'/g, "'\\''")
+        .replace(/'/g, "\u2019")
+        .replace(/"/g, "")
         .replace(/:/g, "\\:")
         .replace(/%/g, "%%");
 }
@@ -119,38 +122,55 @@ export async function renderVideoWithFFmpeg(props: FFmpegRenderProps): Promise<{
         const style = CAPTION_STYLES[captionStyle] || CAPTION_STYLES.classic;
         const captions = parseSrt(srtContent);
 
-        // Font path for FFmpeg drawtext — single backslash in the actual string,
-        // but we need to escape the colon separator in the filter chain
+        function toFFmpegColor(col?: string): string {
+            if (!col) return "black@0.5";
+            if (col.startsWith("rgba(")) {
+                const match = col.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
+                if (match) {
+                    const [_, r, g, b, a] = match;
+                    const hex = "#" + [r, g, b].map((x) => parseInt(x).toString(16).padStart(2, "0")).join("");
+                    return `${hex}@${a}`;
+                }
+            }
+            return col;
+        }
+
+        // Font path for FFmpeg drawtext — Windows drive colon must be escaped (C\:/)
         function getFontPath(fontFamily: string): string {
-            const winFonts = "C:/Windows/Fonts/";  // Use forward slashes — FFmpeg on Windows accepts them
+            const winFonts = "C\\:/Windows/Fonts/";
             const fontMap: Record<string, string> = {
                 "Arial":       winFonts + "arialbd.ttf",
                 "Courier New": winFonts + "cour.ttf",
                 "Impact":      winFonts + "impact.ttf",
+                "Montserrat":  winFonts + "arialbd.ttf",
+                "Inter":       winFonts + "arialbd.ttf",
             };
             return fontMap[fontFamily] || (winFonts + "arialbd.ttf");
         }
 
         const fontPath = getFontPath(style.fontFamily);
+        const fontColor = toFFmpegColor(style.color);
+        const borderColor = toFFmpegColor(style.borderColor);
+        const shadowColor = toFFmpegColor(style.shadowColor);
 
         const drawtextFilters = captions.map((cue) => {
             const escapedText = escapeFFmpegText(cue.text);
-            return [
+            const parts = [
                 `drawtext=fontfile='${fontPath}'`,
                 `text='${escapedText}'`,
                 `fontsize=56`,
-                `fontcolor=${style.color}`,
+                `fontcolor=${fontColor}`,
                 `borderw=4`,
-                `bordercolor=${style.borderColor}`,
-                `shadowcolor=${style.shadowColor}`,
+                `bordercolor=${borderColor}`,
+                `shadowcolor=${shadowColor}`,
                 `shadowx=3`,
                 `shadowy=3`,
                 `x=(w-text_w)/2`,
                 `y=h*0.78`,
                 `enable='between(t\\,${cue.start}\\,${cue.end})'`,
-            ].join(":");
+            ];
+            return parts.join(":");
         });
-
 
         // Combine filters: scale to 1080x1920 + caption overlays
         // NOTE: zoompan is intentionally removed — it's too CPU-heavy for local rendering
@@ -158,6 +178,10 @@ export async function renderVideoWithFFmpeg(props: FFmpegRenderProps): Promise<{
             `scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1`,
             ...drawtextFilters,
         ];
+
+        // Write filter_complex to a file to bypass Windows shell quoting issues
+        const filterScriptPath = path.join(tmpDir, "filters.txt");
+        fs.writeFileSync(filterScriptPath, videoFilters.join(","), "utf-8");
 
         // ── Step 4: Render with FFmpeg ───────────────────────────────────
         const outputPath = path.join(tmpDir, "output.mp4");
@@ -169,10 +193,9 @@ export async function renderVideoWithFFmpeg(props: FFmpegRenderProps): Promise<{
                 .inputOptions(["-f", "concat", "-safe", "0"])
                 // Audio input
                 .input(audioPath)
-                // Video filters
-                .complexFilter(videoFilters.join(","))
-                // Output settings
+                // Use filter script file instead of inline filter_complex
                 .outputOptions([
+                    "-filter_complex_script", filterScriptPath,
                     "-c:v", "libx264",        // H.264 codec
                     "-preset", "fast",         // Balance speed vs compression
                     "-crf", "23",              // Good quality

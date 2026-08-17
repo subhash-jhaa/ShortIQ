@@ -22,13 +22,17 @@ export default function VideosPage() {
     const [currentTime, setCurrentTime] = useState(new Date());
 
     const fetchVideos = async () => {
-        const res = await getVideos();
-        if (res.success) {
-            setVideos(res.data || []);
-        } else {
-            toast.error(res.error || "Failed to load videos");
+        try {
+            const res = await fetch("/api/videos", { cache: "no-store" });
+            if (res.ok) {
+                const data = await res.json();
+                setVideos(Array.isArray(data) ? data : []);
+            }
+        } catch (err) {
+            console.error("Failed to fetch videos:", err);
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
 
     const handleCancel = async (videoId: string) => {

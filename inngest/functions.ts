@@ -75,9 +75,17 @@ async function uploadToStorage(
     body: ArrayBuffer | Buffer,
     contentType: string
 ): Promise<string> {
-    const { error } = await supabaseAdmin.storage
+    let { error } = await supabaseAdmin.storage
         .from(bucket)
         .upload(path, body, { contentType, upsert: true });
+
+    // Auto-create bucket if missing
+    if (error?.message?.includes("not found")) {
+        await supabaseAdmin.storage.createBucket(bucket, { public: true });
+        ({ error } = await supabaseAdmin.storage
+            .from(bucket)
+            .upload(path, body, { contentType, upsert: true }));
+    }
 
     if (error) throw new Error(`Storage upload failed (${bucket}/${path}): ${error.message}`);
 
@@ -286,6 +294,20 @@ export const generateVideo = inngest.createFunction(
         });
 
         const videoProjectId = await step.run("create-video-placeholder", async () => {
+            // Reuse an existing 'generating' project for this series if present to avoid table bloat
+            const { data: existing } = await supabaseAdmin
+                .from("video_projects")
+                .select("id")
+                .eq("series_id", seriesId)
+                .eq("status", "generating")
+                .order("created_at", { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+            if (existing?.id) {
+                return existing.id;
+            }
+
             const { data, error } = await supabaseAdmin
                 .from("video_projects")
                 .insert({
@@ -338,12 +360,23 @@ Expected Output Structure:
 }`;
 
             try {
-                const completion = await groqClient.chat.completions.create({
-                    model: "llama-3.3-70b-versatile",
-                    messages: [{ role: "user", content: prompt }],
-                    response_format: { type: "json_object" },
-                    temperature: 0.7,
-                });
+                let completion;
+                try {
+                    completion = await groqClient.chat.completions.create({
+                        model: "openai/gpt-oss-120b",
+                        messages: [{ role: "user", content: prompt }],
+                        response_format: { type: "json_object" },
+                        temperature: 0.7,
+                    });
+                } catch (firstErr: any) {
+                    console.warn("[Script] Primary model failed, trying fallback groq/compound-mini...", firstErr.message);
+                    completion = await groqClient.chat.completions.create({
+                        model: "groq/compound-mini",
+                        messages: [{ role: "user", content: prompt }],
+                        response_format: { type: "json_object" },
+                        temperature: 0.7,
+                    });
+                }
 
                 let rawText = completion.choices[0]?.message?.content;
                 if (!rawText) throw new Error("Groq returned no text.");
@@ -476,34 +509,45 @@ Expected Output Structure:
                     throw new Error("Leonardo timeout after 2 minutes");
                 }
 
-                async function generateWithPollinations(prompt: string): Promise<string> {
-                    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=576&height=1024&model=flux&nologo=true&seed=${Date.now()}`;
-                    const res = await fetch(url);
-                    if (!res.ok) throw new Error(`Pollinations failed (${res.status})`);
-                    return url;
+                async function generateWithPollinations(prompt: string): Promise<Buffer> {
+                    const cleanPrompt = encodeURIComponent(prompt.slice(0, 300));
+                    const urls = [
+                        `https://image.pollinations.ai/prompt/${cleanPrompt}?width=576&height=1024&model=turbo&nologo=true&seed=${Date.now()}`,
+                        `https://image.pollinations.ai/prompt/${cleanPrompt}?width=576&height=1024&nologo=true&seed=${Date.now()}`,
+                        `https://picsum.photos/576/1024`
+                    ];
+
+                    for (const url of urls) {
+                        try {
+                            const res = await fetch(url, { headers: { "User-Agent": "ShortIQ/1.0" } });
+                            if (res.ok) {
+                                const arrayBuf = await res.arrayBuffer();
+                                return Buffer.from(arrayBuf);
+                            }
+                        } catch (e) {
+                            console.warn(`[Image] Pollinations attempt failed for ${url}:`, (e as any).message);
+                        }
+                    }
+                    throw new Error("All image fallback endpoints failed");
                 }
 
                 // ── Generate ALL scene images IN PARALLEL ──────────────────────
                 const imagePromises = scriptData.scenes.map(async (scene, i) => {
-                    let tempUrl: string;
+                    let imageBuffer: Buffer;
                     try {
                         console.log(`[Image] Scene ${i + 1}: trying Leonardo.AI...`);
-                        tempUrl = await generateWithLeonardo(scene.image_prompt);
+                        const tempUrl = await generateWithLeonardo(scene.image_prompt);
+                        const imageRes = await fetch(tempUrl);
+                        imageBuffer = Buffer.from(await imageRes.arrayBuffer());
                         console.log(`[Image] Scene ${i + 1}: Leonardo succeeded.`);
                     } catch (err: any) {
-                        console.warn(`[Image] Scene ${i + 1}: Leonardo failed (${err.message}), falling back to Pollinations...`);
-                        try {
-                            tempUrl = await generateWithPollinations(scene.image_prompt);
-                            console.log(`[Image] Scene ${i + 1}: Pollinations succeeded.`);
-                        } catch (pErr: any) {
-                            throw new Error(`Both providers failed for scene ${i + 1}: ${pErr.message}`);
-                        }
+                        console.warn(`[Image] Scene ${i + 1}: Leonardo failed (${err.message}), falling back to Pollinations Turbo...`);
+                        imageBuffer = await generateWithPollinations(scene.image_prompt);
+                        console.log(`[Image] Scene ${i + 1}: Pollinations succeeded.`);
                     }
 
-                    const imageRes = await fetch(tempUrl!);
-                    const buffer = Buffer.from(await imageRes.arrayBuffer());
                     const fileName = `${seriesId}/scene-${i + 1}-${Date.now()}.jpg`;
-                    const url = await uploadToStorage("video-images", fileName, buffer, "image/jpeg");
+                    const url = await uploadToStorage("video-images", fileName, imageBuffer, "image/jpeg");
                     console.log(`[Image] Scene ${i + 1} uploaded: ${url}`);
                     return url;
                 });
